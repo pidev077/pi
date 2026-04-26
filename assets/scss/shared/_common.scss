@@ -1,0 +1,47 @@
+html {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	scroll-behavior: auto;
+	scrollbar-gutter: stable;
+}
+
+body {
+	@include media-breakpoint-up(md) {
+		font-size: $font-size-md;
+	}
+}
+
+.is-sticky {
+	.flip-block-layout-column-inner {
+		@include media-breakpoint-up(lg) {
+			height: auto;
+			position: sticky;
+			top: 20px;
+			transition: all 0.3s ease-in-out;
+
+			.scroll-up & {
+				top: 120px;
+			}
+		}
+	}
+}
+
+.logged-in {
+	.is-sticky {
+		.flip-block-layout-column-inner {
+			@include media-breakpoint-up(lg) {
+				top: 52px;
+			}
+		}
+	}
+}
+
+.logged-in.scroll-up {
+	.is-sticky {
+		.flip-block-layout-column-inner {
+			@include media-breakpoint-up(lg) {
+				top: 152px;
+			}
+		}
+	}
+}

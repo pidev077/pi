@@ -1,0 +1,64 @@
+.error404 {
+	.entry-content {
+		text-align: center;
+		padding-top: 200px;
+		padding-bottom: 200px;
+
+		@include media-breakpoint-down(md) {
+			padding-bottom: 140px;
+		}
+
+		h1 {
+			font-size: 200px;
+
+			@include media-breakpoint-down(md) {
+				font-size: 110px;
+			}
+		}
+
+		h2 {
+			text-transform: uppercase;
+		}
+
+		p {
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
+
+		.go-home-btn {
+			border-radius: 9999px;
+			background: #ffe071;
+			color: #120a00;
+			text-align: center;
+			font-size: 18px;
+			font-style: normal;
+			font-weight: 600;
+			line-height: 24px; /* 133.333% */
+			letter-spacing: -0.18px;
+			padding: 16px 32px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 16px;
+			text-decoration: none;
+
+			&::before {
+				content: " ";
+				display: inline-block;
+				width: 10px;
+				height: 10px;
+				background: #120a00;
+				border-radius: 50%;
+				transition: all 0.3s ease-in-out;
+			}
+
+			&:hover {
+				background: #120a00;
+				color: #fff;
+				&::before {
+					background: #fff;
+				}
+			}
+		}
+	}
+}

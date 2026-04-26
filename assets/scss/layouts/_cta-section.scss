@@ -1,0 +1,46 @@
+.flip-cta-section {
+    padding: 140px 0;
+    text-align: center;
+    background: $color-primary;
+    margin-bottom: -60px;
+
+    .cta-heading {
+        font-size: clamp(30px, 8vw, 96px);
+        color: $color-dark;
+        margin-bottom: 40px;
+        line-height: 100%;
+        font-family: $font-primary;
+        @include media-breakpoint-down(md) {
+          font-size: 30px;
+          font-weight: 600;
+          line-height: 100%;
+          margin-bottom: 20px;
+        }
+    }
+
+    .cta-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+ 
+    .cta-btn--quote {
+        background: $color-blue;
+        color: $color-dark;
+        &:hover{
+          background: $color-dark;
+          color: #fff;
+        }
+    }
+
+    .cta-btn--contact {
+        background: $color-second;
+        color: $color-dark;
+        &:hover{
+          background: $color-dark;
+          color: #fff;
+        }
+    }
+}

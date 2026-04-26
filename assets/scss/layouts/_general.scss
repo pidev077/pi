@@ -1,0 +1,59 @@
+img {
+	max-width: 100%;
+	height: auto;
+}
+.flip-is-vertically-aligned-bottom {
+	align-items: flex-end;
+	display: flex;
+	.flip-block-layout-column-inner {
+		height: auto;
+	}
+}
+.border-rdu {
+	border-radius: 15px;
+	position: relative;
+}
+.pi-push {
+	position: relative;
+	overflow: hidden;
+	display: inline-block;
+	transition:
+		transform 0.35s ease,
+		box-shadow 0.35s ease;
+	margin-bottom: 0;
+	border-radius: 10px;
+}
+
+/* Highlight chạy tự động */
+.pi-push::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: -75%;
+	width: 50%;
+	height: 100%;
+	background: linear-gradient(
+		120deg,
+		rgba(255, 255, 255, 0) 0%,
+		rgba(255, 255, 255, 0.5) 50%,
+		rgba(255, 255, 255, 0) 100%
+	);
+	transform: skewX(-25deg);
+	animation: piHighlight 3s infinite;
+	pointer-events: none;
+}
+
+@keyframes piHighlight {
+	0% {
+		left: -75%;
+	}
+	100% {
+		left: 125%;
+	}
+}
+
+/* Hover push lên */
+.pi-push:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+}
