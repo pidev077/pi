@@ -8,7 +8,7 @@ $white_logo = get_theme_mod('white_logo');
 $link_contact = get_field('link_contact_hd', 'option');
 ?>
 
-<header id="header" class="header">
+<header id="header" class="header pi">
     <div class="container">
         <div class="header-inner d-flex align-items-center justify-content-between gap-3">
             <div class="header__logo">
