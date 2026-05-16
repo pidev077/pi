@@ -12,4 +12,4 @@
     <?php wp_body_open(); ?>
     <!--Start site wrap -->
     <div id="site-wrap" class="site-wrap">
-        <?php do_action('flip_hook_header'); ?>
+        <?php do_action('pi_hook_header'); ?>

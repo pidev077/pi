@@ -1,7 +1,7 @@
 <?php
 
-if (!defined('FLIP_WP_TOOLKIT_VER')) {
-	define('FLIP_WP_TOOLKIT_VER', '1.0');
+if (!defined('PI_WP_TOOLKIT_VER')) {
+	define('PI_WP_TOOLKIT_VER', '1.0');
 }
 
 define('TEMPLATE_DIRECTORY_URL', get_template_directory_uri());

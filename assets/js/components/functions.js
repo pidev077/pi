@@ -6,14 +6,14 @@ import {
 	Autoplay,
 	EffectCube,
 	EffectCoverflow,
-	EffectFlip,
+	EffectPi,
 } from "swiper/modules";
 export default {
 	init() {
-		flipCaseRelatedCarousel();
+		piCaseRelatedCarousel();
 	},
 };
-function flipCaseRelatedCarousel() {
+function piCaseRelatedCarousel() {
 	const el = document.querySelector(".case-related__carousel");
 
 	if (!el) return;

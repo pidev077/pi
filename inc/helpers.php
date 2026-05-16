@@ -18,22 +18,22 @@ function dump($data)
 }
 
 
-if (!function_exists('flip_svg_icon')) {
+if (!function_exists('pi_svg_icon')) {
 
 	/**
 	 * @param $icon
 	 *
 	 * @return mixed|string
 	 */
-	function flip_svg_icon($icon)
+	function pi_svg_icon($icon)
 	{
 		$icons = require(__DIR__ . '/svg.php');
 		return isset($icons[$icon]) ? $icons[$icon] : '';
 	}
 }
 
-if (!function_exists('flip_the_posts_navigation')) {
-	function flip_the_posts_navigation($args = array(), $base = false, $query = false)
+if (!function_exists('pi_the_posts_navigation')) {
+	function pi_the_posts_navigation($args = array(), $base = false, $query = false)
 	{
 		$args = wp_parse_args($args, array(
 			'prev_text' => __('Older posts'),

@@ -10,7 +10,7 @@ $index = 1;
     /* Start the Loop */
     while ( have_posts() ) :
 	    the_post();
-	    do_action( 'flip_hook_post_loop_item', get_the_ID(), $index );
+	    do_action( 'pi_hook_post_loop_item', get_the_ID(), $index );
 	    $index ++;
     endwhile;
     ?>

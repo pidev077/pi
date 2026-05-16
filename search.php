@@ -3,13 +3,13 @@
 /**
  * The template for displaying search results pages
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#search-result
- * @package flip
+ * @package pi
  */
 
 get_header();
 ?>
 <main id="primary" class="site-main">
-	<div class="flip-form-search">
+	<div class="pi-form-search">
 		<h5>Search</h5>
 		<form role="search" method="get" class="search-form" action="<?php echo home_url('/'); ?>">
 			<input type="search" class="search-field" placeholder="<?php echo esc_attr_x('Search …', 'placeholder') ?>" value="<?php echo get_search_query() ?>" name="s" title="<?php echo esc_attr_x('Search for:', 'label') ?>" />
@@ -50,18 +50,18 @@ get_header();
 			<?php
 			endwhile;
 
-			flip_the_posts_navigation();
+			pi_the_posts_navigation();
 
 			wp_reset_postdata(); // Reset the global post object
 		else :
 			?>
 			<section class="no-results not-found">
 				<header class="page-header">
-					<h3 class="page-titles"><?php esc_html_e('Nothing Found', 'flip'); ?></h3>
+					<h3 class="page-titles"><?php esc_html_e('Nothing Found', 'pi'); ?></h3>
 				</header><!-- .page-header -->
 
 				<div class="page-content">
-					<p><?php esc_html_e('Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'flip'); ?></p>
+					<p><?php esc_html_e('Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'pi'); ?></p>
 
 				</div><!-- .page-content -->
 			</section><!-- .no-results -->

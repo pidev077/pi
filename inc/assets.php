@@ -16,14 +16,28 @@ add_action('wp_enqueue_scripts', function () {
 	]);
 });
 
-if (!function_exists('flip_load_fonts')) {
+if (!function_exists('pi_load_fonts')) {
 	/**
 	 * Load custom font family
 	 */
-	function flip_load_fonts()
+	function pi_load_fonts()
 	{
-		wp_enqueue_style('primary-font', get_template_directory_uri() . '/assets/fonts/stylesheet.css', [], FLIP_WP_TOOLKIT_VER);
+		wp_enqueue_style('primary-font', 'https://fonts.googleapis.com/css2?family=Google+Sans:wght@200;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap', [], null);
 	}
 }
 
-add_action('admin_enqueue_scripts', 'flip_load_fonts');
+add_action('admin_enqueue_scripts', 'pi_load_fonts');
+
+add_action('enqueue_block_editor_assets', function () {
+	wp_enqueue_style(
+		'pi-editor-fonts',
+		'https://fonts.googleapis.com/css2?family=Google+Sans:wght@200;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap',
+		[],
+		null
+	);
+
+	wp_add_inline_style('pi-editor-fonts', '
+		.font-google-sans { font-family: "Google Sans", sans-serif; }
+		.font-playfair-display { font-family: "Playfair Display", serif; }
+	');
+});

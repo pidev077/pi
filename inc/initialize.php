@@ -24,7 +24,7 @@ add_action('after_setup_theme', function () {
 	add_editor_style('build/editor.css');
 });
 
-function flip_add_slug_to_body_class($classes)
+function pi_add_slug_to_body_class($classes)
 {
 	if (is_singular()) {
 		global $post;
@@ -32,7 +32,7 @@ function flip_add_slug_to_body_class($classes)
 	}
 	return $classes;
 }
-add_filter('body_class', 'flip_add_slug_to_body_class');
+add_filter('body_class', 'pi_add_slug_to_body_class');
 
 
 
@@ -47,7 +47,7 @@ add_filter('rest_authentication_errors', function ($result) {
 		if (strpos($request_uri, '/wp-json/wp/v2/users') !== false) {
 			return new WP_Error(
 				'rest_forbidden',
-				__('User endpoint is restricted for non-logged-in users.', 'flip'),
+				__('User endpoint is restricted for non-logged-in users.', 'pi'),
 				array('status' => 401)
 			);
 		}

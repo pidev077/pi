@@ -583,8 +583,8 @@ $aspect-ratios: (
 // Font, line-height, and color for body text, headings, and more.
 // scss-docs-start font-variables
 // stylelint-disable value-keyword-case
-$font-family-sans-serif: "Be_Vietnam_Pro", sans-serif !default;
-$font-family-monospace: "SVN-Ogg", sans-serif !default;
+$font-family-sans-serif: "Google Sans", sans-serif !default;
+$font-family-monospace: "Playfair Display", sans-serif !default;
 // stylelint-enable value-keyword-case
 $font-family-base: var(--#{$prefix}font-sans-serif) !default;
 $font-family-code: var(--#{$prefix}font-monospace) !default;
@@ -1702,7 +1702,7 @@ $breadcrumb-bg: null !default;
 $breadcrumb-divider-color: var(--#{$prefix}secondary-color) !default;
 $breadcrumb-active-color: var(--#{$prefix}secondary-color) !default;
 $breadcrumb-divider: quote("/") !default;
-$breadcrumb-divider-flipped: $breadcrumb-divider !default;
+$breadcrumb-divider-piped: $breadcrumb-divider !default;
 $breadcrumb-border-radius: null !default;
 // scss-docs-end breadcrumb-variables
 

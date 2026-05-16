@@ -1,13 +1,13 @@
 <?php
 
-add_action('acf/init', 'flip_acf_init');
-function flip_acf_init()
+add_action('acf/init', 'pi_acf_init');
+function pi_acf_init()
 {
 	if (function_exists('acf_add_options_page')) {
 		if (current_user_can('administrator')):
 			acf_add_options_page(array(
-				'page_title' => __('Theme Options', 'flip'),
-				'menu_title' => __('Theme Options', 'flip'),
+				'page_title' => __('Theme Options', 'pi'),
+				'menu_title' => __('Theme Options', 'pi'),
 				'menu_slug' => 'theme-options',
 			));
 
@@ -35,8 +35,8 @@ function flip_acf_init()
 	}
 }
 
-add_filter('acf/settings/save_json', 'flip_acf_json_save_point');
-function flip_acf_json_save_point($path)
+add_filter('acf/settings/save_json', 'pi_acf_json_save_point');
+function pi_acf_json_save_point($path)
 {
 	// update path
 	$path = get_stylesheet_directory() . '/inc/acf-options';
@@ -45,8 +45,8 @@ function flip_acf_json_save_point($path)
 	return $path;
 }
 
-add_filter('acf/settings/load_json', 'flip_acf_json_load_point');
-function flip_acf_json_load_point($paths)
+add_filter('acf/settings/load_json', 'pi_acf_json_load_point');
+function pi_acf_json_load_point($paths)
 {
 	// remove original path (optional)
 	unset($paths[0]);

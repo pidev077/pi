@@ -33,8 +33,8 @@ add_filter('upload_mimes', function ($mime_types) {
  * Header template
  * @return void
  */
-add_action('flip_hook_header', 'flip_header_template');
-function flip_header_template()
+add_action('pi_hook_header', 'pi_header_template');
+function pi_header_template()
 {
 	load_template(get_template_directory() . '/template-parts/header.php', false);
 }
@@ -43,8 +43,8 @@ function flip_header_template()
  * Footer template
  * @return void
  */
-add_action('flip_hook_footer', 'flip_footer_template');
-function flip_footer_template()
+add_action('pi_hook_footer', 'pi_footer_template');
+function pi_footer_template()
 {
 	load_template(get_template_directory() . '/template-parts/footer.php', false);
 }
@@ -57,8 +57,8 @@ function flip_footer_template()
  *
  * @return void
  */
-add_action('flip_hook_post_loop_item', 'flip_post_loop_item_template', 20, 2);
-function flip_post_loop_item_template($post_id, $index)
+add_action('pi_hook_post_loop_item', 'pi_post_loop_item_template', 20, 2);
+function pi_post_loop_item_template($post_id, $index)
 {
 	set_query_var('post_id', $post_id);
 	$v  = ($index) % 3;
@@ -67,7 +67,7 @@ function flip_post_loop_item_template($post_id, $index)
 	$anm = 'data-aos="fade-up" data-aos-duration="' . (($v !== 0 ? $vT : 3) * 400) . '"';
 ?>
 	<article <?= $anm; ?> <?php post_class('col-md-4') ?>>
-		<?php flip_post_item() ?>
+		<?php pi_post_item() ?>
 	</article>
 <?php
 }

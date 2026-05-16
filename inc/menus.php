@@ -1,23 +1,18 @@
 <?php
 add_action('after_setup_theme', function () {
 	register_nav_menus([
-		'primary-menu'     => esc_html__('Primary Menu', 'flip'),
-		'footer-menu'     => esc_html__('Footer Menu', 'flip'),
+		'primary-menu'      => esc_html__('Primary Menu', 'pi'),
+		'footer-menu'       => esc_html__('Footer Menu', 'pi'),
+		'footer-navigation' => esc_html__('Footer: Điều Hướng', 'pi'),
+		'footer-services'   => esc_html__('Footer: Dịch Vụ', 'pi'),
+		'footer-support'    => esc_html__('Footer: Hỗ Trợ', 'pi'),
 	]);
 });
 
-/**
- * @param $classes
- * @param $item
- * @param $args
- *
- * @return mixed
- */
 add_filter('nav_menu_css_class', 'filter_bootstrap_nav_menu_css_class', 10, 3);
 function filter_bootstrap_nav_menu_css_class($classes, $item, $args)
 {
 	if (isset($args->bootstrap)) {
-
 		$classes[] = ($item->object_id == get_the_ID()) ? 'nav-item current' : 'nav-item';
 
 		if (in_array('menu-item-has-children', $classes)) {
@@ -29,25 +24,12 @@ function filter_bootstrap_nav_menu_css_class($classes, $item, $args)
 		}
 	}
 
-
 	return $classes;
 }
-
-/**
- * Add bootstrap attributes to individual link elements.
- *
- * @param $atts
- * @param $item
- * @param $args
- * @param $depth
- *
- * @return mixed
- */
 
 add_filter('nav_menu_link_attributes', 'filter_bootstrap_nav_menu_link_attributes', 10, 4);
 function filter_bootstrap_nav_menu_link_attributes($atts, $item, $args, $depth)
 {
-
 	if (isset($args->bootstrap)) {
 		if (!isset($atts['class'])) {
 			$atts['class'] = '';
@@ -65,28 +47,19 @@ function filter_bootstrap_nav_menu_link_attributes($atts, $item, $args, $depth)
 			}
 		} else {
 			$atts['class'] .= 'nav-link';
+
 			if (in_array('menu-item-has-children', $item->classes)) {
-				$atts['class'] .= ' dropdown-toggle';
-				$atts['role'] = 'button';
-				$atts['data-toggle'] = 'dropdown';
-				$atts['aria-haspopup'] = 'true';
-				$atts['aria-expanded'] = 'false';
+				$atts['class']          .= ' dropdown-toggle';
+				$atts['role']            = 'button';
+				$atts['data-bs-toggle']  = 'dropdown';   // Bootstrap 5
+				$atts['aria-haspopup']   = 'true';
+				$atts['aria-expanded']   = 'false';
 			}
 		}
 	}
 
 	return $atts;
 }
-
-/**
- * Add bootstrap classes to dropdown menus.
- *
- * @param $classes
- * @param $args
- * @param $depth
- *
- * @return mixed
- */
 
 add_filter('nav_menu_submenu_css_class', 'filter_bootstrap_nav_menu_submenu_css_class', 10, 3);
 function filter_bootstrap_nav_menu_submenu_css_class($classes, $args, $depth)
@@ -97,4 +70,3 @@ function filter_bootstrap_nav_menu_submenu_css_class($classes, $args, $depth)
 
 	return $classes;
 }
-

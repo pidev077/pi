@@ -3,9 +3,9 @@
 /**
  * Use this file to register any custom post types you wish to create.
  */
-if (!function_exists('flip_create_custom_post_type')) {
+if (!function_exists('pi_create_custom_post_type')) {
 	// Register Custom Post Type
-	function flip_create_custom_post_type()
+	function pi_create_custom_post_type()
 	{	
 
 		register_post_type('teams', array(
@@ -38,11 +38,11 @@ if (!function_exists('flip_create_custom_post_type')) {
 		));
 	}
 
-	add_action('init', 'flip_create_custom_post_type', 0);
+	add_action('init', 'pi_create_custom_post_type', 0);
 }
 
-if (!function_exists('flip_create_custom_taxonomy')) {
-	function flip_create_custom_taxonomy()
+if (!function_exists('pi_create_custom_taxonomy')) {
+	function pi_create_custom_taxonomy()
 	{
 
 		
@@ -70,5 +70,5 @@ if (!function_exists('flip_create_custom_taxonomy')) {
 		));
 	}
 
-	add_action('init', 'flip_create_custom_taxonomy', 0);
+	add_action('init', 'pi_create_custom_taxonomy', 0);
 }

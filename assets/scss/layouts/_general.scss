@@ -2,10 +2,10 @@ img {
 	max-width: 100%;
 	height: auto;
 }
-.flip-is-vertically-aligned-bottom {
+.pi-is-vertically-aligned-bottom {
 	align-items: flex-end;
 	display: flex;
-	.flip-block-layout-column-inner {
+	.pi-block-layout-column-inner {
 		height: auto;
 	}
 }

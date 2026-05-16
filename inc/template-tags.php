@@ -4,16 +4,16 @@
  * Template tags
  */
 
-if ( ! function_exists( 'flip_template_news_hero_header' ) ) {
-	function flip_template_news_hero_header() {
+if ( ! function_exists( 'pi_template_news_hero_header' ) ) {
+	function pi_template_news_hero_header() {
 		$page_for_posts_id = get_option( 'page_for_posts' );
 		$blog_link         = get_permalink( $page_for_posts_id );
 		ob_start(); ?>
         <div class="news-hero text-center text-white">
             <div class="container">
                 <div class="hero-inner">
-                    <h2 class="flip-title">Blog</h2>
-                    <p class="flip-subtitle"><?= get_bloginfo( 'description' ); ?></p>
+                    <h2 class="pi-title">Blog</h2>
+                    <p class="pi-subtitle"><?= get_bloginfo( 'description' ); ?></p>
                 </div>
             </div>
         </div>

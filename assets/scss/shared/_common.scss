@@ -1,3 +1,11 @@
+.font-google-sans {
+	font-family: $font-second, sans-serif;
+}
+
+.font-playfair-display {
+	font-family: $font-primary, serif;
+}
+
 html {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -12,7 +20,7 @@ body {
 }
 
 .is-sticky {
-	.flip-block-layout-column-inner {
+	.pi-block-layout-column-inner {
 		@include media-breakpoint-up(lg) {
 			height: auto;
 			position: sticky;
@@ -28,7 +36,7 @@ body {
 
 .logged-in {
 	.is-sticky {
-		.flip-block-layout-column-inner {
+		.pi-block-layout-column-inner {
 			@include media-breakpoint-up(lg) {
 				top: 52px;
 			}
@@ -38,7 +46,7 @@ body {
 
 .logged-in.scroll-up {
 	.is-sticky {
-		.flip-block-layout-column-inner {
+		.pi-block-layout-column-inner {
 			@include media-breakpoint-up(lg) {
 				top: 152px;
 			}
