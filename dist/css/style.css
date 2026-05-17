@@ -83,7 +83,7 @@
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
   --bs-font-sans-serif: "Google Sans", sans-serif;
-  --bs-font-monospace: "Playfair Display", sans-serif;
+  --bs-font-monospace: "Playfair Display", serif;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-root-font-size: 1rem;
   --bs-body-font-family: var(--bs-font-sans-serif);
@@ -91,28 +91,28 @@
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
   --bs-body-text-align: left;
-  --bs-body-color: #120a00;
-  --bs-body-color-rgb: 18, 10, 0;
+  --bs-body-color: #584E44;
+  --bs-body-color-rgb: 88, 78, 68;
   --bs-body-bg: #fff;
   --bs-body-bg-rgb: 255, 255, 255;
   --bs-emphasis-color: #000;
   --bs-emphasis-color-rgb: 0, 0, 0;
-  --bs-secondary-color: rgba(18, 10, 0, 0.9);
-  --bs-secondary-color-rgb: 18, 10, 0;
+  --bs-secondary-color: rgba(88, 78, 68, 0.9);
+  --bs-secondary-color-rgb: 88, 78, 68;
   --bs-secondary-bg: #e9ecef;
   --bs-secondary-bg-rgb: 233, 236, 239;
-  --bs-tertiary-color: rgba(18, 10, 0, 0.5);
-  --bs-tertiary-color-rgb: 18, 10, 0;
+  --bs-tertiary-color: rgba(88, 78, 68, 0.5);
+  --bs-tertiary-color-rgb: 88, 78, 68;
   --bs-tertiary-bg: #f8f9fa;
   --bs-tertiary-bg-rgb: 248, 249, 250;
-  --bs-heading-color: #120a00;
+  --bs-heading-color: #27211C;
   --bs-link-color: #120a00;
   --bs-link-color-rgb: 18, 10, 0;
   --bs-link-decoration: underline;
   --bs-link-hover-color: #120a00;
   --bs-link-hover-color-rgb: 18, 10, 0;
   --bs-code-color: #d63384;
-  --bs-highlight-color: #120a00;
+  --bs-highlight-color: #584E44;
   --bs-highlight-bg: rgb(255, 242.6, 205.4);
   --bs-border-width: 1px;
   --bs-border-style: solid;
@@ -228,7 +228,7 @@ hr {
 h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   margin-top: 0;
   margin-bottom: 0.5rem;
-  font-family: "Playfair Display", sans-serif;
+  font-family: "Playfair Display", serif;
   font-style: normal;
   font-weight: 400;
   line-height: 100%;
@@ -236,57 +236,47 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
 }
 
 h1, .h1 {
-  font-size: calc(1.725rem + 5.7vw);
+  font-size: calc(1.525rem + 3.3vw);
 }
 @media (min-width: 1200px) {
   h1, .h1 {
-    font-size: 6rem;
+    font-size: 4rem;
   }
 }
 
 h2, .h2 {
-  font-size: calc(1.575rem + 3.9vw);
-}
-@media (min-width: 1200px) {
-  h2, .h2 {
-    font-size: 4.5rem;
-  }
-}
-
-h3, .h3 {
-  font-size: calc(1.475rem + 2.7vw);
-}
-@media (min-width: 1200px) {
-  h3, .h3 {
-    font-size: 3.5rem;
-  }
-}
-
-h4, .h4 {
   font-size: calc(1.425rem + 2.1vw);
 }
 @media (min-width: 1200px) {
-  h4, .h4 {
+  h2, .h2 {
     font-size: 3rem;
   }
 }
 
-h5, .h5 {
-  font-size: calc(1.325rem + 0.9vw);
+h3, .h3 {
+  font-size: calc(1.35rem + 1.2vw);
 }
 @media (min-width: 1200px) {
-  h5, .h5 {
-    font-size: 2rem;
+  h3, .h3 {
+    font-size: 2.25rem;
   }
 }
 
-h6, .h6 {
+h4, .h4 {
   font-size: calc(1.275rem + 0.3vw);
 }
 @media (min-width: 1200px) {
-  h6, .h6 {
+  h4, .h4 {
     font-size: 1.5rem;
   }
+}
+
+h5, .h5 {
+  font-size: 1rem;
+}
+
+h6, .h6 {
+  font-size: 0.875rem;
 }
 
 p {
@@ -3300,27 +3290,27 @@ progress {
 }
 
 .fs-1 {
-  font-size: calc(1.725rem + 5.7vw) !important;
+  font-size: calc(1.525rem + 3.3vw) !important;
 }
 
 .fs-2 {
-  font-size: calc(1.575rem + 3.9vw) !important;
-}
-
-.fs-3 {
-  font-size: calc(1.475rem + 2.7vw) !important;
-}
-
-.fs-4 {
   font-size: calc(1.425rem + 2.1vw) !important;
 }
 
+.fs-3 {
+  font-size: calc(1.35rem + 1.2vw) !important;
+}
+
+.fs-4 {
+  font-size: calc(1.275rem + 0.3vw) !important;
+}
+
 .fs-5 {
-  font-size: calc(1.325rem + 0.9vw) !important;
+  font-size: 1rem !important;
 }
 
 .fs-6 {
-  font-size: calc(1.275rem + 0.3vw) !important;
+  font-size: 0.875rem !important;
 }
 
 .fst-italic {
@@ -6863,21 +6853,15 @@ progress {
 }
 @media (min-width: 1200px) {
   .fs-1 {
-    font-size: 6rem !important;
+    font-size: 4rem !important;
   }
   .fs-2 {
-    font-size: 4.5rem !important;
-  }
-  .fs-3 {
-    font-size: 3.5rem !important;
-  }
-  .fs-4 {
     font-size: 3rem !important;
   }
-  .fs-5 {
-    font-size: 2rem !important;
+  .fs-3 {
+    font-size: 2.25rem !important;
   }
-  .fs-6 {
+  .fs-4 {
     font-size: 1.5rem !important;
   }
 }
@@ -6922,6 +6906,12 @@ progress {
 
 .font-playfair-display {
   font-family: "Playfair Display", serif;
+}
+
+h5, .h5,
+h6, .h6 {
+  color: #584E44;
+  font-family: "Google Sans", sans-serif;
 }
 
 html {

@@ -6,6 +6,12 @@
 	font-family: $font-primary, serif;
 }
 
+h5, .h5,
+h6, .h6 {
+	color: $body-color;
+	font-family: $font-second, sans-serif;
+}
+
 html {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;

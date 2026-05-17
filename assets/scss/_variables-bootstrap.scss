@@ -442,7 +442,7 @@ $position-values: (
 // Settings for the `<body>` element.
 
 $body-text-align: left !default;
-$body-color: #120a00 !default;
+$body-color: #584E44 !default;
 $body-bg: #fff !default;
 
 $body-secondary-color: rgba($body-color, 0.9) !default;
@@ -584,7 +584,7 @@ $aspect-ratios: (
 // scss-docs-start font-variables
 // stylelint-disable value-keyword-case
 $font-family-sans-serif: "Google Sans", sans-serif !default;
-$font-family-monospace: "Playfair Display", sans-serif !default;
+$font-family-monospace: "Playfair Display", serif !default;
 // stylelint-enable value-keyword-case
 $font-family-base: var(--#{$prefix}font-sans-serif) !default;
 $font-family-code: var(--#{$prefix}font-monospace) !default;
@@ -612,12 +612,12 @@ $line-height-sm: 1.5 !default;
 $line-height-lg: 1.5 !default;
 $line-height-xxl: 1.5 !default;
 
-$h1-font-size: $font-size-root * 6 !default;
-$h2-font-size: $font-size-root * 4.5 !default;
-$h3-font-size: $font-size-root * 3.5 !default;
-$h4-font-size: $font-size-root * 3 !default;
-$h5-font-size: $font-size-root * 2 !default;
-$h6-font-size: $font-size-root * 1.5 !default;
+$h1-font-size: $font-size-root * 4 !default;
+$h2-font-size: $font-size-root * 3 !default;
+$h3-font-size: $font-size-root * 2.25 !default;
+$h4-font-size: $font-size-root * 1.5 !default;
+$h5-font-size: $font-size-root * 1 !default;
+$h6-font-size: $font-size-root * 0.875 !default;
 
 // scss-docs-end font-variables
 
@@ -645,7 +645,7 @@ $headings-font-family: $font-family-monospace !default;
 $headings-font-style: normal !default;
 $headings-font-weight: 400 !default;
 $headings-line-height: 100% !default;
-$headings-color: #120a00 !default;
+$headings-color: #27211C !default;
 // scss-docs-end headings-variables
 
 // scss-docs-start display-headings
