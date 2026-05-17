@@ -6997,6 +6997,7 @@ html {
 .header.scrolled .header__logo:has(img.logo-sticky) img.logo-main {
   opacity: 0;
   pointer-events: none;
+  display: none;
 }
 .header.scrolled .header__logo:has(img.logo-sticky) img.logo-sticky {
   display: block;
