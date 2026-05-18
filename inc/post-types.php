@@ -41,6 +41,44 @@ if (!function_exists('pi_create_custom_post_type')) {
 	add_action('init', 'pi_create_custom_post_type', 0);
 }
 
+if (!function_exists('pi_register_service_post_type')) {
+	function pi_register_service_post_type()
+	{
+		register_post_type('service', array(
+			'labels' => array(
+				'name'               => 'Services',
+				'singular_name'      => 'Service',
+				'add_new'            => 'Add New',
+				'add_new_item'       => 'Add New Service',
+				'edit_item'          => 'Edit Service',
+				'new_item'           => 'New Service',
+				'view_item'          => 'View Service',
+				'search_items'       => 'Search Services',
+				'not_found'          => 'No services found',
+				'not_found_in_trash' => 'No services found in Trash',
+				'menu_name'          => 'Services',
+			),
+			'description'        => 'Manage clinic services',
+			'public'             => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array('slug' => 'service', 'with_front' => false),
+			'capability_type'    => 'post',
+			'has_archive'        => false,
+			'hierarchical'       => false,
+			'menu_position'      => 20,
+			'menu_icon'          => 'dashicons-heart',
+			'supports'           => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields'),
+			'show_in_rest'       => true,
+			'rest_base'          => 'services',
+		));
+	}
+
+	add_action('init', 'pi_register_service_post_type', 0);
+}
+
 if (!function_exists('pi_create_custom_taxonomy')) {
 	function pi_create_custom_taxonomy()
 	{
