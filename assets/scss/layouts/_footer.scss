@@ -17,7 +17,9 @@ $footer-white:  #ffffff;
 	@include media-breakpoint-down(lg) {
 		padding: 48px 0 0;
 	}
-
+	@include media-breakpoint-down(sm) {
+		padding: 40px 0 0;
+	}
 	// ── 4-column grid ─────────────────────────────────────────────
 	&__grid {
 		display: grid;
@@ -58,6 +60,7 @@ $footer-white:  #ffffff;
 
 		@include media-breakpoint-down(sm) {
 			flex-direction: column;
+			align-items: center;
 		}
 	}
 
@@ -86,6 +89,10 @@ $footer-white:  #ffffff;
 		@include media-breakpoint-down(xl) {
 			max-width: 420px;
 		}
+		@include media-breakpoint-down(sm) {
+			text-align: center;
+			font-size: 12px;
+		}
 	}
 
 	// ── Social ────────────────────────────────────────────────────
@@ -102,6 +109,9 @@ $footer-white:  #ffffff;
 		letter-spacing: 1.2px;
 		text-transform: uppercase;
 		color: #978B7B;
+		@include media-breakpoint-down(sm) {
+			text-align: center;
+		}
 	}
 
 	&__social-icons {
@@ -151,6 +161,9 @@ $footer-white:  #ffffff;
 		padding-bottom: 16px;
 		border-bottom: 1px solid #3C342D;
 		font-family: $font-second;
+		@include media-breakpoint-down(sm) {
+			font-size: 18px;
+		}
 	}
 
 	// ── Nav list ──────────────────────────────────────────────────
@@ -183,7 +196,10 @@ $footer-white:  #ffffff;
 		font-weight: 500;
 		line-height: 24px;
 		transition: color 0.2s;
-
+		@include media-breakpoint-down(sm) {
+			font-size: 14px;
+			padding: 8px 0;
+		}
 		&:hover {
 			color: $footer-gold;
 
@@ -221,7 +237,7 @@ $footer-white:  #ffffff;
 
 		@include media-breakpoint-down(sm) {
 			flex-direction: column;
-			align-items: flex-start;
+			align-items: center;
 			gap: 12px;
 		}
 	}

@@ -102,13 +102,12 @@ $languages    = apply_filters('wpml_active_languages', null, array('skip_missing
             <button id="btn-toggle-menu-mobile" class="header__hamberger d-flex d-lg-none flex-wrap"
                 aria-label="Toggle menu" aria-expanded="false">
                 <span class="header__hamberger--open">
-                    <svg width="30" height="14" viewBox="0 0 30 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1H29" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M1 13H29" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M10 6H20M4 12H20H7M4 18H14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </span>
                 <span class="header__hamberger--close">
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="24" height="24" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 21L21 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         <path d="M1 1L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>
