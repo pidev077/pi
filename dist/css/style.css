@@ -7373,6 +7373,7 @@ html {
   line-height: 1;
   transition: all 0.3s ease;
   white-space: nowrap;
+  border: none;
 }
 .lang-switcher__toggle:hover {
   background: rgba(26, 26, 26, 0.05);

@@ -492,6 +492,7 @@ $admin-bar-mobile: 46px;
 		line-height: 1;
 		transition: $transition-base;
 		white-space: nowrap;
+		border: none;
 
 		&:hover {
 			background: rgba(#1a1a1a, 0.05);
