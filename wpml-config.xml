@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wpml-config>
+    <custom-fields>
+        <!-- Page Hero: text fields → translate per language -->
+        <custom-field action="translate">page_hero_supertitle</custom-field>
+        <custom-field action="translate">page_hero_title</custom-field>
+        <custom-field action="translate">page_hero_description</custom-field>
+
+        <!-- Page Hero: toggle & image → copy (same across all languages) -->
+        <custom-field action="copy">page_hero_enable</custom-field>
+        <custom-field action="copy">page_hero_bg_image</custom-field>
+    </custom-fields>
+</wpml-config>

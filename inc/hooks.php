@@ -49,6 +49,15 @@ function pi_footer_template()
 	load_template(get_template_directory() . '/template-parts/footer.php', false);
 }
 
+/**
+ * Mobile menu drawer — rendered once before </body> via wp_footer.
+ */
+add_action('wp_footer', 'pi_mobile_menu_template', 5);
+function pi_mobile_menu_template()
+{
+	load_template(get_template_directory() . '/template-parts/mobile-menu.php', false);
+}
+
 
 /**
  * Post loop item template

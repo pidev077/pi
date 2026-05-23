@@ -31,7 +31,174 @@ function pi_acf_init()
 				'menu_title' => 'Footer',
 				'parent_slug' => 'theme-options',
 			));
+
+			// Mega Menu settings page
+			acf_add_options_sub_page(array(
+				'page_title' => 'Mega Menu',
+				'menu_title' => 'Mega Menu',
+				'menu_slug'  => 'theme-options-mega-menu',
+				'parent_slug'=> 'theme-options',
+			));
 		endif;
+	}
+
+	if (function_exists('acf_add_local_field_group')) {
+
+		// ── Mega Menu field group (code-defined, no JSON needed) ─────────
+		acf_add_local_field_group([
+			'key'    => 'group_pi_mega_menu',
+			'title'  => 'Mega Menu — Ưu Đãi & Cấu Hình',
+			'fields' => [
+
+				// ── Label cột ưu đãi ───────────────────────────────
+				[
+					'key'           => 'field_pi_mega_col_label',
+					'label'         => 'Nhãn cột ưu đãi',
+					'name'          => 'mega_menu_col_label',
+					'type'          => 'text',
+					'default_value' => 'ƯU ĐÃI ĐỘC QUYỀN THÁNG NÀY',
+					'instructions'  => 'Tiêu đề nhỏ phía trên các thẻ ưu đãi.',
+				],
+
+				// ── Link "Xem Thêm" ────────────────────────────────
+				[
+					'key'          => 'field_pi_mega_see_more',
+					'label'        => 'Link "Xem Thêm"',
+					'name'         => 'mega_menu_see_more',
+					'type'         => 'link',
+					'return_format'=> 'array',
+					'instructions' => 'URL khi click "Xem Thêm" ở cột ưu đãi.',
+				],
+
+				// ── Danh sách ưu đãi (repeater, tối đa 2) ──────────
+				[
+					'key'        => 'field_pi_mega_offers',
+					'label'      => 'Danh sách ưu đãi',
+					'name'       => 'mega_menu_offers',
+					'type'       => 'repeater',
+					'max'        => 2,
+					'min'        => 0,
+					'layout'     => 'block',
+					'button_label' => 'Thêm ưu đãi',
+					'instructions' => 'Tối đa 2 ưu đãi. Hiện ở cột phải của mega menu.',
+					'sub_fields' => [
+						[
+							'key'           => 'field_pi_offer_image',
+							'label'         => 'Hình ảnh',
+							'name'          => 'offer_image',
+							'type'          => 'image',
+							'return_format' => 'array',
+							'preview_size'  => 'medium',
+							'instructions'  => 'Khuyến nghị: 420×280 px trở lên.',
+						],
+						[
+							'key'          => 'field_pi_offer_title',
+							'label'        => 'Tiêu đề',
+							'name'         => 'offer_title',
+							'type'         => 'text',
+						],
+						[
+							'key'          => 'field_pi_offer_excerpt',
+							'label'        => 'Mô tả ngắn',
+							'name'         => 'offer_excerpt',
+							'type'         => 'textarea',
+							'rows'         => 2,
+							'new_lines'    => 'br',
+						],
+						[
+							'key'           => 'field_pi_offer_link',
+							'label'         => 'Đường dẫn',
+							'name'          => 'offer_link',
+							'type'          => 'link',
+							'return_format' => 'array',
+						],
+					],
+				],
+
+			],
+			'location' => [
+				[
+					[
+						'param'    => 'options_page',
+						'operator' => '==',
+						'value'    => 'theme-options-mega-menu',
+					],
+				],
+			],
+			'menu_order'  => 0,
+			'style'       => 'default',
+		]);
+
+		// ── Page Hero field group (per-page title bar) ────────────────────
+		acf_add_local_field_group([
+			'key'    => 'group_pi_page_hero',
+			'title'  => 'Page Hero — Title Bar',
+			'fields' => [
+				[
+					'key'           => 'field_pi_hero_enable',
+					'label'         => 'Show Page Hero',
+					'name'          => 'page_hero_enable',
+					'type'          => 'true_false',
+					'default_value' => 0,
+					'ui'            => 1,
+					'ui_on_text'    => 'On',
+					'ui_off_text'   => 'Off',
+					'instructions'  => 'Enable to display the title bar above the page content.',
+				],
+				[
+					'key'               => 'field_pi_hero_supertitle',
+					'label'             => 'Supertitle',
+					'name'              => 'page_hero_supertitle',
+					'type'              => 'text',
+					'instructions'      => 'Small text above the main title. E.g. DD CLINIC — PREMIUM KOREAN AESTHETIC ADVISORY CENTER',
+					'conditional_logic' => [[
+						['field' => 'field_pi_hero_enable', 'operator' => '==', 'value' => '1'],
+					]],
+				],
+				[
+					'key'               => 'field_pi_hero_title',
+					'label'             => 'Title',
+					'name'              => 'page_hero_title',
+					'type'              => 'text',
+					'instructions'      => 'Main heading. Leave blank to use the page name.',
+					'conditional_logic' => [[
+						['field' => 'field_pi_hero_enable', 'operator' => '==', 'value' => '1'],
+					]],
+				],
+				[
+					'key'               => 'field_pi_hero_description',
+					'label'             => 'Description',
+					'name'              => 'page_hero_description',
+					'type'              => 'textarea',
+					'rows'              => 3,
+					'new_lines'         => 'br',
+					'instructions'      => 'Short paragraph displayed below the title.',
+					'conditional_logic' => [[
+						['field' => 'field_pi_hero_enable', 'operator' => '==', 'value' => '1'],
+					]],
+				],
+				[
+					'key'               => 'field_pi_hero_bg_image',
+					'label'             => 'Background Image',
+					'name'              => 'page_hero_bg_image',
+					'type'              => 'image',
+					'return_format'     => 'url',
+					'preview_size'      => 'medium',
+					'instructions'      => 'Hero background image. Leave blank to use the default gradient.',
+					'conditional_logic' => [[
+						['field' => 'field_pi_hero_enable', 'operator' => '==', 'value' => '1'],
+					]],
+				],
+			],
+			'location' => [
+				[[ 'param' => 'post_type', 'operator' => '==', 'value' => 'page' ]],
+				[[ 'param' => 'post_type', 'operator' => '==', 'value' => 'service' ]],
+			],
+			'menu_order' => 0,
+			'position'   => 'normal',
+			'style'      => 'default',
+		]);
+
 	}
 }
 
@@ -58,11 +225,10 @@ function pi_acf_json_load_point($paths)
 }
 
 function my_acf_google_map_api($api) {
-    $api_key = get_field('google_map_api_key', 'option'); 
+    $api_key = get_field('google_map_api_key', 'option');
     if ($api_key) {
         $api['key'] = $api_key;
     }
     return $api;
 }
 add_filter('acf/fields/google_map/api', 'my_acf_google_map_api');
-

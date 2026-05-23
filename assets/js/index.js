@@ -1,6 +1,7 @@
 import Lenis from "lenis";
 import Header from "./components/header";
 import Functions from "./components/functions";
+import MegaMenu from "./components/mega-menu";
 import AOS from "aos";
 
 // global lenis instance
@@ -13,68 +14,110 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	Header.init();
 	Functions.init();
+	MegaMenu.init();
 	initLangSwitcher();
-	initMobileSubmenus();
+	initMobileDrawer();
 
-	AOS.init({
-		once: true,
+	AOS.init({ once: true });
+});
+
+/* ═══════════════════════════════════════════════
+   Mobile Drawer
+   Full-screen overlay that slides in from the right.
+   Replaces the old header__menu drop-down on mobile.
+═══════════════════════════════════════════════ */
+function initMobileDrawer() {
+	const drawer    = document.getElementById("mobile-menu");
+	const hamburger = document.getElementById("btn-toggle-menu-mobile");
+	if (!drawer || !hamburger) return;
+
+	const overlay  = drawer.querySelector(".mobile-menu__overlay");
+	const closeBtn = drawer.querySelector(".mobile-menu__close");
+
+	// ── Open / close ─────────────────────────────────────────────
+	const openDrawer = () => {
+		drawer.classList.add("is-open");
+		drawer.setAttribute("aria-hidden", "false");
+		document.body.classList.add("mobile-opened");
+		document.body.style.overflow = "hidden";
+		if (window.lenis) window.lenis.stop();
+	};
+
+	const closeDrawer = () => {
+		drawer.classList.remove("is-open");
+		drawer.setAttribute("aria-hidden", "true");
+		document.body.classList.remove("mobile-opened");
+		document.body.style.overflow = "";
+		if (window.lenis) window.lenis.start();
+	};
+
+	hamburger.addEventListener("click", (e) => {
+		e.stopPropagation();
+		drawer.classList.contains("is-open") ? closeDrawer() : openDrawer();
 	});
 
-	const hamberger = document.getElementById("btn-toggle-menu-mobile");
-	if (hamberger) {
-		hamberger.addEventListener("click", function (e) {
-			e.stopPropagation();
-			const isOpen = document.body.classList.toggle("mobile-opened");
-			if (isOpen) {
-				lenis.stop();
-			} else {
-				lenis.start();
-				// Close any open submenus when closing mobile menu
-				document.querySelectorAll(".nav-item.dropdown.open").forEach((el) => {
-					el.classList.remove("open");
-					const toggle = el.querySelector(".dropdown-toggle");
-					if (toggle) toggle.setAttribute("aria-expanded", "false");
-				});
+	closeBtn?.addEventListener("click", closeDrawer);
+	overlay?.addEventListener("click", closeDrawer);
+
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape" && drawer.classList.contains("is-open")) {
+			closeDrawer();
+		}
+	});
+
+	// ── Level-1 accordion ────────────────────────────────────────
+	drawer.querySelectorAll(".mob-toggle").forEach((toggle) => {
+		toggle.addEventListener("click", () => {
+			const item  = toggle.closest(".mob-item");
+			const isOpen = item.classList.contains("is-open");
+
+			// Close all open level-1 items
+			drawer.querySelectorAll(".mob-item.is-open").forEach((el) => {
+				el.classList.remove("is-open");
+				el.querySelector(".mob-toggle")?.setAttribute("aria-expanded", "false");
+			});
+
+			if (!isOpen) {
+				item.classList.add("is-open");
+				toggle.setAttribute("aria-expanded", "true");
+			}
+		});
+	});
+
+	// ── Level-2 accordion ────────────────────────────────────────
+	drawer.querySelectorAll(".mob-sub-toggle").forEach((toggle) => {
+		toggle.addEventListener("click", () => {
+			const item   = toggle.closest(".mob-sub-item");
+			const isOpen = item.classList.contains("is-open");
+			item.classList.toggle("is-open", !isOpen);
+			toggle.setAttribute("aria-expanded", String(!isOpen));
+		});
+	});
+
+	// ── Mobile language switcher ──────────────────────────────────
+	const langToggle   = drawer.querySelector(".mob-lang__toggle");
+	const langDropdown = drawer.querySelector(".mob-lang__dropdown");
+
+	if (langToggle && langDropdown) {
+		langToggle.addEventListener("click", () => {
+			const isOpen = langDropdown.classList.toggle("is-open");
+			langToggle.setAttribute("aria-expanded", String(isOpen));
+		});
+		drawer.addEventListener("click", (e) => {
+			if (!langToggle.contains(e.target) && !langDropdown.contains(e.target)) {
+				langDropdown.classList.remove("is-open");
+				langToggle.setAttribute("aria-expanded", "false");
 			}
 		});
 	}
-});
-
-// Mobile submenu: click dropdown-toggle to expand/collapse inline
-function initMobileSubmenus() {
-	const LG_BREAKPOINT = 992;
-	const dropdownItems = document.querySelectorAll(
-		".header .nav-item.dropdown"
-	);
-
-	dropdownItems.forEach((item) => {
-		const toggle = item.querySelector(".dropdown-toggle");
-		if (!toggle) return;
-
-		toggle.addEventListener("click", (e) => {
-			if (window.innerWidth >= LG_BREAKPOINT) return; // desktop: CSS hover handles it
-			e.preventDefault();
-			e.stopPropagation();
-
-			const isOpen = item.classList.toggle("open");
-			toggle.setAttribute("aria-expanded", String(isOpen));
-
-			// Close sibling submenus
-			dropdownItems.forEach((sibling) => {
-				if (sibling !== item) {
-					sibling.classList.remove("open");
-					const sibToggle = sibling.querySelector(".dropdown-toggle");
-					if (sibToggle) sibToggle.setAttribute("aria-expanded", "false");
-				}
-			});
-		});
-	});
 }
 
+/* ═══════════════════════════════════════════════
+   Desktop language switcher (header)
+═══════════════════════════════════════════════ */
 function initLangSwitcher() {
-	const toggle = document.querySelector(".lang-switcher__toggle");
+	const toggle   = document.querySelector(".lang-switcher__toggle");
 	const dropdown = document.querySelector(".lang-switcher__dropdown");
-
 	if (!toggle || !dropdown) return;
 
 	toggle.addEventListener("click", (e) => {
@@ -91,15 +134,14 @@ function initLangSwitcher() {
 	dropdown.addEventListener("click", (e) => e.stopPropagation());
 }
 
-/* ========== LENIS ========== */
+/* ═══════════════════════════════════════════════
+   Lenis smooth scroll
+═══════════════════════════════════════════════ */
 function initLenis() {
 	if (rafId) cancelAnimationFrame(rafId);
 	if (lenis) lenis.destroy();
 
-	lenis = new Lenis({
-		duration: 1.2,
-		lerp: 0.1,
-	});
+	lenis = new Lenis({ duration: 1.2, lerp: 0.1 });
 
 	function raf(time) {
 		lenis.raf(time);

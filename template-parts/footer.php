@@ -145,3 +145,13 @@ $copyright     = $copyright ?: '&copy; ' . date('Y') . ' ' . __('DD CLINIC. All 
     </div><!-- /.container -->
 </footer>
 
+<!-- ── Scroll to top ─────────────────────────────────────────────── -->
+<button id="scroll-top" class="scroll-top" aria-label="<?php esc_attr_e('TRỞ VỀ ĐẦU TRANG', 'pi'); ?>">
+    <span class="scroll-top__icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </span>
+    <span class="scroll-top__label"><?php esc_html_e('TRỞ VỀ ĐẦU TRANG', 'pi'); ?></span>
+</button>
+

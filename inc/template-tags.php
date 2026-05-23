@@ -4,6 +4,58 @@
  * Template tags
  */
 
+if ( ! function_exists( 'pi_page_breadcrumb' ) ) {
+	/**
+	 * Render breadcrumb nav below the page hero.
+	 * Supports: pages (with ancestors), service CPT, single posts.
+	 */
+	function pi_page_breadcrumb() {
+		if ( is_front_page() ) {
+			return;
+		}
+
+		$crumbs   = [];
+		$crumbs[] = [ 'label' => __( 'Trang Chủ', 'pi' ), 'url' => home_url( '/' ) ];
+
+		if ( is_page() ) {
+			$ancestors = array_reverse( get_post_ancestors( get_the_ID() ) );
+			foreach ( $ancestors as $pid ) {
+				$crumbs[] = [ 'label' => get_the_title( $pid ), 'url' => get_permalink( $pid ) ];
+			}
+			$crumbs[] = [ 'label' => get_the_title(), 'url' => '' ];
+
+		} elseif ( is_singular( 'service' ) ) {
+			$crumbs[] = [ 'label' => get_the_title(), 'url' => '' ];
+
+		} elseif ( is_singular( 'post' ) ) {
+			$cats = get_the_category();
+			if ( $cats ) {
+				$crumbs[] = [ 'label' => $cats[0]->name, 'url' => get_category_link( $cats[0]->term_id ) ];
+			}
+			$crumbs[] = [ 'label' => get_the_title(), 'url' => '' ];
+		}
+
+		if ( count( $crumbs ) < 2 ) {
+			return;
+		}
+
+		echo '<nav class="page-hero-breadcrumb" aria-label="breadcrumb">';
+		echo '<div class="container">';
+		echo '<ol class="breadcrumb">';
+		$last = count( $crumbs ) - 1;
+		foreach ( $crumbs as $i => $crumb ) {
+			if ( $i === $last ) {
+				echo '<li class="breadcrumb-item active" aria-current="page"><span>' . esc_html( $crumb['label'] ) . '</span></li>';
+			} else {
+				echo '<li class="breadcrumb-item"><a href="' . esc_url( $crumb['url'] ) . '">' . esc_html( $crumb['label'] ) . '</a></li>';
+			}
+		}
+		echo '</ol>';
+		echo '</div>';
+		echo '</nav>';
+	}
+}
+
 if ( ! function_exists( 'pi_template_news_hero_header' ) ) {
 	function pi_template_news_hero_header() {
 		$page_for_posts_id = get_option( 'page_for_posts' );

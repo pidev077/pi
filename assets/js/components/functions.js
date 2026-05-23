@@ -11,8 +11,26 @@ import {
 export default {
 	init() {
 		piCaseRelatedCarousel();
+		initScrollTop();
 	},
 };
+function initScrollTop() {
+	const btn = document.getElementById('scroll-top');
+	if (!btn) return;
+
+	window.addEventListener('scroll', () => {
+		btn.classList.toggle('is-visible', window.scrollY > 300);
+	}, { passive: true });
+
+	btn.addEventListener('click', () => {
+		if (window.lenis) {
+			window.lenis.scrollTo(0, { duration: 1.2 });
+		} else {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
+	});
+}
+
 function piCaseRelatedCarousel() {
 	const el = document.querySelector(".case-related__carousel");
 
