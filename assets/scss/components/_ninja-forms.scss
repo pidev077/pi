@@ -140,7 +140,7 @@ $nf-required:    #C0392B;
 					appearance: none;
 
 					@include media-breakpoint-down(md) {
-						padding: 9px 14px;
+						padding: 6px 16px;
 					}
 
 					&::placeholder {
@@ -235,8 +235,14 @@ $nf-required:    #C0392B;
 			.checkbox-wrap{
 				.nf-field-label{
 					padding-left: 0;
+					@include media-breakpoint-down(md) {
+							padding-left: 5px;
+						}
 					label{
 						font-size: 16px;
+						@include media-breakpoint-down(md) {
+							font-size: 14px;
+						}
 					}
 				}
 			}

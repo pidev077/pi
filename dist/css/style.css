@@ -7081,7 +7081,7 @@ html {
   .nf-form-cont .nf-form-content .nf-field-element input,
   .nf-form-cont .nf-form-content .nf-field-element textarea,
   .nf-form-cont .nf-form-content .nf-field-element select {
-    padding: 9px 14px;
+    padding: 6px 16px;
   }
 }
 .nf-form-cont .nf-form-content .nf-field-element input::placeholder,
@@ -7162,8 +7162,18 @@ html {
 .nf-form-cont .nf-form-content .nf-field .checkbox-wrap .nf-field-label {
   padding-left: 0;
 }
+@media (max-width: 767.98px) {
+  .nf-form-cont .nf-form-content .nf-field .checkbox-wrap .nf-field-label {
+    padding-left: 5px;
+  }
+}
 .nf-form-cont .nf-form-content .nf-field .checkbox-wrap .nf-field-label label {
   font-size: 16px;
+}
+@media (max-width: 767.98px) {
+  .nf-form-cont .nf-form-content .nf-field .checkbox-wrap .nf-field-label label {
+    font-size: 14px;
+  }
 }
 .nf-form-cont .nf-form-content .nf-field .html-wrap {
   margin-top: 24px;
@@ -9170,6 +9180,11 @@ img {
 }
 .page-hero--style-2 .page-hero__title {
   max-width: 560px;
+}
+@media (max-width: 767.98px) {
+  .page-hero--style-2 .page-hero__title {
+    font-size: 36px;
+  }
 }
 .page-hero--style-2 .page-hero__desc {
   margin-left: 0;
