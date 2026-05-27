@@ -146,6 +146,21 @@ function pi_acf_init()
 					'instructions'  => 'Enable to display the title bar above the page content.',
 				],
 				[
+					'key'               => 'field_pi_hero_style',
+					'label'             => 'Layout Style',
+					'name'              => 'page_hero_style',
+					'type'              => 'select',
+					'choices'           => [
+						'style-1' => 'Style 1 — Centered (full-width background)',
+						'style-2' => 'Style 2 — Split (text trái / ảnh phải)',
+					],
+					'default_value'     => 'style-1',
+					'instructions'      => 'Style 1: text căn giữa trên nền ảnh. Style 2: text bên trái, ảnh bên phải.',
+					'conditional_logic' => [[
+						['field' => 'field_pi_hero_enable', 'operator' => '==', 'value' => '1'],
+					]],
+				],
+				[
 					'key'               => 'field_pi_hero_supertitle',
 					'label'             => 'Supertitle',
 					'name'              => 'page_hero_supertitle',
@@ -178,6 +193,17 @@ function pi_acf_init()
 					]],
 				],
 				[
+					'key'               => 'field_pi_hero_cta',
+					'label'             => 'CTA Button',
+					'name'              => 'page_hero_cta',
+					'type'              => 'link',
+					'return_format'     => 'array',
+					'instructions'      => 'Optional call-to-action button displayed below the description. E.g. "Đặt Lịch Tư Vấn" → booking page URL.',
+					'conditional_logic' => [[
+						['field' => 'field_pi_hero_enable', 'operator' => '==', 'value' => '1'],
+					]],
+				],
+				[
 					'key'               => 'field_pi_hero_bg_image',
 					'label'             => 'Background Image',
 					'name'              => 'page_hero_bg_image',
@@ -192,10 +218,81 @@ function pi_acf_init()
 			],
 			'location' => [
 				[[ 'param' => 'post_type', 'operator' => '==', 'value' => 'page' ]],
-				[[ 'param' => 'post_type', 'operator' => '==', 'value' => 'service' ]],
 			],
 			'menu_order' => 0,
 			'position'   => 'normal',
+			'style'      => 'default',
+		]);
+
+		// ── Service Hero: banner split-layout cho service & service_group ─
+		acf_add_local_field_group([
+			'key'    => 'group_pi_service_hero',
+			'title'  => 'Service Hero — Banner',
+			'fields' => [
+				[
+					'key'          => 'field_pi_sh_title',
+					'label'        => 'Title',
+					'name'         => 'service_hero_title',
+					'type'         => 'text',
+					'instructions' => 'Leave blank to use the post name.',
+				],
+				[
+					'key'       => 'field_pi_sh_desc',
+					'label'     => 'Description',
+					'name'      => 'service_hero_desc',
+					'type'      => 'textarea',
+					'rows'      => 3,
+					'new_lines' => 'br',
+				],
+				[
+					'key'           => 'field_pi_sh_cta',
+					'label'         => 'CTA Button',
+					'name'          => 'service_hero_cta',
+					'type'          => 'link',
+					'return_format' => 'array',
+					'instructions'  => 'Optional call-to-action button. E.g. "Đặt Lịch Tư Vấn" → booking page URL.',
+				],
+				[
+					'key'           => 'field_pi_sh_image',
+					'label'         => 'Banner Image (right side)',
+					'name'          => 'service_hero_image',
+					'type'          => 'image',
+					'return_format' => 'array',
+					'preview_size'  => 'medium',
+					'instructions'  => 'Portrait image, ~3:4 or ~2:3 ratio. Fills the right half of the banner.',
+				],
+			],
+			'location' => [
+				[[ 'param' => 'post_type', 'operator' => '==', 'value' => 'service' ]],
+				[[ 'param' => 'post_type', 'operator' => '==', 'value' => 'service_group' ]],
+			],
+			'menu_order' => 1,
+			'position'   => 'normal',
+			'style'      => 'default',
+		]);
+
+		// ── Service Group: chọn danh mục liên kết ───────────────────────
+		acf_add_local_field_group([
+			'key'    => 'group_pi_service_group',
+			'title'  => 'Cài Đặt Nhóm Dịch Vụ',
+			'fields' => [
+				[
+					'key'           => 'field_pi_sg_linked_category',
+					'label'         => 'Danh Mục Dịch Vụ Liên Kết',
+					'name'          => 'sg_linked_category',
+					'type'          => 'taxonomy',
+					'taxonomy'      => 'service_category',
+					'field_type'    => 'select',
+					'return_format' => 'id',
+					'allow_null'    => 1,
+					'instructions'  => 'Chọn danh mục (cấp 1 hoặc cấp 2) để tự động liệt kê các dịch vụ thuộc nhóm này bên dưới nội dung Gutenberg.',
+				],
+			],
+			'location' => [
+				[[ 'param' => 'post_type', 'operator' => '==', 'value' => 'service_group' ]],
+			],
+			'menu_order' => 0,
+			'position'   => 'side',
 			'style'      => 'default',
 		]);
 

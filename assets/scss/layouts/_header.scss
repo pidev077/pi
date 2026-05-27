@@ -440,6 +440,27 @@ $admin-bar-mobile: 46px;
 }
 
 // =============================================
+// Non-home pages: show sticky logo immediately (white bg, no overlay)
+// =============================================
+
+body:not(.home) .header:not(.scrolled) {
+	.header__logo:has(img.logo-sticky) {
+		img.logo-main {
+			display: none;
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		img.logo-sticky {
+			display: block;
+			position: relative;
+			opacity: 1;
+			pointer-events: auto;
+		}
+	}
+}
+
+// =============================================
 // Homepage transparent header — white text
 // =============================================
 
@@ -464,6 +485,28 @@ $admin-bar-mobile: 46px;
 
 			&:hover {
 				background: rgba(#fff, 0.1);
+			}
+		}
+	}
+}
+
+// =============================================
+// Service & service_group: frosted-glass header over hero
+// =============================================
+
+.single-service,
+.single-service_group {
+	.header:not(.scrolled):not(.mobile-opened) {
+		position: absolute;
+		background: #FFFFFF14;
+		backdrop-filter: blur(80px);
+		top: 0;
+
+		.logged-in & {
+			top: $admin-bar-desktop;
+
+			@media screen and (max-width: 782px) {
+				top: $admin-bar-mobile;
 			}
 		}
 	}

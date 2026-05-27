@@ -46,25 +46,25 @@ if (!function_exists('pi_register_service_post_type')) {
 	{
 		register_post_type('service', array(
 			'labels' => array(
-				'name'               => 'Services',
-				'singular_name'      => 'Service',
-				'add_new'            => 'Add New',
-				'add_new_item'       => 'Add New Service',
-				'edit_item'          => 'Edit Service',
-				'new_item'           => 'New Service',
-				'view_item'          => 'View Service',
-				'search_items'       => 'Search Services',
-				'not_found'          => 'No services found',
-				'not_found_in_trash' => 'No services found in Trash',
-				'menu_name'          => 'Services',
+				'name'               => 'Dịch Vụ',
+				'singular_name'      => 'Dịch Vụ',
+				'add_new'            => 'Thêm Mới',
+				'add_new_item'       => 'Thêm Dịch Vụ Mới',
+				'edit_item'          => 'Sửa Dịch Vụ',
+				'new_item'           => 'Dịch Vụ Mới',
+				'view_item'          => 'Xem Dịch Vụ',
+				'search_items'       => 'Tìm Dịch Vụ',
+				'not_found'          => 'Không tìm thấy dịch vụ',
+				'not_found_in_trash' => 'Không có dịch vụ trong thùng rác',
+				'menu_name'          => 'Dịch Vụ',
 			),
-			'description'        => 'Manage clinic services',
+			'description'        => 'Quản lý dịch vụ thẩm mỹ',
 			'public'             => true,
 			'publicly_queryable' => true,
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array('slug' => 'service', 'with_front' => false),
+			'rewrite'            => array('slug' => 'dich-vu', 'with_front' => false),
 			'capability_type'    => 'post',
 			'has_archive'        => false,
 			'hierarchical'       => false,
@@ -73,10 +73,82 @@ if (!function_exists('pi_register_service_post_type')) {
 			'supports'           => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields'),
 			'show_in_rest'       => true,
 			'rest_base'          => 'services',
+			'taxonomies'         => array('service_category'),
 		));
 	}
 
 	add_action('init', 'pi_register_service_post_type', 0);
+}
+
+if (!function_exists('pi_register_service_taxonomy')) {
+	function pi_register_service_taxonomy()
+	{
+		// Taxonomy phân cấp cho dịch vụ (hỗ trợ cấp 1 và cấp 2)
+		// Ví dụ cấp 1: "Phẫu Thuật Thẩm Mỹ Khuôn Mặt"
+		// Ví dụ cấp 2: "Nâng Mũi" (con của Khuôn Mặt)
+		// Post thực tế: "Nâng Mũi S-Line", "Nâng Mũi L-Line" gán vào term cấp 2
+		register_taxonomy('service_category', array('service'), array(
+			'labels' => array(
+				'name'              => 'Danh Mục Dịch Vụ',
+				'singular_name'     => 'Danh Mục',
+				'search_items'      => 'Tìm Danh Mục',
+				'all_items'         => 'Tất Cả Danh Mục',
+				'parent_item'       => 'Danh Mục Cha',
+				'parent_item_colon' => 'Danh Mục Cha:',
+				'edit_item'         => 'Sửa Danh Mục',
+				'update_item'       => 'Cập Nhật Danh Mục',
+				'add_new_item'      => 'Thêm Danh Mục Mới',
+				'new_item_name'     => 'Tên Danh Mục Mới',
+				'menu_name'         => 'Danh Mục',
+			),
+			'hierarchical'      => true,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array('slug' => 'danh-muc-dich-vu', 'with_front' => false, 'hierarchical' => true),
+			'show_in_rest'      => true,
+		));
+	}
+
+	add_action('init', 'pi_register_service_taxonomy', 0);
+}
+
+if (!function_exists('pi_register_service_group_post_type')) {
+	function pi_register_service_group_post_type()
+	{
+		register_post_type('service_group', array(
+			'labels' => array(
+				'name'               => 'Nhóm Dịch Vụ',
+				'singular_name'      => 'Nhóm Dịch Vụ',
+				'add_new'            => 'Thêm Mới',
+				'add_new_item'       => 'Thêm Nhóm Dịch Vụ Mới',
+				'edit_item'          => 'Sửa Nhóm Dịch Vụ',
+				'new_item'           => 'Nhóm Dịch Vụ Mới',
+				'view_item'          => 'Xem Nhóm Dịch Vụ',
+				'search_items'       => 'Tìm Nhóm Dịch Vụ',
+				'not_found'          => 'Không tìm thấy nhóm dịch vụ',
+				'not_found_in_trash' => 'Không có nhóm dịch vụ trong thùng rác',
+				'menu_name'          => 'Nhóm Dịch Vụ',
+			),
+			'description'        => 'Trang landing cho từng nhóm dịch vụ lớn — layout tự do bằng Gutenberg',
+			'public'             => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array('slug' => 'nhom-dich-vu', 'with_front' => false),
+			'capability_type'    => 'post',
+			'has_archive'        => false,
+			'hierarchical'       => false,
+			'menu_position'      => 21,
+			'menu_icon'          => 'dashicons-category',
+			'supports'           => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields'),
+			'show_in_rest'       => true, // bắt buộc để Gutenberg hoạt động
+			'rest_base'          => 'service-groups',
+		));
+	}
+
+	add_action('init', 'pi_register_service_group_post_type', 0);
 }
 
 if (!function_exists('pi_create_custom_taxonomy')) {

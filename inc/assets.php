@@ -28,6 +28,21 @@ if (!function_exists('pi_load_fonts')) {
 
 add_action('admin_enqueue_scripts', 'pi_load_fonts');
 
+// Load theme CSS inside Ninja Forms admin builder so the form preview matches frontend
+add_action('admin_enqueue_scripts', function ( $hook ) {
+	if ( strpos( $hook, 'ninja-forms' ) === false &&
+		( ! isset( $_GET['page'] ) || strpos( $_GET['page'], 'ninja-forms' ) === false ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'pi-nf-admin-styles',
+		get_template_directory_uri() . '/dist/css/style.css',
+		[],
+		null
+	);
+});
+
 add_action('enqueue_block_editor_assets', function () {
 	wp_enqueue_style(
 		'pi-editor-fonts',

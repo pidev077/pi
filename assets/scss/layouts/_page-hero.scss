@@ -77,8 +77,71 @@
 		max-width: 720px;
 		margin: 0 auto;
 	}
+
+	&__cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		background: #E0AC47;
+		color: #fff;
+		font-family: $font-second, sans-serif;
+		font-size: 16px;
+		font-weight: 500;
+		padding: 8px 20px;
+		text-decoration: none;
+		margin-top: 24px;
+		transition: background 0.2s ease, transform 0.2s ease;
+		@include media-breakpoint-down(md) {
+			font-size: 14px;
+		}
+		svg {
+			flex-shrink: 0;
+			transition: transform 0.2s ease;
+		}
+
+		&:hover {
+			background: darken($color-primary, 10%);
+			color: $color-dark;
+
+			svg { transform: translate(2px, -2px); }
+		}
+	}
 }
 
+// ── Style 2: full-width bg + solid gradient left + text căn trái ─────────────
+.page-hero--style-2 {
+	text-align: left;
+
+	&.page-hero--has-bg::before {
+		background: linear-gradient(90deg, #FAF8F4 38.96%, rgba(250, 248, 244, 0) 65.76%);
+	}
+
+	.page-hero__label {
+		margin-left: 0;
+		margin-right: auto;
+	}
+
+	.page-hero__divider::after {
+		display: none;
+	}
+
+	.page-hero__title {
+		max-width: 560px;
+	}
+
+	.page-hero__desc {
+		margin-left: 0;
+		margin-right: 0;
+		max-width: 500px;
+	}
+
+	.page-hero__cta {
+		margin-left: 0;
+	}
+}
+.page-hero--style-2 .page-hero__divider{
+	display: none;
+}
 .page-hero-breadcrumb {
 	background: #fff;
 	border-bottom: 1px solid #F2EEE7;
@@ -93,6 +156,7 @@
 		list-style: none;
 		align-items: center;
 		gap: 14px;
+		padding-left: 0;
 	}
 
 	.breadcrumb-item {
