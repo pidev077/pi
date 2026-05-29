@@ -151,34 +151,3 @@ if (!function_exists('pi_register_service_group_post_type')) {
 	add_action('init', 'pi_register_service_group_post_type', 0);
 }
 
-if (!function_exists('pi_create_custom_taxonomy')) {
-	function pi_create_custom_taxonomy()
-	{
-
-		
-
-		register_taxonomy('team-location', array('teams'), array(
-			'labels' => array(
-				'name'              => 'Locations',
-				'singular_name'     => 'location',
-				'search_items'      => 'Search Locations',
-				'all_items'         => 'All Locations',
-				'parent_item'       => 'Parent Location',
-				'parent_item_colon' => 'Parent Location:',
-				'edit_item'         => 'Edit Location',
-				'update_item'       => 'Update Location',
-				'add_new_item'      => 'Add New Location',
-				'new_item_name'     => 'New Location Name',
-				'menu_name'         => 'Locations',
-			),
-			'hierarchical'      => true,
-			'show_ui'           => true,
-			'show_admin_column' => true,
-			'query_var'         => true,
-			'rewrite'           => false,
-			'show_in_rest'      => true,
-		));
-	}
-
-	add_action('init', 'pi_create_custom_taxonomy', 0);
-}
