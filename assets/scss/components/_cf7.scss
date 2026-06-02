@@ -3,7 +3,7 @@ $cf7-border:      #F2EEE7;
 $cf7-text:        #27211C;
 $cf7-placeholder: #D5CCBE;
 $cf7-gold:        #E0AC47;
-$cf7-required:    #C0392B;
+$cf7-required:    #FF2056;
 
 .wpcf7 {
 	width: 100%;
@@ -106,7 +106,7 @@ $cf7-required:    #C0392B;
 			font-size: 16px;
 			font-weight: 400;
 			color: $cf7-text;
-			border-radius: 0;
+			border-radius: 4px;
 			border: 1px solid $cf7-border;
 			background: #fff;
 			padding: 8px 16px;
@@ -162,8 +162,8 @@ $cf7-required:    #C0392B;
 			}
 		}
 
-		// Custom arrow cho select (dùng :has() — Chrome 105+, FF 121+, Safari 15.4+)
-		span.wpcf7-form-control-wrap:has(select) {
+		// Custom arrow cho select thuần (chỉ khi KHÔNG có custom dropdown)
+		span.wpcf7-form-control-wrap:has(select):not(:has(.cf7-custom-select)) {
 			position: relative;
 
 			&::after {
@@ -191,7 +191,7 @@ $cf7-required:    #C0392B;
 			border: 1px solid #E6DFD4 !important;
 			cursor: pointer;
 			flex-shrink: 0;
-			margin-top: 2px;
+			margin-top: 4px;
 		}
 
 		// Acceptance field (checkbox + text inline)
@@ -235,10 +235,10 @@ $cf7-required:    #C0392B;
 		input[type="submit"].wpcf7-submit {
 			width: auto;
 			padding: 0 48px 0 28px;
-			border-radius: 0;
+			border-radius: 4px;
+			border:none;
 			background-color: $cf7-gold;
-			border: 2px solid $cf7-gold;
-			height: 46px;
+			height: 40px;
 			font-family: $font-second, sans-serif;
 			font-size: 16px;
 			font-weight: 500;
@@ -284,10 +284,10 @@ $cf7-required:    #C0392B;
 				content: "";
 				display: block;
 				flex-shrink: 0;
-				width: 20px;
-				height: 20px;
+				width: 24px;
+				height: 24px;
 				margin-top: 1px;
-				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'%3E%3Crect x='3' y='11' width='18' height='11' rx='2' stroke='%23C0392B' stroke-width='1.5'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4' stroke='%23C0392B' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M8 11V7C8 5.93913 8.42143 4.92172 9.17157 4.17157C9.92172 3.42143 10.9391 3 12 3C13.0609 3 14.0783 3.42143 14.8284 4.17157C15.5786 4.92172 16 5.93913 16 7V11M5 13C5 12.4696 5.21071 11.9609 5.58579 11.5858C5.96086 11.2107 6.46957 11 7 11H17C17.5304 11 18.0391 11.2107 18.4142 11.5858C18.7893 11.9609 19 12.4696 19 13V19C19 19.5304 18.7893 20.0391 18.4142 20.4142C18.0391 20.7893 17.5304 21 17 21H7C6.46957 21 5.96086 20.7893 5.58579 20.4142C5.21071 20.0391 5 19.5304 5 19V13ZM11 16C11 16.2652 11.1054 16.5196 11.2929 16.7071C11.4804 16.8946 11.7348 17 12 17C12.2652 17 12.5196 16.8946 12.7071 16.7071C12.8946 16.5196 13 16.2652 13 16C13 15.7348 12.8946 15.4804 12.7071 15.2929C12.5196 15.1054 12.2652 15 12 15C11.7348 15 11.4804 15.1054 11.2929 15.2929C11.1054 15.4804 11 15.7348 11 16Z' stroke='%23FF2056' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 				background-repeat: no-repeat;
 				background-size: contain;
 			}
@@ -327,6 +327,145 @@ $cf7-required:    #C0392B;
 			color: $cf7-required;
 			background: transparent;
 			border-color: $cf7-required;
+		}
+	}
+}
+
+// ── Custom Select Dropdown với Radio (ngoài .wpcf7 để selector không bị override) ──
+.cf7-custom-select {
+	position: relative;
+	width: 100%;
+
+	&__trigger {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		width: 100%;
+		height: 40px;
+		padding: 8px 16px;
+		font-family: $font-second, sans-serif;
+		font-size: 16px;
+		font-weight: 400;
+		color: $cf7-placeholder;
+		background: #fff;
+		border: 1px solid $cf7-border;
+		border-radius: 4px;
+		cursor: pointer;
+		text-align: left;
+		transition: border-color 0.2s ease;
+		box-shadow: none;
+		-webkit-appearance: none;
+		appearance: none;
+
+		@include media-breakpoint-down(md) {
+			height: 34px;
+			font-size: 14px;
+			padding: 6px 16px;
+		}
+
+		&::after {
+			content: "";
+			flex-shrink: 0;
+			width: 8px;
+			height: 8px;
+			border-right: 2px solid $cf7-placeholder;
+			border-bottom: 2px solid $cf7-placeholder;
+			transform: rotate(45deg) translateY(-3px);
+			transition: transform 0.2s ease, border-color 0.2s ease;
+		}
+	}
+
+	&.has-value &__trigger {
+		color: $cf7-text;
+	}
+
+	&.is-open &__trigger {
+		border-color: $cf7-gold;
+
+		&::after {
+			transform: rotate(-135deg) translateY(3px);
+			border-color: $cf7-gold;
+		}
+	}
+
+	&__panel {
+		position: absolute;
+		top: calc(100% + 4px);
+		left: 0;
+		right: 0;
+		background: #fff;
+		border: 1px solid $cf7-gold;
+		border-radius: 4px;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+		z-index: 9999;
+		padding: 6px 0;
+		max-height: 260px;
+		overflow-y: auto;
+	}
+
+	&__item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 10px 16px;
+		cursor: pointer;
+		font-family: $font-second, sans-serif;
+		font-size: 15px;
+		color: $cf7-text;
+		transition: background 0.15s ease;
+		margin: 0;
+
+		@include media-breakpoint-down(md) {
+			font-size: 14px;
+			padding: 9px 14px;
+		}
+
+		&:hover {
+			background: #FBF7EB;
+		}
+		.is-checked{
+			background: #FBF7EB;
+		}
+
+		input[type="radio"] {
+			flex-shrink: 0;
+			width: 18px !important;
+			height: 18px !important;
+			padding: 0 !important;
+			margin: 0 !important;
+			appearance: none !important;
+			-webkit-appearance: none !important;
+			border: 2px solid $cf7-border;
+			border-radius: 50%;
+			background: #fff;
+			cursor: pointer;
+			position: relative;
+			transition: border-color 0.15s ease;
+
+			&:checked {
+				border-color: $cf7-gold;
+
+				&::after {
+					content: "";
+					position: absolute;
+					inset: 3px;
+					border-radius: 50%;
+					background: $cf7-gold;
+				}
+			}
+		}
+
+		&.is-checked input[type="radio"] {
+			border-color: $cf7-gold;
+
+			&::after {
+				content: "";
+				position: absolute;
+				inset: 3px;
+				border-radius: 50%;
+				background: $cf7-gold;
+			}
 		}
 	}
 }
