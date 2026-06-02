@@ -1,0 +1,332 @@
+// Contact Form 7 — ported from Ninja Forms, clinic theme
+$cf7-border:      #F2EEE7;
+$cf7-text:        #27211C;
+$cf7-placeholder: #D5CCBE;
+$cf7-gold:        #E0AC47;
+$cf7-required:    #C0392B;
+
+.wpcf7 {
+	width: 100%;
+
+	form.wpcf7-form {
+		padding: 0;
+		max-width: 100%;
+
+		&::after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+
+		// ── Field container (<p> mặc định của CF7, hoặc .cf7-field tuỳ chỉnh) ──
+		> p,
+		.cf7-field {
+			margin-top: 0;
+			margin-bottom: 20px;
+
+			@include media-breakpoint-down(md) {
+				margin-bottom: 16px;
+			}
+
+			&.cf7-submit {
+				margin-bottom: 0 !important;
+			}
+
+			// 50% — thêm class cf7-half ll / rr vào thẻ <p> trong CF7 editor
+			&.cf7-half.ll {
+				width: 50%;
+				float: left;
+				clear: none;
+				padding-right: 12px;
+
+				@include media-breakpoint-down(md) {
+					width: 100%;
+					float: none;
+					padding-right: 0;
+				}
+			}
+
+			&.cf7-half.rr {
+				width: 50%;
+				float: left;
+				clear: none;
+				padding-left: 12px;
+
+				@include media-breakpoint-down(md) {
+					width: 100%;
+					float: none;
+					padding-left: 0;
+				}
+			}
+		}
+
+		// ── Label ─────────────────────────────────────────────────────────────
+		> p > label,
+		.cf7-field > label {
+			display: block;
+			font-family: $font-second, sans-serif;
+			font-size: 14px;
+			font-weight: 500;
+			color: #584E44;
+			line-height: 1.5;
+			margin-bottom: 8px;
+
+			@include media-breakpoint-down(md) {
+				margin-bottom: 6px;
+			}
+		}
+
+		// Required * trước label — thêm class "required" vào thẻ <p>
+		> p.required > label,
+		.cf7-field.required > label {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+
+			&::before {
+				content: "*";
+				color: $cf7-required;
+				font-size: 14px;
+				font-weight: 600;
+				line-height: 1;
+			}
+		}
+
+		// ── Field wrapper (span.wpcf7-form-control-wrap) ──────────────────────
+		.wpcf7-form-control-wrap {
+			display: block;
+			width: 100%;
+		}
+
+		// ── Input / Textarea / Select (base) ──────────────────────────────────
+		input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]),
+		textarea,
+		select {
+			font-family: $font-second, sans-serif;
+			font-size: 16px;
+			font-weight: 400;
+			color: $cf7-text;
+			border-radius: 0;
+			border: 1px solid $cf7-border;
+			background: #fff;
+			padding: 8px 16px;
+			width: 100%;
+			box-shadow: none;
+			transition: border-color 0.2s ease;
+			-webkit-appearance: none;
+			appearance: none;
+
+			@include media-breakpoint-down(md) {
+				font-size: 14px;
+				padding: 6px 16px;
+			}
+
+			&::placeholder {
+				color: $cf7-placeholder;
+				font-family: $font-second, sans-serif;
+				font-size: inherit;
+				font-weight: 400;
+			}
+
+			&:focus,
+			&:focus-visible {
+				outline: none;
+				border-color: darken($cf7-border, 15%);
+				box-shadow: none;
+			}
+		}
+
+		input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]),
+		select {
+			height: 40px;
+
+			@include media-breakpoint-down(md) {
+				height: 34px;
+			}
+		}
+
+		textarea {
+			height: 200px;
+			resize: vertical;
+			min-height: 200px;
+		}
+
+		// ── Select với placeholder màu xám ────────────────────────────────────
+		select {
+			padding-right: 40px;
+			color: $cf7-placeholder;
+			cursor: pointer;
+
+			option:not([value=""]) {
+				color: $cf7-text;
+			}
+		}
+
+		// Custom arrow cho select (dùng :has() — Chrome 105+, FF 121+, Safari 15.4+)
+		span.wpcf7-form-control-wrap:has(select) {
+			position: relative;
+
+			&::after {
+				content: "";
+				position: absolute;
+				right: 18px;
+				top: 50%;
+				transform: translateY(calc(-50% - 2px)) rotate(45deg);
+				width: 8px;
+				height: 8px;
+				border-right: 2px solid $cf7-placeholder;
+				border-bottom: 2px solid $cf7-placeholder;
+				pointer-events: none;
+			}
+		}
+
+		// ── Checkbox ──────────────────────────────────────────────────────────
+		input[type="checkbox"] {
+			width: 14px !important;
+			height: 14px !important;
+			padding: 0 !important;
+			-webkit-appearance: auto !important;
+			appearance: auto !important;
+			accent-color: $cf7-gold;
+			border: 1px solid #E6DFD4 !important;
+			cursor: pointer;
+			flex-shrink: 0;
+			margin-top: 2px;
+		}
+
+		// Acceptance field (checkbox + text inline)
+		.wpcf7-acceptance {
+			.wpcf7-list-item {
+				margin: 0;
+
+				label {
+					display: inline-flex;
+					align-items: flex-start;
+					gap: 8px;
+					font-family: $font-second, sans-serif;
+					font-size: 16px;
+					font-weight: 400;
+					color: $cf7-text;
+					margin-bottom: 0;
+					cursor: pointer;
+
+					@include media-breakpoint-down(md) {
+						font-size: 14px;
+					}
+				}
+			}
+		}
+
+		// ── Error state ───────────────────────────────────────────────────────
+		.wpcf7-not-valid {
+			border-color: $cf7-required !important;
+		}
+
+		.wpcf7-not-valid-tip {
+			font-family: $font-second, sans-serif;
+			font-size: 13px;
+			font-weight: 400;
+			color: $cf7-required;
+			display: block;
+			margin: 4px 0 0;
+		}
+
+		// ── Submit ────────────────────────────────────────────────────────────
+		input[type="submit"].wpcf7-submit {
+			width: auto;
+			padding: 0 48px 0 28px;
+			border-radius: 0;
+			background-color: $cf7-gold;
+			border: 2px solid $cf7-gold;
+			height: 46px;
+			font-family: $font-second, sans-serif;
+			font-size: 16px;
+			font-weight: 500;
+			color: #fff;
+			cursor: pointer;
+			transition: all 0.3s ease-in-out;
+			-webkit-appearance: none;
+			appearance: none;
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M15 10L11 14L17 20L21 4L3 11L7 13L9 19L12 15' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+			background-repeat: no-repeat;
+			background-position: right 16px center;
+			background-size: 22px;
+
+			@include media-breakpoint-down(md) {
+				height: 42px;
+				font-size: 15px;
+			}
+
+			&:hover {
+				background-color: darken($cf7-gold, 12%);
+				border-color: darken($cf7-gold, 12%);
+			}
+
+			&:disabled {
+				opacity: 0.65;
+				cursor: not-allowed;
+			}
+		}
+
+		// ── Spinner (ẩn) ──────────────────────────────────────────────────────
+		.wpcf7-spinner {
+			display: none;
+		}
+
+		// ── Privacy / HTML note (.cf7-note thêm vào thẻ <p>) ─────────────────
+		.cf7-note {
+			margin-top: 24px;
+			display: flex;
+			align-items: flex-start;
+			gap: 10px;
+
+			&::before {
+				content: "";
+				display: block;
+				flex-shrink: 0;
+				width: 20px;
+				height: 20px;
+				margin-top: 1px;
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'%3E%3Crect x='3' y='11' width='18' height='11' rx='2' stroke='%23C0392B' stroke-width='1.5'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4' stroke='%23C0392B' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+				background-repeat: no-repeat;
+				background-size: contain;
+			}
+
+			p {
+				margin: 0;
+				font-family: $font-second, sans-serif;
+				font-size: 14px;
+				line-height: 1.6;
+				color: #978B7B;
+			}
+		}
+	}
+
+	// ── Response output (success / validation error) ───────────────────────
+	.wpcf7-response-output {
+		font-family: $font-second, sans-serif;
+		margin: 20px 0 0;
+		padding: 0;
+		border: none;
+		font-size: 14px;
+		line-height: 1.6;
+		text-align: center;
+
+		&.wpcf7-mail-sent-ok {
+			font-family: $font-primary, serif;
+			font-size: 24px;
+			font-weight: 400;
+			color: $cf7-text;
+			background: transparent;
+			border: none;
+		}
+
+		&.wpcf7-validation-errors,
+		&.wpcf7-mail-sent-ng,
+		&.wpcf7-acceptance-missing {
+			color: $cf7-required;
+			background: transparent;
+			border-color: $cf7-required;
+		}
+	}
+}
