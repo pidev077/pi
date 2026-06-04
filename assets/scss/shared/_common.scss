@@ -6,6 +6,16 @@
 	font-family: $font-primary, serif;
 }
 
+.heading-strikethrough {
+	&::after {
+		content: '';
+		display: block;
+		width: 236px;
+		height: 18px;
+		background-color: #F2EEE7;
+	}
+}
+
 h5, .h5,
 h6, .h6 {
 	color: $body-color;
