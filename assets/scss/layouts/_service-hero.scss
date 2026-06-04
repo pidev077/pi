@@ -51,6 +51,29 @@
 		}
 	}
 
+	// ── Featured image: ảnh full width, text đè lên trên ─────────────
+	&--full-image {
+		.service-hero__image-wrap {
+			width: 100%;
+
+			// overlay để chữ đọc được
+			&::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(90deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.1) 60%, transparent 100%);
+			}
+
+			@include media-breakpoint-down(lg) { width: 100%; }
+		}
+
+		.service-hero__title,
+		.service-hero__desc,
+		.service-hero__supertitle { color: #fff; }
+
+		.service-hero__desc { color: rgba(255,255,255,.85); }
+	}
+
 	// ── Khu vực text ──────────────────────────────────────────────────
 	&__body {
 		position: relative;

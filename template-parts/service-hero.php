@@ -13,9 +13,19 @@
 $title      = get_field( 'service_hero_title' ) ?: get_the_title();
 $desc       = get_field( 'service_hero_desc' );
 $cta        = get_field( 'service_hero_cta' );
-$image      = get_field( 'service_hero_image' );
+
+if ( has_post_thumbnail() ) {
+	$thumb_id   = get_post_thumbnail_id();
+	$thumb_data = wp_get_attachment_image_src( $thumb_id, 'full' );
+	$image      = [
+		'url' => $thumb_data[0],
+		'alt' => get_post_meta( $thumb_id, '_wp_attachment_image_alt', true ) ?: get_the_title(),
+	];
+} else {
+	$image = get_field( 'service_hero_image' );
+}
 ?>
-<section class="service-hero">
+<section class="service-hero<?= has_post_thumbnail() ? ' service-hero--full-image' : '' ?>">
 
 	<?php if ( $image ) : ?>
 		<figure class="service-hero__image-wrap" aria-hidden="true">
