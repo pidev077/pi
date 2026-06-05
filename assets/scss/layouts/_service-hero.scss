@@ -56,22 +56,8 @@
 		.service-hero__image-wrap {
 			width: 100%;
 
-			// overlay để chữ đọc được
-			&::after {
-				content: '';
-				position: absolute;
-				inset: 0;
-				background: linear-gradient(90deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.1) 60%, transparent 100%);
-			}
-
 			@include media-breakpoint-down(lg) { width: 100%; }
 		}
-
-		.service-hero__title,
-		.service-hero__desc,
-		.service-hero__supertitle { color: #fff; }
-
-		.service-hero__desc { color: rgba(255,255,255,.85); }
 	}
 
 	// ── Khu vực text ──────────────────────────────────────────────────
@@ -122,7 +108,7 @@
 
 	&__desc {
 		font-family: $font-second, sans-serif;
-		font-size: 15px;
+		font-size: 18px;
 		line-height: 1.7;
 		color: #584E44;
 		margin-bottom: 28px;
@@ -135,12 +121,12 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;
-		background: $color-primary;
-		color: $color-dark;
+		background: #E0AC47;
+		color: #fff;
 		font-family: $font-second, sans-serif;
-		font-size: 14px;
+		font-size: 16px;
 		font-weight: 500;
-		padding: 14px 24px;
+		padding: 8px 24px;
 		text-decoration: none;
 		border-radius: 4px;
 		transition: background 0.2s ease, transform 0.2s ease;
