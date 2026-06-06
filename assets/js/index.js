@@ -3,6 +3,7 @@ import Header from "./components/header";
 import Functions from "./components/functions";
 import MegaMenu from "./components/mega-menu";
 import CF7 from "./components/cf7";
+import Blog from "./components/blog";
 import AOS from "aos";
 
 // global lenis instance
@@ -17,6 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	Functions.init();
 	MegaMenu.init();
 	CF7.init();
+	Blog.init();
 	initLangSwitcher();
 	initMobileDrawer();
 

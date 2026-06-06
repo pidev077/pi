@@ -21,7 +21,7 @@
 		<?php endif; ?>
 
 		<a href="<?php the_permalink(); ?>" class="service-card__cta">
-			Xem Chi Tiết
+			<?php esc_html_e('Xem Chi Tiết', 'pi'); ?>
 		</a>
 	</div>
 </article>

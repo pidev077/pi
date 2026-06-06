@@ -10,7 +10,7 @@ get_header();
 ?>
 <main id="primary" class="site-main">
 	<div class="pi-form-search">
-		<h5>Search</h5>
+		<h5><?php esc_html_e('Search', 'pi'); ?></h5>
 		<form role="search" method="get" class="search-form" action="<?php echo home_url('/'); ?>">
 			<input type="search" class="search-field" placeholder="<?php echo esc_attr_x('Search …', 'placeholder') ?>" value="<?php echo get_search_query() ?>" name="s" title="<?php echo esc_attr_x('Search for:', 'label') ?>" />
 			<input type="submit" />
@@ -21,7 +21,7 @@ get_header();
 		<?php if (have_posts()) : ?>
 			<?php
 			/* Start the Loop */
-			echo '<h3 class="title-total-result-search">' . count($posts) . ' results for “' . get_search_query() . '”</h3>';
+			echo '<h3 class=”title-total-result-search”>' . count($posts) . ' ' . esc_html__('results for', 'pi') . ' “' . esc_html(get_search_query()) . '”</h3>';
 			global $post;
 			$index = 1;
 			$duration = $index % 2 == 0 ? 400 : 800;
@@ -30,7 +30,7 @@ get_header();
 				the_post();
 				$postType = str_replace("-", " ", get_post_type($post->ID));
 				if ($postType == 'post') {
-					$postType =  'NEWS & ARTICLES';
+					$postType = __('NEWS & ARTICLES', 'pi');
 				}
 			?>
 				<article <?php post_class('post-loop-item post-item-temp-defaults post-indexs-' . $index) ?> data-aos="fade-up" data-aos-duration="<?= $index == 1 ? 400 : $duration; ?>">

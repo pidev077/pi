@@ -271,6 +271,29 @@ function pi_acf_init()
 			'style'      => 'default',
 		]);
 
+		// ── Blog Category: thứ tự hiển thị ─────────────────────────────
+		acf_add_local_field_group([
+			'key'    => 'group_pi_blog_category',
+			'title'  => 'Cài Đặt Danh Mục Blog',
+			'fields' => [
+				[
+					'key'           => 'field_pi_cat_sort_order',
+					'label'         => 'Thứ tự hiển thị',
+					'name'          => 'cat_sort_order',
+					'type'          => 'number',
+					'default_value' => 10,
+					'min'           => 0,
+					'step'          => 1,
+					'instructions'  => 'Số nhỏ hơn hiển thị trước. Mặc định: 10.',
+				],
+			],
+			'location' => [
+				[[ 'param' => 'taxonomy', 'operator' => '==', 'value' => 'category' ]],
+			],
+			'menu_order' => 0,
+			'style'      => 'default',
+		]);
+
 		// ── Service Group: chọn danh mục liên kết ───────────────────────
 		acf_add_local_field_group([
 			'key'    => 'group_pi_service_group',

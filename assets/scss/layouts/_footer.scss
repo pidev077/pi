@@ -327,6 +327,9 @@ $footer-white:  #ffffff;
 		text-transform: uppercase;
 		color: #27211C;
 		line-height: 1.2;
+		@include media-breakpoint-down(sm) {
+			display: none;
+		}
 	}
 
 	&:hover &__icon,

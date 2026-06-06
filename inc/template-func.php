@@ -751,7 +751,7 @@ function pi_item_post()
    </div>
 
    <a href="<?= esc_url(get_permalink()) ?>" class="item-post__btn">
-      Read more
+      <?php esc_html_e('Read more', 'pi'); ?>
    </a>
 </div>
 <?php }
