@@ -221,6 +221,12 @@ usort($categories, function($a, $b) {
     </section>
     <?php endforeach; ?>
 
+    <?php if ( get_the_content() ) : ?>
+    <div class="blog-page-content">
+        <?php the_content(); ?>
+    </div>
+    <?php endif; ?>
+
 </main>
 
 <?php get_footer(); ?>
