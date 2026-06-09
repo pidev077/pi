@@ -112,4 +112,77 @@ if (!function_exists('__get_fields')) {
 	}
 }
 
+if (!function_exists('pi_blog_card')) {
+	/**
+	 * Render a blog card.
+	 *
+	 * @param WP_Post $post_obj
+	 * @param bool    $show_cats  true = show category pills with ACF colours
+	 * @param bool    $is_featured  true = tall centre card variant
+	 */
+	function pi_blog_card($post_obj, $show_cats = false, $is_featured = false) {
+		$tags        = get_the_tags($post_obj->ID);
+		$cats        = get_the_category($post_obj->ID);
+		$first_tag   = !empty($tags) ? $tags[0] : null;
+		$author_name = get_the_author_meta('display_name', $post_obj->post_author);
+		$excerpt     = wp_trim_words(get_the_excerpt($post_obj->ID), 18, '...');
+		$img_size    = $is_featured ? 'large' : 'medium_large';
+		$classes     = 'blog-card' . ($is_featured ? ' blog-card--featured' : '');
+		?>
+		<article class="<?= $classes ?>">
+			<a href="<?= esc_url(get_permalink($post_obj->ID)) ?>" class="blog-card__image-link" tabindex="-1" aria-hidden="true">
+				<div class="blog-card__image">
+					<?php if (has_post_thumbnail($post_obj->ID)): ?>
+						<?= get_the_post_thumbnail($post_obj->ID, $img_size) ?>
+					<?php else: ?>
+						<div class="blog-card__image-placeholder">
+							<svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+								<rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+								<circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+								<path d="M3 15l5-5 4 4 3-3 5 5" stroke="currentColor" stroke-width="1" opacity="0.3" stroke-linecap="round"/>
+							</svg>
+						</div>
+					<?php endif; ?>
+				</div>
+			</a>
+			<div class="blog-card__body">
+				<div class="blog-card__tags">
+					<?php if ($show_cats && !empty($cats)):
+						foreach ($cats as $cat):
+							$c_color = get_field('color_category', 'category_' . $cat->term_id) ?: '#120A00';
+							$c_bg    = get_field('bg_category',    'category_' . $cat->term_id) ?: '#ffe071';
+							?>
+							<span class="blog-card__tag" style="color:<?= esc_attr($c_color) ?>;background:<?= esc_attr($c_bg) ?>;">
+								<?= esc_html($cat->name) ?>
+							</span>
+						<?php endforeach;
+					elseif (!empty($tags)):
+						foreach (array_slice($tags, 0, 2) as $tag): ?>
+							<span class="blog-card__tag"><?= esc_html($tag->name) ?></span>
+						<?php endforeach;
+					endif; ?>
+				</div>
 
+				<h3 class="blog-card__title">
+					<a href="<?= esc_url(get_permalink($post_obj->ID)) ?>"><?= esc_html(get_the_title($post_obj->ID)) ?></a>
+				</h3>
+
+				<?php if ($excerpt): ?>
+				<p class="blog-card__excerpt"><?= esc_html($excerpt) ?></p>
+				<?php endif; ?>
+
+				<div class="blog-card__meta">
+					<span class="blog-card__author">
+						<span class="blog-card__by" aria-hidden="true"><?= esc_html__('Bởi', 'pi') ?></span>
+						<?= esc_html($author_name) ?>
+					</span>
+					<span class="blog-card__sep" aria-hidden="true">•</span>
+					<span class="blog-card__date">
+						<?= get_the_date('j \t\h\á\n\g n, Y', $post_obj->ID) ?>
+					</span>
+				</div>
+			</div>
+		</article>
+		<?php
+	}
+}

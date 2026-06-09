@@ -58,6 +58,58 @@ $mega-border: #F2EEE7;
         &::after { display: none !important; }
     }
 
+    // ── Split toggle: text link (navigates) + chevron button (opens panel) ──
+    > a.mega-toggle-link {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: #1a1a1a;
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        line-height: 1;
+        padding: 8px 0;
+        white-space: nowrap;
+        transition: color 0.2s;
+        font-family: inherit;
+
+        @include media-breakpoint-down(xl) { font-size: 13px; }
+
+        @include media-breakpoint-down(lg) {
+            font-size: 15px;
+            padding: 14px 0;
+            flex: 1;
+        }
+
+        &:hover { color: $mega-gold; }
+    }
+
+    > button.mega-toggle-chevron {
+        display: inline-flex;
+        align-items: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px 0 8px 5px;
+        color: #1a1a1a;
+        transition: color 0.2s;
+
+        @include media-breakpoint-down(lg) { padding: 14px 0 14px 5px; }
+
+        &:hover,
+        &[aria-expanded="true"] { color: $mega-gold; }
+
+        .nav-chevron {
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        &[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
+
+        &::after { display: none !important; }
+    }
+
     // Mobile dropdown-menu fallback — same style as existing .dropdown-menu
     .mega-mobile-nav {
         @include media-breakpoint-up(lg) {
@@ -75,7 +127,9 @@ $mega-border: #F2EEE7;
 
 // Homepage: white text for mega toggle
 .home .header:not(.scrolled):not(.mobile-opened) {
-    .nav-item.has-mega-menu > button.nav-link {
+    .nav-item.has-mega-menu > button.nav-link,
+    .nav-item.has-mega-menu > a.mega-toggle-link,
+    .nav-item.has-mega-menu > button.mega-toggle-chevron {
         color: #fff;
 
         &:hover,
@@ -86,7 +140,9 @@ $mega-border: #F2EEE7;
 }
 
 // Scrolled header: dark text for mega toggle
-.header.scrolled .nav-item.has-mega-menu > button.nav-link {
+.header.scrolled .nav-item.has-mega-menu > button.nav-link,
+.header.scrolled .nav-item.has-mega-menu > a.mega-toggle-link,
+.header.scrolled .nav-item.has-mega-menu > button.mega-toggle-chevron {
     color: #1a1a1a;
 }
 
@@ -303,7 +359,6 @@ $mega-border: #F2EEE7;
             text-decoration: none;
             flex: 1;
             transition: color 0.15s, font-weight 0.15s;
-            pointer-events: none; // hover handled by <li>
         }
 
         svg {

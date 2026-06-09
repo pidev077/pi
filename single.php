@@ -1,215 +1,401 @@
 <?php
 /**
- * The template for displaying all single posts
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
+ * Template for displaying single blog posts.
  * @package pi
  */
 
+/**
+ * Add unique IDs to h2/h3 headings in content for TOC anchoring.
+ */
+if (!function_exists('pi_add_heading_ids')) {
+    function pi_add_heading_ids($content) {
+        $counts = [];
+        return preg_replace_callback(
+            '/<h([23])([^>]*)>(.*?)<\/h\1>/is',
+            function ($m) use (&$counts) {
+                $level = $m[1];
+                $attrs = $m[2];
+                $inner = $m[3];
+                // Skip if already has an id
+                if (preg_match('/\bid=["\']/', $attrs)) return $m[0];
+                $slug = sanitize_title(wp_strip_all_tags($inner));
+                $counts[$slug] = isset($counts[$slug]) ? $counts[$slug] + 1 : 0;
+                $id = $counts[$slug] > 0 ? $slug . '-' . $counts[$slug] : $slug;
+                return "<h{$level}{$attrs} id=\"{$id}\">{$inner}</h{$level}>";
+            },
+            $content
+        );
+    }
+}
+
+/**
+ * Extract TOC items from processed content (headings must already have IDs).
+ *
+ * @return array  [{level, id, text}, ...]
+ */
+if (!function_exists('pi_extract_toc')) {
+    function pi_extract_toc($content) {
+        $items = [];
+        if (preg_match_all('/<h([23])[^>]*\bid=["\']([^"\']+)["\'][^>]*>(.*?)<\/h\1>/is', $content, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $m) {
+                $items[] = [
+                    'level' => (int) $m[1],
+                    'id'    => $m[2],
+                    'text'  => wp_strip_all_tags($m[3]),
+                ];
+            }
+        }
+        return $items;
+    }
+}
+
 get_header();
+?>
+
+<main id="primary" class="site-main post-single">
+
+<?php while (have_posts()) : the_post();
+
+    $post_id   = get_the_ID();
+    $tags      = get_the_tags();
+    $cats      = get_the_category();
+
+    $author_name   = get_the_author();
+    $reviewer_name = get_field('reviewer_name');
+
+    // Process content: add heading IDs then extract TOC
+    $raw_content = get_the_content();
+    $content     = pi_add_heading_ids(apply_filters('the_content', $raw_content));
+    $toc         = pi_extract_toc($content);
+
+    // Reading time
+    $word_count = str_word_count(wp_strip_all_tags($raw_content));
+    $read_time  = max(1, ceil($word_count / 200));
+
+    // Blog page URL for breadcrumb
+    $blog_url = get_permalink(get_option('page_for_posts')) ?: home_url('/blog/');
+
+    // Related posts — prefer same category, fallback to latest
+    $cat_ids = array_column($cats, 'term_id');
+    $related = get_posts([
+        'posts_per_page' => 4,
+        'post__not_in'   => [$post_id],
+        'category__in'   => $cat_ids ?: [0],
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ]);
+    if (count($related) < 4) {
+        $related = get_posts([
+            'posts_per_page' => 4,
+            'post__not_in'   => [$post_id],
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        ]);
+    }
+
+    // Sidebar latest posts
+    $sidebar_latest = get_posts([
+        'posts_per_page' => 5,
+        'post__not_in'   => [$post_id],
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ]);
+
+    // Sidebar related tags — all tags from posts in the same root category
+    $root_cat_ids = [];
+    foreach ($cats as $cat) {
+        if ($cat->parent == 0) {
+            $root_cat_ids[] = $cat->term_id;
+        } else {
+            $ancestors = get_ancestors($cat->term_id, 'category');
+            $root_cat_ids[] = end($ancestors);
+        }
+    }
+    $root_cat_ids  = array_unique($root_cat_ids);
+    $sidebar_tags  = [];
+    if (!empty($root_cat_ids)) {
+        $root_post_ids = get_posts([
+            'posts_per_page' => -1,
+            'category__in'   => $root_cat_ids,
+            'fields'         => 'ids',
+        ]);
+        if (!empty($root_post_ids)) {
+            $sidebar_tags = wp_get_object_terms($root_post_ids, 'post_tag', [
+                'orderby' => 'count',
+                'order'   => 'DESC',
+            ]);
+        }
+    }
 
 ?>
-<main id="primary" class="site-main">
-    <div class="entry-content">
-        <div class="container insight-wrapper">
-            <?php while (have_posts()):
-                the_post(); ?>
-                <div class="insight-wrapper__thumbnail">
-                    <div class="insight-wrapper__thumbnail--image">
-                        <?php if (has_post_thumbnail()): ?>
-                            <?php the_post_thumbnail('full'); ?>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <div class="insight-wrapper__content">
-                    <div class="insight-wrapper__content--top">
-                        <h1 class="wp-block-heading-fadein-chars"><?= get_the_title() ?></h1>
 
-                        <div class="insight-wrapper__content--datetime">
-                            <span class="post-date">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none">
-                                    <path
-                                        d="M19.5 3H16.5V1.5H15V3H9V1.5H7.5V3H4.5C3.675 3 3 3.675 3 4.5V19.5C3 20.325 3.675 21 4.5 21H19.5C20.325 21 21 20.325 21 19.5V4.5C21 3.675 20.325 3 19.5 3ZM19.5 19.5H4.5V9H19.5V19.5ZM19.5 7.5H4.5V4.5H7.5V6H9V4.5H15V6H16.5V4.5H19.5V7.5Z"
-                                        fill="#120A00" />
-                                </svg>
-                                <?php echo get_the_date(); ?>
-                            </span>
-
-                            <span class="read-time">
-                                <?php
-                                $word_count = str_word_count(wp_strip_all_tags(get_the_content()));
-                                $reading_time = ceil($word_count / 200);
-
-                                echo $reading_time . ' min read';
-                                ?>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="insight-wrapper__content--body">
-                        <?php the_content(); ?>
-                    </div>
-                </div>
-            <?php endwhile; ?>
+<!-- ── Post Header ──────────────────────────────────────────────── -->
+<div class="post-single__header">
+    <!-- Breadcrumb -->
+    <div class="single-breadcrumb"> 
+        <div class="container">         
+            <nav class="post-breadcrumb" aria-label="<?php esc_attr_e('Đường dẫn', 'pi'); ?>">
+                <a href="<?= esc_url(home_url('/')) ?>"><?php esc_html_e('Trang Chủ', 'pi'); ?></a>
+                <span class="post-breadcrumb__sep" aria-hidden="true">
+                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none"><path d="M1 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <a class="post-breadcrumb__item--blog" href="<?= esc_url($blog_url) ?>"><?php esc_html_e('Blog', 'pi'); ?></a>
+                <span class="post-breadcrumb__ellipsis" aria-hidden="true">...</span>
+                <span class="post-breadcrumb__sep" aria-hidden="true">
+                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none"><path d="M1 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span aria-current="page"><?= esc_html(get_the_title()) ?></span>
+            </nav>
         </div>
+    </div>
+    <div class="post-info">
+        <div class="container">
 
-        <?php
-        $author_avatar = get_field('author_avatar');
-        $author_name = get_field('author_name');
-        $author_bio = get_field('author_bio');
-        ?>
+            <!-- Tag pills -->
+            <?php $pills = !empty($tags) ? $tags : $cats; ?>
+            <?php if (!empty($pills)): ?>
+            <div class="post-single__pills">
+                <?php foreach (array_slice($pills, 0, 4) as $pill):
+                    $pill_url = !empty($tags)
+                        ? get_tag_link($pill->term_id)
+                        : get_category_link($pill->term_id);
+                ?>
+                <a href="<?= esc_url($pill_url) ?>" class="post-single__pill">
+                    <?= esc_html($pill->name) ?>
+                </a>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
 
-        <div class="insight-post-meta-box">
-            <div class="container insight-post-meta-box__flex">
-                <div class="insight-post-meta-box__left">
-                    <div class="post-meta-box__author">
-                        <div class="author-avatar">
-                            <?php if ($author_avatar) { ?>
-                                <img src="<?= $author_avatar ?>"
-                                    alt="<?php $author_name ? $author_name : the_author(); ?>" />
-                            <?php } else {
-                                echo get_avatar(get_the_author_meta('ID'), 80);
-                            }
-                            ?>s
-                        </div>
+            <!-- Title -->
+            <h1 class="post-single__title"><?php the_title(); ?></h1>
 
-                        <div class="author-info">
-                            <p class="author-name">
-                                Written by <?php echo $author_name ? $author_name : the_author(); ?>
-                            </p>
+            <!-- Meta: author · date · reading time -->
+            <div class="post-single__meta">
+                <span class="post-single__meta-author">
+                    <?php esc_html_e('Bởi', 'pi'); ?> <strong><?= esc_html($author_name) ?></strong>
+                </span>
+                <span class="post-single__meta-sep" aria-hidden="true">•</span>
+                <time class="post-single__meta-date" datetime="<?= get_the_date('c') ?>">
+                    <?= get_the_date('j \t\h\á\n\g n, Y') ?>
+                </time>
+                <span class="post-single__meta-sep" aria-hidden="true">•</span>
+                <span class="post-single__meta-read">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <?= $read_time ?> <?php esc_html_e('phút đọc', 'pi'); ?>
+                </span>
+            </div>
 
-                            <p class="author-bio">
-                                <?php echo $author_bio ? $author_bio : get_the_author_meta('description'); ?>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="insight-post-meta-box__right">
-                    <div class="post-meta-box__share">
-                        <p class="share-title">Share this insight</p>
+            <!-- Excerpt -->
+            <?php $excerpt = get_the_excerpt(); if ($excerpt): ?>
+            <p class="post-single__excerpt"><?= esc_html($excerpt) ?></p>
+            <?php endif; ?>
 
-                        <div class="share-icons">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u=<?php the_permalink(); ?>"
-                                target="_blank" aria-label="Share on Facebook">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
-                                    fill="none">
-                                    <path
-                                        d="M6.89856 16.125H9.89856V10.1175H12.6016L12.8986 7.1325H9.89856V5.625C9.89856 5.42609 9.97758 5.23532 10.1182 5.09467C10.2589 4.95402 10.4497 4.875 10.6486 4.875H12.8986V1.875H10.6486C9.654 1.875 8.70017 2.27009 7.99691 2.97335C7.29365 3.67661 6.89856 4.63044 6.89856 5.625V7.1325H5.39856L5.10156 10.1175H6.89856V16.125Z"
-                                        fill="#FFF5D2" />
-                                </svg>
-                            </a>
-
-                            <a href="https://twitter.com/intent/tweet?url=<?php the_permalink(); ?>&text=<?php the_title(); ?>"
-                                target="_blank" aria-label="Share on X">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
-                                    fill="none">
-                                    <path
-                                        d="M10.4563 7.794L16.1522 1.125H14.8022L9.85784 6.91537L5.90684 1.125H1.35059L7.32434 9.882L1.35059 16.875H2.70059L7.92284 10.7595L12.0955 16.875H16.6517L10.4563 7.794ZM8.60796 9.9585L8.00271 9.08662L3.18659 2.14875H5.25996L9.14571 7.74788L9.75096 8.61975L14.8033 15.8985H12.73L8.60796 9.9585Z"
-                                        fill="#FFF5D2" />
-                                </svg>
-                            </a>
-
-                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php the_permalink(); ?>"
-                                target="_blank" aria-label="Share on LinkedIn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
-                                    fill="none">
-                                    <path
-                                        d="M5.20508 3.75002C5.20488 4.14784 5.04665 4.52929 4.76521 4.81046C4.48376 5.09162 4.10215 5.24947 3.70433 5.24927C3.3065 5.24907 2.92505 5.09084 2.64389 4.8094C2.36272 4.52795 2.20488 4.14634 2.20508 3.74852C2.20528 3.35069 2.3635 2.96924 2.64495 2.68808C2.92639 2.40691 3.308 2.24907 3.70583 2.24927C4.10365 2.24947 4.48511 2.40769 4.76627 2.68914C5.04743 2.97058 5.20528 3.35219 5.20508 3.75002ZM5.25008 6.36002H2.25008V15.75H5.25008V6.36002ZM9.99008 6.36002H7.00508V15.75H9.96008V10.8225C9.96008 8.07752 13.5376 7.82252 13.5376 10.8225V15.75H16.5001V9.80252C16.5001 5.17502 11.2051 5.34752 9.96008 7.62002L9.99008 6.36002Z"
-                                        fill="#FFF5D2" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    <?php
-                    $tags = get_the_tags();
-                    if ($tags): ?>
-                        <div class="post-meta-box__tags">
-                            <p class="tags-title">Tags</p>
-
-                            <div class="tags-list">
-                                <?php
-                                $tags = get_the_tags();
-                                if ($tags):
-                                    foreach ($tags as $tag):
-                                        ?>
-                                        <div class="tag-item">
-                                            <?php echo esc_html($tag->name); ?>
-                                        </div>
-                                        <?php
-                                    endforeach;
-                                endif;
-                                ?>
-                            </div>
-                        </div>
-                    <?php endif; ?>
+            <!-- Medical reviewer badge -->
+            <?php if ($reviewer_name): ?>
+            <div class="post-single__reviewer">
+                <div class="post-single__reviewer-info">
+                    <span class="post-single__reviewer-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<path d="M9 12.0005L11 14.0005L15 10.0005M5.00046 7.20046C5.00046 6.61698 5.23225 6.05741 5.64483 5.64483C6.05741 5.23225 6.61698 5.00046 7.20046 5.00046H8.20046C8.78136 5.00013 9.33855 4.77006 9.75046 4.36046L10.4505 3.66046C10.6549 3.45486 10.898 3.2917 11.1657 3.18037C11.4334 3.06903 11.7205 3.01172 12.0105 3.01172C12.3004 3.01172 12.5875 3.06903 12.8552 3.18037C13.1229 3.2917 13.366 3.45486 13.5705 3.66046L14.2705 4.36046C14.6825 4.77046 15.2405 5.00046 15.8205 5.00046H16.8205C17.4039 5.00046 17.9635 5.23225 18.3761 5.64483C18.7887 6.05741 19.0205 6.61698 19.0205 7.20046V8.20046C19.0205 8.78046 19.2505 9.33846 19.6605 9.75046L20.3605 10.4505C20.5661 10.6549 20.7292 10.898 20.8406 11.1657C20.9519 11.4334 21.0092 11.7205 21.0092 12.0105C21.0092 12.3004 20.9519 12.5875 20.8406 12.8552C20.7292 13.1229 20.5661 13.366 20.3605 13.5705L19.6605 14.2705C19.2509 14.6824 19.0208 15.2396 19.0205 15.8205V16.8205C19.0205 17.4039 18.7887 17.9635 18.3761 18.3761C17.9635 18.7887 17.4039 19.0205 16.8205 19.0205H15.8205C15.2396 19.0208 14.6824 19.2509 14.2705 19.6605L13.5705 20.3605C13.366 20.5661 13.1229 20.7292 12.8552 20.8406C12.5875 20.9519 12.3004 21.0092 12.0105 21.0092C11.7205 21.0092 11.4334 20.9519 11.1657 20.8406C10.898 20.7292 10.6549 20.5661 10.4505 20.3605L9.75046 19.6605C9.33855 19.2509 8.78136 19.0208 8.20046 19.0205H7.20046C6.61698 19.0205 6.05741 18.7887 5.64483 18.3761C5.23225 17.9635 5.00046 17.4039 5.00046 16.8205V15.8205C5.00013 15.2396 4.77006 14.6824 4.36046 14.2705L3.66046 13.5705C3.45486 13.366 3.2917 13.1229 3.18037 12.8552C3.06903 12.5875 3.01172 12.3004 3.01172 12.0105C3.01172 11.7205 3.06903 11.4334 3.18037 11.1657C3.2917 10.898 3.45486 10.6549 3.66046 10.4505L4.36046 9.75046C4.77006 9.33855 5.00013 8.78136 5.00046 8.20046V7.20046Z" stroke="#07B9F0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                        <?php esc_html_e('Được kiểm duyệt chuyên môn bởi', 'pi'); ?>
+                    </span>
+                    <strong class="post-single__reviewer-name"><?= esc_html($reviewer_name) ?></strong>
                 </div>
             </div>
+            <?php endif; ?>
+
+        </div><!-- /.container -->
+    </div>
+    <!-- Featured image -->
+    <?php if (has_post_thumbnail()): ?>
+    <div class="post-single__featured-image">
+        <div class="container">
+            <?php the_post_thumbnail('full', ['loading' => 'eager', 'class' => 'post-single__featured-img']); ?>
+            <?php $caption = get_the_post_thumbnail_caption(); if ($caption): ?>
+            <p class="post-single__image-caption"><?= esc_html($caption) ?></p>
+            <?php endif; ?>
         </div>
+    </div>
+    <?php endif; ?>
+</div><!-- /.post-single__header -->
 
-        <?php
-        $form_pattern = get_field('form_block_code', 'option');
-        if ($form_pattern) {
-            echo do_blocks($form_pattern);
-        }
-        ?>
+<!-- ── Post Body: Sidebar + Content ───────────────────────────────── -->
+<div class="post-single__body">
+    <div class="container post-single__body-inner">
 
-        <div class="insight-related">
-            <div class="container">
-                <h2>NEXT INSIGHT</h2>
+        <!-- Left sidebar -->
+        <aside class="post-sidebar" aria-label="<?php esc_attr_e('Nội dung phụ', 'pi'); ?>">
+            <div class="post-sidebar__sticky">
 
-                <?php
-                $next_post = get_next_post();
-                if (!$next_post) {
-                    $args = array(
-                        'posts_per_page' => 1,
-                        'order' => 'ASC',
-                        'orderby' => 'date',
-                        'post_type' => 'post',
-                        'post_status' => 'publish',
-                    );
-                    $first_post = get_posts($args);
-
-                    if (!empty($first_post)) {
-                        $next_post = $first_post[0];
-                    }
-                }
-                if ($next_post) {
-                    ?>
-                    <article class="insight-related__article">
-                        <div class="insight-related__article--thumbnail">
-                            <?php if (has_post_thumbnail($next_post->ID)): ?>
-                                <a href="<?php echo get_permalink($next_post->ID); ?>">
-                                    <img src="<?php echo get_the_post_thumbnail_url($next_post->ID, 'full'); ?>"
-                                        alt="<?php echo get_the_title($next_post->ID); ?>" />
-                                </a>
-                            <?php endif; ?>
-                        </div>
-
-                        <div class="insight-related__content">
-                            <h3 class="insight-related__title">
-                                <a href="<?php echo get_permalink($next_post->ID); ?>">
-                                    <?php echo get_the_title($next_post->ID); ?>
-                                </a>
-                            </h3>
-                            <?php
-                            $excerpt = get_the_excerpt($next_post->ID);
-                            if ($excerpt) {
-                                ?>
-                                <div class="insight-related__content--excerpt"><?= $excerpt; ?></div>
-                            <?php } ?>
-
-                            <a class="insight-related__content--cta" href="<?php echo get_permalink($next_post->ID); ?>">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"
-                                    fill="none">
-                                    <circle cx="5" cy="5" r="5" fill="#120A00" />
-                                </svg>
-                                Continue reading
+                <!-- Table of Contents -->
+                <?php if (!empty($toc)): ?>
+                <div class="post-toc js-post-toc">
+                    <h4 class="post-toc__title">
+                        <span class="post-toc__title-text"><?php esc_html_e('Mục Lục Bài Viết', 'pi'); ?></span>
+                        <button type="button" class="post-toc__toggle js-toc-toggle" aria-label="<?php esc_attr_e('Mục lục', 'pi'); ?>">
+                            <svg class="post-toc__icon--plus" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 5V19M5 12H19" stroke="#978B7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <svg class="post-toc__icon--minus" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M5 12H19" stroke="#978B7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </h4>
+                    <ol class="post-toc__list">
+                        <?php foreach ($toc as $item): ?>
+                        <li class="post-toc__item post-toc__item--h<?= $item['level'] ?>">
+                            <a href="#<?= esc_attr($item['id']) ?>" class="post-toc__link">
+                                <?= esc_html($item['text']) ?>
                             </a>
-                        </div>
-                    </article>
-                <?php } ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ol>
+                </div>
+                <?php endif; ?>
+
+                <!-- Latest posts -->
+                <?php if (!empty($sidebar_latest)): ?>
+                <div class="post-sidebar__section">
+                    <h4 class="post-sidebar__section-title"><?php esc_html_e('Bài Viết Mới Nhất', 'pi'); ?></h4>
+                    <ul class="post-sidebar__list">
+                        <?php foreach ($sidebar_latest as $i => $lp): ?>
+                        <li>
+                            <a href="<?= esc_url(get_permalink($lp->ID)) ?>" class="post-sidebar__post-link">
+                                <span class="post-sidebar__post-num"><?= $i + 1 ?></span>
+                                <?php if (has_post_thumbnail($lp->ID)): ?>
+                                <div class="post-sidebar__post-thumb">
+                                    <?= get_the_post_thumbnail($lp->ID, [64, 64]) ?>
+                                </div>
+                                <?php endif; ?>
+                                <span class="post-sidebar__post-title"><?= esc_html(get_the_title($lp->ID)) ?></span>
+                            </a>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php endif; ?>
+
+                <!-- Related tags / categories -->
+                <?php if (!empty($sidebar_tags)): ?>
+                <div class="post-sidebar__section">
+                    <h4 class="post-sidebar__section-title"><?php esc_html_e('Chủ Đề Liên Quan', 'pi'); ?></h4>
+                    <div class="post-sidebar__cat-tags">
+                        <?php foreach ($sidebar_tags as $t): ?>
+                        <a href="<?= esc_url(get_tag_link($t->term_id)) ?>" class="post-sidebar__cat-tag post-sidebar__cat-tag--tag">
+                            <?= esc_html($t->name) ?>
+                        </a>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+            </div><!-- /.post-sidebar__sticky -->
+        </aside>
+
+        <!-- Right: Gutenberg content -->
+        <div class="post-content js-post-content">
+            <div class="post-content__body">
+                <?= $content ?>
+            </div>
+
+            <!-- Footer: tags + share -->
+            <div class="post-content__footer">
+
+                <div class="post-share">
+                    <div class="post-share__label">
+                        <span class="post-share__label-cursive"><?php esc_html_e('Chia sẻ', 'pi'); ?></span>
+                        <span class="post-share__label-bold"><?php esc_html_e('BÀI VIẾT NÀY', 'pi'); ?></span>
+                    </div>
+                    <div class="post-share__icons">
+                        <!-- Copy link -->
+                        <button type="button" class="post-share__icon js-copy-link" aria-label="<?php esc_attr_e('Sao chép liên kết', 'pi'); ?>" data-url="<?= esc_url(get_permalink()) ?>">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                            </svg>
+                        </button>
+                        <!-- Gmail -->
+                        <a href="https://mail.google.com/mail/?view=cm&su=<?= urlencode(get_the_title()) ?>&body=<?= urlencode(get_permalink()) ?>" target="_blank" rel="noopener noreferrer" class="post-share__icon" aria-label="Gmail">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"/>
+                            </svg>
+                        </a>
+                        <!-- Twitter/X -->
+                        <a href="https://twitter.com/intent/tweet?url=<?= urlencode(get_permalink()) ?>&text=<?= urlencode(get_the_title()) ?>" target="_blank" rel="noopener noreferrer" class="post-share__icon" aria-label="X (Twitter)">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <!-- Facebook -->
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=<?= urlencode(get_permalink()) ?>" target="_blank" rel="noopener noreferrer" class="post-share__icon" aria-label="Facebook">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.post-content -->
+
+    </div><!-- /.post-single__body-inner -->
+</div><!-- /.post-single__body -->
+
+<!-- ── Related Posts ───────────────────────────────────────────────── -->
+<?php if (!empty($related)): ?>
+<section class="post-related">
+    <div class="container">
+        <div class="post-related__heading">
+            <span class="post-related__label"><?php esc_html_e('Bài Viết Liên Quan', 'pi'); ?></span>
+            <h2 class="post-related__title"><?php esc_html_e('Bạn Có Thể Muốn Đọc Thêm', 'pi'); ?></h2>
+        </div>
+        <div class="post-related__header">
+            <div class="post-related__nav">
+                <button class="post-related-prev blog-swiper-btn" aria-label="<?php esc_attr_e('Bài trước', 'pi'); ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M8.57143 6C8.57143 6.6095 7.96932 7.51964 7.35982 8.28357C6.57618 9.26929 5.63975 10.1293 4.56614 10.7856C3.76114 11.2777 2.78529 11.75 2 11.75M2 11.75C2.78529 11.75 3.76196 12.2223 4.56614 12.7144C5.63975 13.3715 6.57618 14.2315 7.35982 15.2156C7.96932 15.9804 8.57143 16.8921 8.57143 17.5M2 11.75H21.7143" stroke="#27211C" stroke-width="1.5"/>
+                    </svg>
+                </button>
+                <button class="post-related-next blog-swiper-btn" aria-label="<?php esc_attr_e('Bài tiếp', 'pi'); ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15.1429 6C15.1429 6.6095 15.745 7.51964 16.3545 8.28357C17.1381 9.26929 18.0745 10.1293 19.1481 10.7856C19.9531 11.2777 20.929 11.75 21.7143 11.75M21.7143 11.75C20.929 11.75 19.9523 12.2223 19.1481 12.7144C18.0745 13.3715 17.1381 14.2315 16.3545 15.2156C15.745 15.9804 15.1429 16.8921 15.1429 17.5M21.7143 11.75H2" stroke="#27211C" stroke-width="1.5"/>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
-</main><!-- #main -->
+    <div class="container post-related__swiper-wrap">
+        <div class="swiper js-related-swiper">
+            <div class="swiper-wrapper">
+                <?php foreach ($related as $rp): ?>
+                <div class="swiper-slide">
+                    <?php pi_blog_card($rp, false, false); ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
+<!-- ── Footer blog synced pattern ────────────────────────────────── -->
 <?php
-get_footer();
+$footer_blog = get_page_by_path('footer-blog', OBJECT, 'wp_block');
+if ($footer_blog) {
+    echo do_blocks($footer_blog->post_content);
+}
+?>
+
+<!-- ── Global CTA / form block ────────────────────────────────────── -->
+<?php
+$form_pattern = get_field('form_block_code', 'option');
+if ($form_pattern) {
+    echo do_blocks($form_pattern);
+}
+?>
+
+<?php endwhile; ?>
+
+</main><!-- /#primary -->
+
+<?php get_footer(); ?>

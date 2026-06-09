@@ -7,15 +7,23 @@ const Blog = {
     sections: [],
 
     init() {
-        if (!document.querySelector('.blog-page')) return;
-        this.nav = document.getElementById('blog-cat-nav');
-        this.links = this.nav ? Array.from(this.nav.querySelectorAll('.blog-cat-nav__link')) : [];
-        this.sections = Array.from(document.querySelectorAll('.blog-cat-section'));
-        this.setHeaderOffset();
-        this.initSwipers();
-        this.initCatNav();
-        this.initPinObserver();
-        this.initMobileTrigger();
+        // Blog listing page
+        if (document.querySelector('.blog-page')) {
+            this.nav = document.getElementById('blog-cat-nav');
+            this.links = this.nav ? Array.from(this.nav.querySelectorAll('.blog-cat-nav__link')) : [];
+            this.sections = Array.from(document.querySelectorAll('.blog-cat-section'));
+            this.setHeaderOffset();
+            this.initSwipers();
+            this.initCatNav();
+            this.initPinObserver();
+            this.initMobileTrigger();
+        }
+
+        // Single post page
+        this.initToc();
+        this.initRelatedSwiper();
+        this.initCopyLink();
+        this.initMobileToc();
     },
 
     setHeaderOffset() {
@@ -69,7 +77,6 @@ const Blog = {
         const { nav, links } = this;
         if (!nav || !links.length) return;
 
-        // Click → smooth scroll to section
         links.forEach((link) => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -92,7 +99,6 @@ const Blog = {
 
         if (!this.sections.length) return;
 
-        // IntersectionObserver → highlight active nav item while scrolling
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -129,7 +135,6 @@ const Blog = {
             trigger.setAttribute('aria-expanded', open);
         });
 
-        // Close dropdown & update label when a link is clicked
         links.forEach((link) => {
             link.addEventListener('click', () => {
                 list.classList.remove('is-open');
@@ -157,6 +162,109 @@ const Blog = {
             { threshold: 0 }
         );
         observer.observe(hero);
+    },
+
+    // ── Single post: Table of Contents ──────────────────────────────────────
+    initToc() {
+        const toc     = document.querySelector('.js-post-toc');
+        const content = document.querySelector('.js-post-content');
+        if (!toc || !content) return;
+
+        const headings = Array.from(content.querySelectorAll('h2[id], h3[id]'));
+        const tocLinks = Array.from(toc.querySelectorAll('.post-toc__link'));
+        if (!headings.length || !tocLinks.length) return;
+
+        // Smooth-scroll on TOC link click
+        tocLinks.forEach((link) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id     = link.getAttribute('href').slice(1);
+                const target = document.getElementById(id);
+                if (!target) return;
+
+                const offset = -(document.getElementById('header')?.offsetHeight || 80) - 24;
+                if (window.lenis) {
+                    window.lenis.scrollTo(target, { offset });
+                } else {
+                    const top = target.getBoundingClientRect().top + window.scrollY + offset;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Highlight active TOC entry on scroll
+        const activate = (id) => {
+            tocLinks.forEach((l) => l.classList.remove('is-active'));
+            const active = toc.querySelector(`.post-toc__link[href="#${CSS.escape(id)}"]`);
+            if (active) active.classList.add('is-active');
+        };
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) activate(entry.target.id);
+                });
+            },
+            { rootMargin: '-10% 0px -82% 0px', threshold: 0 }
+        );
+
+        headings.forEach((h) => observer.observe(h));
+    },
+
+    // ── Single post: Mobile floating TOC ────────────────────────────────────
+    initMobileToc() {
+        const mq = window.matchMedia('(max-width: 991px)');
+        if (!mq.matches) return;
+
+        const toc = document.querySelector('.js-post-toc');
+        const btn = document.querySelector('.js-toc-toggle');
+        if (!toc || !btn) return;
+
+        btn.addEventListener('click', () => {
+            toc.classList.toggle('is-expanded');
+        });
+
+        // Close when clicking a TOC link on mobile
+        toc.querySelectorAll('.post-toc__link').forEach((link) => {
+            link.addEventListener('click', () => {
+                toc.classList.remove('is-expanded');
+            });
+        });
+    },
+
+    // ── Single post: Copy link ───────────────────────────────────────────────
+    initCopyLink() {
+        document.querySelectorAll('.js-copy-link').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const url = btn.dataset.url || window.location.href;
+                navigator.clipboard.writeText(url).then(() => {
+                    btn.classList.add('is-copied');
+                    setTimeout(() => btn.classList.remove('is-copied'), 2000);
+                });
+            });
+        });
+    },
+
+    // ── Single post: Related posts swiper ───────────────────────────────────
+    initRelatedSwiper() {
+        const el = document.querySelector('.js-related-swiper');
+        if (!el) return;
+
+        const section = el.closest('.post-related');
+        new Swiper(el, {
+            modules: [Navigation],
+            slidesPerView: 1.2,
+            spaceBetween: 16,
+            navigation: {
+                nextEl: section ? section.querySelector('.post-related-next') : null,
+                prevEl: section ? section.querySelector('.post-related-prev') : null,
+            },
+            breakpoints: {
+                576: { slidesPerView: 1.6, spaceBetween: 20 },
+                768: { slidesPerView: 2.2, spaceBetween: 20 },
+                1024: { slidesPerView: 3,   spaceBetween: 24 },
+            },
+        });
     },
 };
 

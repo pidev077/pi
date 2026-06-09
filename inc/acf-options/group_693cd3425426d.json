@@ -3,38 +3,12 @@
     "title": "Metabox Insight",
     "fields": [
         {
-            "key": "field_693cd342d2220",
-            "label": "Author avatar",
-            "name": "author_avatar",
-            "aria-label": "",
-            "type": "image",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "return_format": "url",
-            "library": "all",
-            "min_width": "",
-            "min_height": "",
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": "",
-            "mime_types": "",
-            "allow_in_bindings": 0,
-            "preview_size": "thumbnail"
-        },
-        {
-            "key": "field_693cd364d2221",
-            "label": "Author name",
-            "name": "author_name",
+            "key": "field_pi_reviewer_name",
+            "label": "Tên người kiểm duyệt",
+            "name": "reviewer_name",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Bỏ trống nếu không hiển thị badge kiểm duyệt.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -48,27 +22,6 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
-        },
-        {
-            "key": "field_693cd37cd2222",
-            "label": "Author bio",
-            "name": "author_bio",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "rows": 3,
-            "placeholder": "",
-            "new_lines": ""
         }
     ],
     "location": [

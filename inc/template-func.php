@@ -110,12 +110,25 @@ if (!class_exists('Pi_Header_Walker')) {
 
             $output .= '<li class="' . esc_attr(implode(' ', $classes)) . '">';
 
-            // Toggle button (works for desktop mega + mobile accordion via .dropdown-toggle)
-            $output .= '<button class="nav-link mega-toggle dropdown-toggle" type="button"'
-                     . ' aria-expanded="false" aria-controls="' . $panel_id . '">';
-            $output .= '<span>' . $title . '</span>';
-            $output .= $this->chevron_svg();
-            $output .= '</button>';
+            // Toggle: if item has a real URL → split (link text + chevron button), else full button
+            $item_url = esc_url($item->url);
+            $has_link = !empty($item->url) && $item->url !== '#';
+
+            if ($has_link) {
+                $output .= '<a href="' . $item_url . '" class="nav-link mega-toggle-link">';
+                $output .= '<span>' . $title . '</span>';
+                $output .= '</a>';
+                $output .= '<button class="mega-toggle dropdown-toggle mega-toggle-chevron" type="button"'
+                         . ' aria-expanded="false" aria-controls="' . $panel_id . '">';
+                $output .= $this->chevron_svg();
+                $output .= '</button>';
+            } else {
+                $output .= '<button class="nav-link mega-toggle dropdown-toggle" type="button"'
+                         . ' aria-expanded="false" aria-controls="' . $panel_id . '">';
+                $output .= '<span>' . $title . '</span>';
+                $output .= $this->chevron_svg();
+                $output .= '</button>';
+            }
 
             // ── Mobile fallback: show real navigable links (skips structural layers) ──
             $title_items    = $this->get_children($item->ID);
