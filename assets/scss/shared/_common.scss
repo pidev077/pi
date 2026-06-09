@@ -78,3 +78,10 @@ body {
 		aspect-ratio: 16 / 9;
 	}
 }
+
+// Legacy category/tag pill used in pi_post_item()
+a.item-cate {
+	text-decoration: none;
+	transition: opacity 0.2s ease;
+	&:hover { opacity: 0.8; }
+}

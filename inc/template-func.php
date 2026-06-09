@@ -698,9 +698,9 @@ function pi_post_item()
       <?php if (!empty($categories)): ?>
       <div class="pi-post-loop--category">
          <?php foreach ($categories as $key => $value): ?>
-         <div class="item-cate" style="color:<?= $cate_color ?>; background-color:<?= $cate_bg_color ?>;">
-            <?= $value->name ?>
-         </div>
+         <a href="<?= esc_url(get_category_link($value->term_id)) ?>" class="item-cate" style="color:<?= $cate_color ?>; background-color:<?= $cate_bg_color ?>;">
+            <?= esc_html($value->name) ?>
+         </a>
          <?php endforeach; ?>
       </div>
       <?php endif; ?>

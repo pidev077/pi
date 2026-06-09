@@ -125,6 +125,7 @@ if (!function_exists('pi_blog_card')) {
 		$cats        = get_the_category($post_obj->ID);
 		$first_tag   = !empty($tags) ? $tags[0] : null;
 		$author_name = get_the_author_meta('display_name', $post_obj->post_author);
+		$author_url  = get_author_posts_url($post_obj->post_author);
 		$excerpt     = wp_trim_words(get_the_excerpt($post_obj->ID), 18, '...');
 		$img_size    = $is_featured ? 'large' : 'medium_large';
 		$classes     = 'blog-card' . ($is_featured ? ' blog-card--featured' : '');
@@ -147,18 +148,9 @@ if (!function_exists('pi_blog_card')) {
 			</a>
 			<div class="blog-card__body">
 				<div class="blog-card__tags">
-					<?php if ($show_cats && !empty($cats)):
-						foreach ($cats as $cat):
-							$c_color = get_field('color_category', 'category_' . $cat->term_id) ?: '#120A00';
-							$c_bg    = get_field('bg_category',    'category_' . $cat->term_id) ?: '#ffe071';
-							?>
-							<span class="blog-card__tag" style="color:<?= esc_attr($c_color) ?>;background:<?= esc_attr($c_bg) ?>;">
-								<?= esc_html($cat->name) ?>
-							</span>
-						<?php endforeach;
-					elseif (!empty($tags)):
+					<?php if (!empty($tags)):
 						foreach (array_slice($tags, 0, 2) as $tag): ?>
-							<span class="blog-card__tag"><?= esc_html($tag->name) ?></span>
+							<a href="<?= esc_url(get_tag_link($tag->term_id)) ?>" class="blog-card__tag"><?= esc_html($tag->name) ?></a>
 						<?php endforeach;
 					endif; ?>
 				</div>
@@ -174,7 +166,7 @@ if (!function_exists('pi_blog_card')) {
 				<div class="blog-card__meta">
 					<span class="blog-card__author">
 						<span class="blog-card__by" aria-hidden="true"><?= esc_html__('Bởi', 'pi') ?></span>
-						<?= esc_html($author_name) ?>
+						<a href="<?= esc_url($author_url) ?>" class="blog-card__author-link"><?= esc_html($author_name) ?></a>
 					</span>
 					<span class="blog-card__sep" aria-hidden="true">•</span>
 					<span class="blog-card__date">

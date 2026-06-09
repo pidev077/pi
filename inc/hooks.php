@@ -81,6 +81,21 @@ function pi_post_loop_item_template($post_id, $index)
 <?php
 }
 
+// ── Archive sort: register 'sort' query var and apply ordering ────────────────
+add_filter( 'query_vars', function ( $vars ) {
+	$vars[] = 'sort';
+	return $vars;
+} );
+
+add_action( 'pre_get_posts', function ( $query ) {
+	if ( ! is_admin() && $query->is_main_query() && ( is_tag() || is_category() || is_author() ) ) {
+		if ( get_query_var( 'sort' ) === 'oldest' ) {
+			$query->set( 'orderby', 'date' );
+			$query->set( 'order', 'ASC' );
+		}
+	}
+} );
+
 //remove comments
 add_action('admin_init', function () {
 	// Redirect any user trying to access comments page

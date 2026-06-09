@@ -61,6 +61,7 @@ get_header();
     $cats      = get_the_category();
 
     $author_name   = get_the_author();
+    $author_url    = get_author_posts_url( get_the_author_meta('ID') );
     $reviewer_name = get_field('reviewer_name');
 
     // Process content: add heading IDs then extract TOC
@@ -173,7 +174,7 @@ get_header();
             <!-- Meta: author · date · reading time -->
             <div class="post-single__meta">
                 <span class="post-single__meta-author">
-                    <?php esc_html_e('Bởi', 'pi'); ?> <strong><?= esc_html($author_name) ?></strong>
+                    <?php esc_html_e('Bởi', 'pi'); ?> <a href="<?= esc_url($author_url) ?>" class="post-single__meta-author-link"><strong><?= esc_html($author_name) ?></strong></a>
                 </span>
                 <span class="post-single__meta-sep" aria-hidden="true">•</span>
                 <time class="post-single__meta-date" datetime="<?= get_the_date('c') ?>">

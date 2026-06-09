@@ -413,9 +413,15 @@
         border-radius: 4px;
         padding: 4px 12px;
         white-space: nowrap;
+        text-decoration: none;
+        transition: background 0.2s ease, color 0.2s ease;
         @include media-breakpoint-down(md) {
             font-size: 12px;
             padding: 3px 8px;
+        }
+        &:hover {
+            background: darken(#FBF7EB, 6%);
+            color: darken(#E0AC47, 10%);
         }
     }
 
@@ -478,6 +484,11 @@
         span.blog-card__by{
             color: #978B7B !important;
             font-weight: 400 !important;
+        }
+        .blog-card__author-link {
+            color: inherit;
+            text-decoration: none;
+            &:hover { text-decoration: underline; }
         }
     }
     .blog-card__author,

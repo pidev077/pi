@@ -1,0 +1,409 @@
+// ── Archive Pages (Tag, Category) ─────────────────────────────────────────────
+
+// ── Breadcrumb bar (white strip above hero, same as single post) ──────────────
+.archive-breadcrumb-bar {
+    background: #fff;
+    border-bottom: 1px solid #F2EEE7;
+    border-top: 1px solid #F2EEE7;
+    padding: 16px 0;
+}
+
+// ── Archive Hero ─────────────────────────────────────────────────────────────
+.archive-hero {
+    background: url('../../images/bg-post.webp') no-repeat center center / cover;
+    position: relative;
+    overflow: hidden;
+
+    // ── Two-column variant (author page) ─────────────────────────────────────
+    &__breadcrumb {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 24px 0 0;
+        font-family: $font-second, sans-serif;
+        font-size: 14px;
+        color: #978B7B;
+
+        a {
+            color: #978B7B;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            &:hover { color: $color-dark; }
+        }
+
+        &-sep { color: #C5B9A8; }
+
+        &-current {
+            color: $color-dark;
+            font-weight: 500;
+            max-width: 200px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &__inner {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        padding: 40px 0 56px;
+
+        @include media-breakpoint-down(lg) {
+            flex-direction: column;
+            padding: 32px 0 48px;
+            align-items: flex-start;
+        }
+
+        @include media-breakpoint-down(md) {
+            padding: 24px 0 40px;
+        }
+    }
+
+    &__content {
+        flex: 0 0 50%;
+        width: 50%;
+        min-width: 0;
+        padding-right: 56px;
+
+        @include media-breakpoint-down(lg) {
+            flex: none;
+            width: 100%;
+            padding-right: 0;
+        }
+    }
+
+    &__label {
+        display: block;
+        font-family: $font-second, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #978B7B;
+        margin-bottom: 12px;
+    }
+
+    &__title {
+        font-family: $font-primary, serif;
+        font-size: 48px;
+        font-weight: 400;
+        line-height: 1.15;
+        color: $color-dark;
+        margin: 0 0 20px;
+
+        @include media-breakpoint-down(lg) { font-size: 42px; }
+        @include media-breakpoint-down(md) { font-size: 32px; margin-bottom: 14px; }
+    }
+
+    &__title-prefix {
+        font-weight: 400;
+        color: #27211C;
+        font-style: italic;
+        font-size: 48px;
+        margin-right: 4px;
+    }
+
+    &__desc {
+        font-family: $font-second, sans-serif;
+        font-size: 18px;
+        line-height: 1.75;
+        color: #584E44;
+        margin: 0;
+        max-width: 720px;
+
+        p { margin: 0; }
+
+        @include media-breakpoint-down(md) { font-size: 16px; }
+    }
+
+    // ── Right info panel (author only) ────────────────────────────────────────
+    &__meta {
+        flex: 0 0 50%;
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-left: 56px;
+        border-left: 1px solid #E6DFD4;
+
+        @include media-breakpoint-down(lg) {
+            flex: none;
+            width: 100%;
+            padding-left: 0;
+            border-left: none;
+            border-top: 1px solid #E6DFD4;
+            padding-top: 24px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        @include media-breakpoint-down(sm) {
+            flex-direction: column;
+        }
+    }
+
+    &__meta-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+
+        @include media-breakpoint-down(lg) {
+            flex: 1;
+            min-width: 180px;
+        }
+    }
+
+    &__meta-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: rgba(#E0AC47, 0.12);
+        border: 1px solid rgba(#E0AC47, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: #E0AC47;
+
+        svg { display: block; }
+    }
+
+    &__meta-body {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        padding-top: 3px;
+    }
+
+    &__meta-label {
+        font-family: $font-second, sans-serif;
+        font-size: 13px;
+        font-weight: 400;
+        color: #978B7B;
+        line-height: 1.4;
+    }
+
+    &__meta-text {
+        font-family: $font-second, sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        color: $color-dark;
+        line-height: 1.5;
+    }
+
+    // ── Centered variant (tag, category) ─────────────────────────────────────
+    &--centered {
+        text-align: center;
+        padding: 60px 0;
+
+        @include media-breakpoint-down(md) { padding: 44px 0; }
+
+        .archive-hero__title {
+            font-size: 48px;
+            margin: 0 auto 24px;
+
+            @include media-breakpoint-down(lg) { font-size: 40px; }
+            @include media-breakpoint-down(md) { font-size: 36px; margin-bottom: 14px; }
+        }
+
+        .archive-hero__desc {
+            max-width: 720px;
+            margin: 0 auto;
+            text-align: center;
+        }
+    }
+}
+
+// ── Archive Posts Section ─────────────────────────────────────────────────────
+.archive-posts {
+    padding: 48px 0 80px;
+    background: #fff;
+
+    @include media-breakpoint-down(md) { padding: 36px 0 60px; }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 32px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #F2EEE7;
+
+        @include media-breakpoint-down(sm) {
+            flex-direction: column;
+            gap: 12px;
+        }
+    }
+
+    &__heading {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    &__title {
+        font-family: $font-primary, serif;
+        font-size: 36px;
+        font-weight: 500;
+        color: $color-dark;
+        margin: 0;
+        line-height: 1.3;
+
+        span {
+            font-style: italic;
+            color: $color-dark;
+        }
+
+        @include media-breakpoint-down(md) { font-size: 22px; }
+    }
+
+    &__subtitle {
+        font-family: $font-second, sans-serif;
+        font-size: 14px;
+        color: #978B7B;
+        margin: 0;
+    }
+
+    &__sort {
+        position: relative;
+        flex-shrink: 0;
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            background: #fff;
+            border: 1px solid #E8E0D4;
+            border-radius: 6px;
+            padding: 9px 38px 9px 14px;
+            font-family: $font-second, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: $color-dark;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            min-width: 130px;
+
+            &:hover { border-color: #E0AC47; }
+            &:focus { border-color: #E0AC47; box-shadow: 0 0 0 3px rgba(#E0AC47, 0.12); }
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid #978B7B;
+            pointer-events: none;
+        }
+    }
+
+    &__grid {
+        margin-bottom: 48px;
+
+        @include media-breakpoint-down(md) { margin-bottom: 32px; }
+        article.blog-card{
+        .blog-card__tags,.blog-card__meta{
+            justify-content:flex-start;
+        }
+        .blog-card__title,.blog-card__excerpt{
+            text-align: left;
+        }
+        }
+        
+    }
+
+    // ── Pagination ────────────────────────────────────────────────────────────
+    .nav-filter-wrap {
+        display: flex;
+        justify-content: center;
+    }
+
+    .paging-navigation {
+        display: flex;
+        justify-content: center;
+    }
+
+    .loop-pagination {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        // Số trang
+        a.page-numbers:not(.prev):not(.next),
+        span.page-numbers:not(.dots) {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            font-family: $font-second, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: $color-dark;
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: border-color 0.2s ease, color 0.2s ease;
+
+            &:hover {
+                border-color: #E0AC47;
+                color: #E0AC47;
+            }
+
+            &.current {
+                border-color: #E0AC47;
+                color: #E0AC47;
+                font-weight: 600;
+                pointer-events: none;
+            }
+        }
+
+        // Prev / Next
+        a.prev,
+        a.next {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 16px;
+            height: 40px;
+            font-family: $font-second, sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: $color-dark;
+            text-decoration: none;
+            border: none;
+            transition: color 0.2s ease;
+
+            svg { flex-shrink: 0; width:16px; height:16px}
+
+            &:hover { color: #E0AC47; }
+        }
+
+        // Dấu ...
+        .dots {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            font-family: $font-second, sans-serif;
+            font-size: 14px;
+            color: #B9AE9E;
+            pointer-events: none;
+        }
+    }
+}
