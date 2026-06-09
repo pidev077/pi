@@ -69,3 +69,12 @@ body {
 		}
 	}
 }
+
+// Responsive YouTube / video embed — override WP inline fixed dimensions
+.wp-block-embed__wrapper {
+	iframe {
+		width: 100% !important;
+		height: auto !important;
+		aspect-ratio: 16 / 9;
+	}
+}

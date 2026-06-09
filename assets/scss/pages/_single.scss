@@ -501,7 +501,7 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
-        counter-reset: toc-h2;
+        counter-reset: toc-item;
 
         @include media-breakpoint-down(lg) {
             display: none;
@@ -519,17 +519,16 @@
     }
 
     &__item {
-        
-        &--h2 { counter-increment: toc-h2; counter-reset: toc-h3; }
+        counter-increment: toc-item;
+
         &--h3 {
             padding-left: 18px;
-            counter-increment: toc-h3;
 
             .post-toc__link { font-size: 12px; }
         }
     }
 
-    &__link { 
+    &__link {
         display: flex;
         align-items: baseline;
         gap: 8px;
@@ -542,8 +541,8 @@
         border-left: 4px solid #fff;
         transition: color 0.2s ease, background 0.2s ease;
 
-        .post-toc__item--h2 &::before {
-            content: counter(toc-h2, decimal-leading-zero) ".";
+        &::before {
+            content: counter(toc-item, decimal-leading-zero) ".";
             flex-shrink: 0;
             font-size: 16px;
             font-weight: 400;
@@ -555,14 +554,14 @@
             background-color: #FBF7EB;
             border-left: 4px solid #E0AC47;
             color: #E0AC47;
-             .post-toc__item--h2 &::before { color: #E0AC47; }
+            &::before { color: #E0AC47; }
         }
 
         &.is-active {
             background-color: #FBF7EB;
             border-left: 4px solid #E0AC47;
             color: #E0AC47;
-            .post-toc__item--h2 &::before { color: #E0AC47; }
+            &::before { color: #E0AC47; }
         }
     }
 }
@@ -597,7 +596,7 @@
             font-family: $font-primary, serif;
             font-size: 32px;
             font-weight: 500;
-            color: #C0862A;
+            color: #E0AC47;
             margin: 1.8em 0 0.6em;
             line-height: 1.3;
 
@@ -865,8 +864,6 @@
         justify-content: flex-end;
         gap: 20px;
         margin-bottom: 24px;
-        border-top: 1px solid #F2EEE7;
-        border-bottom: 1px solid #F2EEE7;
         padding: 8px 0;
     }
 
@@ -876,7 +873,6 @@
         font-weight: 500;
         color: $color-dark;
         margin: 0;
-        text-transform: uppercase;
 
         @include media-breakpoint-down(md) { font-size: 22px; }
     }
