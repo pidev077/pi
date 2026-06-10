@@ -13177,6 +13177,10 @@ img {
   pointer-events: none;
 }
 
+.page-template-template-legal .page-hero-breadcrumb {
+  display: none;
+}
+
 .page-hero--legal .page-hero__updated {
   font-family: "Google Sans", sans-serif;
   font-size: 16px;
