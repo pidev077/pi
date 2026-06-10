@@ -174,13 +174,24 @@ const Blog = {
         const tocLinks = Array.from(toc.querySelectorAll('.post-toc__link'));
         if (!headings.length || !tocLinks.length) return;
 
-        // Smooth-scroll on TOC link click
+        const activate = (id) => {
+            tocLinks.forEach((l) => l.classList.remove('is-active'));
+            const active = toc.querySelector(`.post-toc__link[href="#${CSS.escape(id)}"]`);
+            if (active) active.classList.add('is-active');
+        };
+
+        // Activate first item immediately on load
+        activate(headings[0].id);
+
+        // Smooth-scroll + immediately set active on click
         tocLinks.forEach((link) => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const id     = link.getAttribute('href').slice(1);
                 const target = document.getElementById(id);
                 if (!target) return;
+
+                activate(id);
 
                 const offset = -(document.getElementById('header')?.offsetHeight || 80) - 24;
                 if (window.lenis) {
@@ -192,13 +203,7 @@ const Blog = {
             });
         });
 
-        // Highlight active TOC entry on scroll
-        const activate = (id) => {
-            tocLinks.forEach((l) => l.classList.remove('is-active'));
-            const active = toc.querySelector(`.post-toc__link[href="#${CSS.escape(id)}"]`);
-            if (active) active.classList.add('is-active');
-        };
-
+        // Update active item while scrolling
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -213,9 +218,6 @@ const Blog = {
 
     // ── Single post: Mobile floating TOC ────────────────────────────────────
     initMobileToc() {
-        const mq = window.matchMedia('(max-width: 991px)');
-        if (!mq.matches) return;
-
         const toc = document.querySelector('.js-post-toc');
         const btn = document.querySelector('.js-toc-toggle');
         if (!toc || !btn) return;

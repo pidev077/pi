@@ -178,3 +178,39 @@ if (!function_exists('pi_blog_card')) {
 		<?php
 	}
 }
+
+if ( ! function_exists( 'pi_add_heading_ids' ) ) {
+	function pi_add_heading_ids( $content ) {
+		$counts = [];
+		return preg_replace_callback(
+			'/<h([23])([^>]*)>(.*?)<\/h\1>/is',
+			function ( $m ) use ( &$counts ) {
+				$level = $m[1];
+				$attrs = $m[2];
+				$inner = $m[3];
+				if ( preg_match( '/\bid=["\']/', $attrs ) ) return $m[0];
+				$slug          = sanitize_title( wp_strip_all_tags( $inner ) );
+				$counts[$slug] = isset( $counts[$slug] ) ? $counts[$slug] + 1 : 0;
+				$id            = $counts[$slug] > 0 ? $slug . '-' . $counts[$slug] : $slug;
+				return "<h{$level}{$attrs} id=\"{$id}\">{$inner}</h{$level}>";
+			},
+			$content
+		);
+	}
+}
+
+if ( ! function_exists( 'pi_extract_toc' ) ) {
+	function pi_extract_toc( $content ) {
+		$items = [];
+		if ( preg_match_all( '/<h([23])[^>]*\bid=["\']([^"\']+)["\'][^>]*>(.*?)<\/h\1>/is', $content, $matches, PREG_SET_ORDER ) ) {
+			foreach ( $matches as $m ) {
+				$items[] = [
+					'level' => (int) $m[1],
+					'id'    => $m[2],
+					'text'  => wp_strip_all_tags( $m[3] ),
+				];
+			}
+		}
+		return $items;
+	}
+}

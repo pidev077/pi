@@ -10,21 +10,37 @@
  *   page_hero_description — paragraph below title
  *   page_hero_cta         — link button
  *   page_hero_bg_image    — background / side image URL
+ *
+ * Optional args (passed via get_template_part $args):
+ *   supertitle   — overrides page_hero_supertitle
+ *   title        — overrides page_hero_title
+ *   description  — overrides page_hero_description
+ *   cta          — overrides page_hero_cta
+ *   bg_image     — overrides page_hero_bg_image
+ *   style        — overrides page_hero_style
+ *   extra        — extra HTML injected after description (before CTA)
+ *   modifier     — extra CSS class on <section>
  */
 
-if ( ! get_field( 'page_hero_enable' ) ) {
+$args = $args ?? [];
+
+// When called without args, respect the per-page ACF toggle.
+// When called with args, always render (caller takes responsibility).
+if ( empty( $args ) && ! get_field( 'page_hero_enable' ) ) {
 	return;
 }
 
-$supertitle   = get_field( 'page_hero_supertitle' );
-$title        = get_field( 'page_hero_title' ) ?: get_the_title();
-$description  = get_field( 'page_hero_description' );
-$cta          = get_field( 'page_hero_cta' );
-$bg_image     = get_field( 'page_hero_bg_image' );
-$style_choice = get_field( 'page_hero_style' ) ?: 'style-1';
+$supertitle   = $args['supertitle']  ?? get_field( 'page_hero_supertitle' );
+$title        = $args['title']       ?? ( get_field( 'page_hero_title' ) ?: get_the_title() );
+$description  = $args['description'] ?? get_field( 'page_hero_description' );
+$cta          = $args['cta']         ?? get_field( 'page_hero_cta' );
+$bg_image     = $args['bg_image']    ?? get_field( 'page_hero_bg_image' );
+$style_choice = $args['style']       ?? ( get_field( 'page_hero_style' ) ?: 'style-1' );
+$extra        = $args['extra']       ?? '';
+$modifier     = $args['modifier']    ?? '';
 
 // ── Shared inner content (reused in both styles) ─────────────────────────────
-$inner_content = function() use ( $supertitle, $title, $description, $cta ) { ?>
+$inner_content = function() use ( $supertitle, $title, $description, $cta, $extra ) { ?>
 	<div class="page-hero__label">
 		<?php if ( $supertitle ) : ?>
 			<p class="page-hero__supertitle"><?= esc_html( $supertitle ) ?></p>
@@ -44,6 +60,10 @@ $inner_content = function() use ( $supertitle, $title, $description, $cta ) { ?>
 		<p class="page-hero__desc"><?= wp_kses_post( $description ) ?></p>
 	<?php endif; ?>
 
+	<?php if ( $extra ) : ?>
+		<?= $extra ?>
+	<?php endif; ?>
+
 	<?php if ( $cta ) : ?>
 		<a href="<?= esc_url( $cta['url'] ) ?>"
 		   class="page-hero__cta"
@@ -56,11 +76,12 @@ $inner_content = function() use ( $supertitle, $title, $description, $cta ) { ?>
 	<?php endif;
 };
 
-$style  = $bg_image ? ' style="background-image:url(' . esc_url( $bg_image ) . ');"' : '';
-$has_bg = $bg_image ? ' page-hero--has-bg' : '';
+$style      = $bg_image ? ' style="background-image:url(' . esc_url( $bg_image ) . ');"' : '';
+$has_bg     = $bg_image ? ' page-hero--has-bg' : '';
 $style_class = $style_choice === 'style-2' ? ' page-hero--style-2' : '';
+$mod_class   = $modifier ? ' ' . sanitize_html_class( $modifier ) : '';
 ?>
-<section class="page-hero<?= $has_bg ?><?= $style_class ?>"<?= $style ?>>
+<section class="page-hero<?= $has_bg ?><?= $style_class ?><?= $mod_class ?>"<?= $style ?>>
 	<div class="page-hero__inner">
 		<div class="container">
 			<?php $inner_content(); ?>
