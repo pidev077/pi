@@ -10371,6 +10371,8 @@ img {
   font-size: 52px;
   font-weight: 400;
   color: #27211C;
+  max-width: 800px;
+  margin: 0 auto;
   margin-bottom: 18px;
   line-height: 1.25;
 }
@@ -11783,8 +11785,8 @@ img {
   font-size: 24px;
   font-weight: 500;
   color: #120a00;
-  margin: 0 0 14px;
-  padding-bottom: 10px;
+  margin: 0 0 24px;
+  padding-bottom: 16px;
   border-bottom: 1px solid #F2EEE7;
 }
 @media (max-width: 1023.98px) {
@@ -13177,7 +13179,8 @@ img {
   pointer-events: none;
 }
 
-.page-template-template-legal .page-hero-breadcrumb {
+.page-template-template-legal .page-hero-breadcrumb,
+.page-template-template-faq .page-hero-breadcrumb {
   display: none;
 }
 
@@ -13238,47 +13241,7 @@ img {
 .legal-sidebar .post-toc__link::before {
   display: none;
 }
-
-.faq-sidebar__title {
-  font-family: "Google Sans", sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #978B7B;
-  margin: 0 0 16px;
-  padding: 0 0 12px;
-  border-bottom: 1px solid #EEE9E0;
-}
-.faq-sidebar__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.faq-sidebar__item {
-  border-bottom: 1px solid #F2EEE7;
-}
-.faq-sidebar__item:last-child {
-  border-bottom: none;
-}
-.faq-sidebar__link {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  padding: 12px 0 12px 12px;
-  text-decoration: none;
-  border-left: 3px solid transparent;
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-.faq-sidebar__link:hover, .faq-sidebar__link.is-active {
-  border-left-color: #E0AC47;
-}
-.faq-sidebar__link:hover .faq-sidebar__letter,
-.faq-sidebar__link:hover .faq-sidebar__label, .faq-sidebar__link.is-active .faq-sidebar__letter,
-.faq-sidebar__link.is-active .faq-sidebar__label {
-  color: #120a00;
-}
-.faq-sidebar__letter {
+.legal-sidebar .faq-toc__letter {
   font-family: "Google Sans", sans-serif;
   font-size: 13px;
   font-weight: 600;
@@ -13286,13 +13249,19 @@ img {
   flex-shrink: 0;
   transition: color 0.2s ease;
 }
-.faq-sidebar__label {
+.legal-sidebar .faq-toc__label {
   font-family: "Google Sans", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
-  color: #584E44;
+  color: #B9AE9E;
   line-height: 1.5;
   transition: color 0.2s ease;
+}
+.legal-sidebar .post-toc__link:hover .faq-toc__letter,
+.legal-sidebar .post-toc__link:hover .faq-toc__label,
+.legal-sidebar .post-toc__link.is-active .faq-toc__letter,
+.legal-sidebar .post-toc__link.is-active .faq-toc__label {
+  color: #E0AC47;
 }
 
 .legal-content {

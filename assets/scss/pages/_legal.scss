@@ -1,6 +1,7 @@
 // ── Legal / Policy Page ───────────────────────────────────────────────────────
-.page-template-template-legal .page-hero-breadcrumb{
-    display: none;
+.page-template-template-legal,
+.page-template-template-faq {
+    .page-hero-breadcrumb { display: none; }
 }
 .page-hero--legal {
 
@@ -46,60 +47,14 @@
         width: 100%;
         position: static;
     }
-    ol.post-toc__list{
-        li.post-toc__item{
-            padding-left: 0 !important;
-        }
-    }
-    // Headings already include numbers — suppress the CSS counter
+
+    ol.post-toc__list li.post-toc__item { padding-left: 0 !important; }
+
+    // Headings / FAQ letters already include numbers — suppress the CSS counter
     .post-toc__link::before { display: none; }
-}
 
-// ── FAQ Sidebar nav ───────────────────────────────────────────────────────────
-.faq-sidebar {
-    &__title {
-        font-family: $font-second, sans-serif;
-        font-size: 13px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #978B7B;
-        margin: 0 0 16px;
-        padding: 0 0 12px;
-        border-bottom: 1px solid #EEE9E0;
-    }
-
-    &__list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    &__item {
-        border-bottom: 1px solid #F2EEE7;
-
-        &:last-child { border-bottom: none; }
-    }
-
-    &__link {
-        display: flex;
-        align-items: baseline;
-        gap: 8px;
-        padding: 12px 0 12px 12px;
-        text-decoration: none;
-        border-left: 3px solid transparent;
-        transition: border-color 0.2s ease, color 0.2s ease;
-
-        &:hover,
-        &.is-active {
-            border-left-color: #E0AC47;
-
-            .faq-sidebar__letter,
-            .faq-sidebar__label { color: $color-dark; }
-        }
-    }
-
-    &__letter {
+    // ── FAQ sidebar item sub-elements ────────────────────────────────────
+    .faq-toc__letter {
         font-family: $font-second, sans-serif;
         font-size: 13px;
         font-weight: 600;
@@ -108,15 +63,22 @@
         transition: color 0.2s ease;
     }
 
-    &__label {
+    .faq-toc__label {
         font-family: $font-second, sans-serif;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 400;
-        color: #584E44;
+        color: #B9AE9E;
         line-height: 1.5;
         transition: color 0.2s ease;
     }
+
+    .post-toc__link:hover,
+    .post-toc__link.is-active {
+        .faq-toc__letter,
+        .faq-toc__label { color:#E0AC47; }
+    }
 }
+
 
 // ── Article content — mirrors .post-content ───────────────────────────────────
 .legal-content {

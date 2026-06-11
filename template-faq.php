@@ -6,163 +6,162 @@
 
 get_header();
 
-$faq_label   = get_field( 'legal_label' )        ?: 'CÂU HỎI THƯỜNG GẶP';
-$faq_desc    = get_field( 'legal_description' )  ?: '';
+// Recursively collect all blocks including those inside containers
+$_flatten_blocks = function( array $blocks ) use ( &$_flatten_blocks ): array {
+	$flat = [];
+	foreach ( $blocks as $b ) {
+		$flat[] = $b;
+		if ( ! empty( $b['innerBlocks'] ) ) {
+			$flat = array_merge( $flat, $_flatten_blocks( $b['innerBlocks'] ) );
+		}
+	}
+	return $flat;
+};
 
-// Parse blocks to build sidebar navigation
-$blocks    = parse_blocks( get_the_content() );
+// Build sidebar navigation from faq-group block attributes.
+// WP omits default attr values from the block comment, so we fall back to
+// the same defaults defined in block-faq/index.js.
 $faq_groups = [];
-foreach ( $blocks as $block ) {
-    if ( $block['blockName'] === 'pi-blocks/block-faq' ) {
-        $attrs = $block['attrs'];
-        $letter = $attrs['groupLetter'] ?? '';
-        $title  = $attrs['groupTitle']  ?? '';
-        if ( $letter && $title ) {
-            $faq_groups[] = [
-                'letter' => $letter,
-                'title'  => $title,
-                'id'     => 'faq-group-' . strtolower( sanitize_title( $letter ) ),
-            ];
-        }
-    }
+foreach ( $_flatten_blocks( parse_blocks( get_the_content() ) ) as $block ) {
+	if ( $block['blockName'] !== 'pi-blocks/block-faq' ) {
+		continue;
+	}
+	$attrs  = $block['attrs'];
+	$letter = $attrs['groupLetter'] ?? 'A';
+	$title  = $attrs['groupTitle']  ?? 'Tiêu đề nhóm câu hỏi';
+	$faq_groups[] = [
+		'letter' => $letter,
+		'title'  => $title,
+		'id'     => 'faq-group-' . strtolower( sanitize_title( $letter ) ),
+	];
 }
 
-$raw_content = get_the_content();
-$content     = apply_filters( 'the_content', $raw_content );
+$content = apply_filters( 'the_content', get_the_content() );
 ?>
 
 <main id="primary" class="site-main">
 
-    <!-- ── Breadcrumb bar ────────────────────────────────────────────────── -->
-    <div class="archive-breadcrumb-bar">
-        <div class="container">
-            <nav class="post-breadcrumb" aria-label="breadcrumb">
-                <a href="<?= esc_url( home_url( '/' ) ) ?>"><?= esc_html__( 'Trang Chủ', 'pi' ) ?></a>
-                <span class="post-breadcrumb__sep" aria-hidden="true">
-                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none" aria-hidden="true">
-                        <path d="M1 1L5 5L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </span>
-                <span aria-current="page"><?= esc_html( get_the_title() ) ?></span>
-            </nav>
-        </div>
-    </div>
+	<?php
+	get_template_part( 'template-parts/page-hero', null, [
+		'modifier' => 'page-hero--legal',
+	] );
+	?>
 
-    <!-- ── Hero ─────────────────────────────────────────────────────────── -->
-    <section class="legal-hero">
-        <div class="container">
-            <?php if ( $faq_label ) : ?>
-                <span class="legal-hero__label"><?= esc_html( $faq_label ) ?></span>
-            <?php endif; ?>
-            <h1 class="legal-hero__title"><?= esc_html( get_the_title() ) ?></h1>
-            <?php if ( $faq_desc ) : ?>
-                <p class="legal-hero__desc"><?= esc_html( $faq_desc ) ?></p>
-            <?php endif; ?>
-        </div>
-    </section>
+	<!-- ── Body: Sidebar + FAQ Content ──────────────────────────────────── -->
+	<div class="legal-body-wrap">
+		<div class="container legal-body-inner">
 
-    <!-- ── Body: Sidebar + FAQ Content ──────────────────────────────────── -->
-    <div class="legal-body-wrap">
-        <div class="container legal-body-inner">
+			<!-- Sidebar (TOC from faq-group labels) -->
+			<?php if ( ! empty( $faq_groups ) ) : ?>
+			<aside class="legal-sidebar" aria-label="Chủ đề câu hỏi">
+				<div class="legal-sidebar__sticky">
+					<div class="post-toc js-post-toc">
+						<h4 class="post-toc__title">
+							<span class="post-toc__title-text"><?= esc_html__( 'Chủ Đề Câu Hỏi', 'pi' ) ?></span>
+							<button type="button" class="post-toc__toggle js-toc-toggle"
+									aria-label="<?= esc_attr__( 'Chủ đề câu hỏi', 'pi' ) ?>">
+								<svg class="post-toc__icon--plus" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+									<path d="M12 5V19M5 12H19" stroke="#978B7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+								<svg class="post-toc__icon--minus" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+									<path d="M5 12H19" stroke="#978B7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</button>
+						</h4>
+						<ol class="post-toc__list">
+							<?php foreach ( $faq_groups as $group ) : ?>
+							<li class="post-toc__item">
+								<a href="#<?= esc_attr( $group['id'] ) ?>"
+								   class="post-toc__link js-faq-toc-link">
+									<span class="faq-toc__letter"><?= esc_html( $group['letter'] ) ?>.</span>
+									<span class="faq-toc__label"><?= esc_html( $group['title'] ) ?></span>
+								</a>
+							</li>
+							<?php endforeach; ?>
+						</ol>
+					</div>
+				</div>
+			</aside>
+			<?php endif; ?>
 
-            <!-- Sidebar navigation -->
-            <?php if ( ! empty( $faq_groups ) ) : ?>
-            <aside class="legal-sidebar faq-sidebar" aria-label="Chủ đề câu hỏi">
-                <div class="legal-sidebar__sticky">
-                    <h2 class="faq-sidebar__title"><?= esc_html__( 'Chủ Đề Câu Hỏi', 'pi' ) ?></h2>
-                    <nav class="faq-sidebar__nav">
-                        <ol class="faq-sidebar__list">
-                            <?php foreach ( $faq_groups as $group ) : ?>
-                            <li class="faq-sidebar__item">
-                                <a href="#<?= esc_attr( $group['id'] ) ?>"
-                                   class="faq-sidebar__link js-faq-nav-link"
-                                   data-target="<?= esc_attr( $group['id'] ) ?>">
-                                    <span class="faq-sidebar__letter"><?= esc_html( $group['letter'] ) ?>.</span>
-                                    <span class="faq-sidebar__label"><?= esc_html( $group['title'] ) ?></span>
-                                </a>
-                            </li>
-                            <?php endforeach; ?>
-                        </ol>
-                    </nav>
-                </div>
-            </aside>
-            <?php endif; ?>
+			<!-- FAQ blocks output -->
+			<div class="legal-content faq-content">
+				<?= $content ?>
+			</div>
 
-            <!-- FAQ blocks output -->
-            <div class="legal-content faq-content">
-                <?= $content ?>
-            </div>
+		</div>
+	</div>
 
-        </div>
-    </div>
-
-    <?php
-    $footer_cta = get_page_by_path( 'footer-blog', OBJECT, 'wp_block' );
-    if ( $footer_cta ) {
-        echo do_blocks( $footer_cta->post_content );
-    }
-    ?>
+	<?php
+	$footer_cta = get_page_by_path( 'footer-blog', OBJECT, 'wp_block' );
+	if ( $footer_cta ) {
+		echo do_blocks( $footer_cta->post_content );
+	}
+	?>
 
 </main>
 
 <script>
 (function () {
-    // ── Group toggle ──────────────────────────────────────────────────────
-    document.querySelectorAll('.js-faq-group-toggle').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            var group   = this.closest('.block-faq');
-            var body    = group.querySelector('.faq-group__body');
-            var isOpen  = group.classList.toggle('is-open');
-            this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-            if (isOpen) {
-                body.removeAttribute('hidden');
-            } else {
-                body.setAttribute('hidden', '');
-            }
-        });
-    });
+	// ── FAQ group toggle ──────────────────────────────────────────────────
+	document.querySelectorAll('.js-faq-group-toggle').forEach(function (btn) {
+		btn.addEventListener('click', function () {
+			var group  = this.closest('.block-faq');
+			var body   = group.querySelector('.faq-group__body');
+			var isOpen = group.classList.toggle('is-open');
+			this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+			if (isOpen) {
+				body.removeAttribute('hidden');
+			} else {
+				body.setAttribute('hidden', '');
+			}
+		});
+	});
 
-    // ── Sidebar active on scroll ──────────────────────────────────────────
-    var navLinks = document.querySelectorAll('.js-faq-nav-link');
-    if (!navLinks.length) return;
+	// ── Sidebar: active state + smooth scroll ─────────────────────────────
+	var tocLinks = document.querySelectorAll('.js-faq-toc-link');
+	if (!tocLinks.length) return;
 
-    var setActive = function (id) {
-        navLinks.forEach(function (a) {
-            a.classList.toggle('is-active', a.dataset.target === id);
-        });
-    };
+	var setActive = function (id) {
+		tocLinks.forEach(function (a) {
+			a.classList.toggle('is-active', a.getAttribute('href') === '#' + id);
+		});
+	};
 
-    var groups = [];
-    navLinks.forEach(function (a) {
-        var el = document.getElementById(a.dataset.target);
-        if (el) groups.push({ el: el, id: a.dataset.target });
-    });
+	var groups = [];
+	tocLinks.forEach(function (a) {
+		var id = a.getAttribute('href').slice(1);
+		var el = document.getElementById(id);
+		if (el) groups.push({ el: el, id: id });
+	});
 
-    if (groups.length) {
-        var io = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    setActive(entry.target.id);
-                }
-            });
-        }, { rootMargin: '0px 0px -60% 0px', threshold: 0 });
+	if (groups.length) {
+		var io = new IntersectionObserver(function (entries) {
+			entries.forEach(function (entry) {
+				if (entry.isIntersecting) setActive(entry.target.id);
+			});
+		}, { rootMargin: '0px 0px -60% 0px', threshold: 0 });
 
-        groups.forEach(function (g) { io.observe(g.el); });
-        setActive(groups[0].id);
-    }
+		groups.forEach(function (g) { io.observe(g.el); });
+		setActive(groups[0].id);
+	}
 
-    // ── Smooth scroll for sidebar links ──────────────────────────────────
-    navLinks.forEach(function (a) {
-        a.addEventListener('click', function (e) {
-            e.preventDefault();
-            var target = document.getElementById(this.dataset.target);
-            if (target) {
-                var offset = 100;
-                var top = target.getBoundingClientRect().top + window.scrollY - offset;
-                window.scrollTo({ top: top, behavior: 'smooth' });
-            }
-        });
-    });
+	tocLinks.forEach(function (a) {
+		a.addEventListener('click', function (e) {
+			e.preventDefault();
+			var id     = this.getAttribute('href').slice(1);
+			var target = document.getElementById(id);
+			if (!target) return;
+			setActive(id);
+			var offset = 100;
+			if (window.lenis) {
+				window.lenis.scrollTo(target, { offset: -offset });
+			} else {
+				var top = target.getBoundingClientRect().top + window.scrollY - offset;
+				window.scrollTo({ top: top, behavior: 'smooth' });
+			}
+		});
+	});
 })();
 </script>
 
