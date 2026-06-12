@@ -81,6 +81,9 @@ function pi_post_loop_item_template($post_id, $index)
 <?php
 }
 
+// ── CF7: tắt tự động chèn <br> / <p> trong form body ─────────────────────────
+add_filter( 'wpcf7_autop_or_not', '__return_false' );
+
 // ── Archive sort: register 'sort' query var and apply ordering ────────────────
 add_filter( 'query_vars', function ( $vars ) {
 	$vars[] = 'sort';

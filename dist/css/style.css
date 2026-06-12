@@ -8380,6 +8380,172 @@ a.item-cate:hover {
   border-color: #FF2056;
 }
 
+.consult-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0 32px;
+  align-items: start;
+}
+@media (max-width: 1023.98px) {
+  .consult-grid {
+    grid-template-columns: 1fr;
+    gap: 24px 0;
+  }
+}
+.consult-grid .consult-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+.consult-grid .consult-main__top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 32px;
+}
+@media (max-width: 767.98px) {
+  .consult-grid .consult-main__top {
+    grid-template-columns: 1fr;
+  }
+}
+.consult-grid .consult-col {
+  min-width: 0;
+}
+.consult-grid .consult-col--inputs > .cf7-field:last-child, .consult-grid .consult-col--dropdowns > .cf7-field:last-child {
+  margin-bottom: 0;
+}
+.consult-grid .consult-col--textarea > .cf7-field {
+  margin-bottom: 0;
+}
+.consult-grid .consult-col--textarea textarea {
+  height: 248px !important;
+  min-height: 160px;
+  resize: vertical;
+}
+.consult-grid .consult-col--right .cf7-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  background-color: #E0AC47;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 0 !important;
+}
+.consult-grid .consult-col--right .cf7-submit:hover {
+  background-color: rgb(200.0893023256, 143.5423255814, 33.7106976744);
+}
+.consult-grid .consult-col--right .cf7-submit:has(input[type=submit]:disabled) {
+  opacity: 0.65;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.consult-grid .consult-col--right .cf7-submit::after {
+  content: "";
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2720%27 height=%2720%27 viewBox=%270 0 24 24%27 fill=%27none%27%3E%3Cpath d=%27M15 10L11 14L17 20L21 4L3 11L7 13L9 19L12 15%27 stroke=%27white%27 stroke-width=%271.5%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  pointer-events: none;
+}
+.consult-grid .consult-col--right .cf7-submit input[type=submit].wpcf7-submit {
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  color: #fff !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  box-shadow: none !important;
+}
+.consult-grid .consult-col--right .cf7-submit input[type=submit].wpcf7-submit:disabled {
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+}
+.consult-grid .consult-upload-zone {
+  display: block;
+  position: relative;
+  border: 1px dashed #E6DFD4;
+  border-radius: 4px;
+  min-height: 108px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  background: #F9FAFB;
+}
+.consult-grid .consult-upload-zone:hover {
+  border-color: rgb(220.4972972973, 209.8810810811, 191.3027027027);
+}
+.consult-grid .consult-upload-zone__ui {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px 16px;
+  text-align: center;
+  min-height: 102px;
+  pointer-events: none;
+}
+.consult-grid .consult-upload-zone__title {
+  font-family: "Google Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #27211C;
+}
+.consult-grid .consult-upload-zone__title svg {
+  vertical-align: -4px;
+  margin-right: 4px;
+}
+.consult-grid .consult-upload-zone__hint {
+  font-family: "Google Sans", sans-serif;
+  font-size: 13px;
+  color: #D5CCBE;
+}
+.consult-grid .consult-upload-zone .wpcf7-form-control-wrap {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+.consult-grid .cf7-optional {
+  font-weight: 400;
+  font-size: 12px;
+  color: #D5CCBE;
+  margin-left: 4px;
+}
+.consult-grid .cf7-has-counter textarea {
+  height: 160px !important;
+  min-height: 120px;
+}
+.consult-grid .cf7-char-counter {
+  display: block;
+  text-align: right;
+  font-family: "Google Sans", sans-serif;
+  font-size: 13px;
+  color: #D5CCBE;
+  margin-top: 4px;
+}
+.consult-grid .wpcf7-acceptance a {
+  color: #E0AC47;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.consult-grid .wpcf7-acceptance a:hover {
+  color: rgb(200.0893023256, 143.5423255814, 33.7106976744);
+}
+
 .cf7-custom-select {
   position: relative;
   width: 100%;

@@ -5,7 +5,10 @@ export default {
 			select.dataset.cf7SdBound = "1";
 
 			const opts = [...select.options];
-			const placeholder = opts.find((o) => o.value === "")?.text || "Vui lòng chọn";
+			const placeholder =
+				opts.find((o) => o.value === "")?.text ||
+				select.closest("[data-placeholder]")?.dataset.placeholder ||
+				"Vui lòng chọn";
 
 			const dd = document.createElement("div");
 			dd.className = "cf7-custom-select";
@@ -92,6 +95,45 @@ export default {
 		initAll();
 		setTimeout(initAll, 600);
 
+		// ── Submit button: click vùng nền vàng ngoài input cũng trigger submit ──
+		document.querySelectorAll(".consult-col--right .cf7-submit").forEach((p) => {
+			const input = p.querySelector("input[type='submit']");
+			if (!input) return;
+			p.addEventListener("click", (e) => {
+				if (e.target !== input) input.click();
+			});
+		});
+
+		// ── Upload zone ───────────────────────────────────────────────────────
+		document.querySelectorAll(".consult-upload-zone").forEach((zone) => {
+			const input = zone.querySelector("input[type='file']");
+			if (!input) return;
+
+			// Click anywhere on zone → open file dialog
+			zone.addEventListener("click", () => input.click());
+
+			// Show file name after selection
+			input.addEventListener("change", () => {
+				const ui = zone.querySelector(".consult-upload-zone__title");
+				if (!ui) return;
+				if (input.files.length) {
+					ui.textContent = Array.from(input.files).map((f) => f.name).join(", ");
+				}
+			});
+		});
+
+		// ── Character counter ──────────────────────────────────────────────────
+		document.querySelectorAll(".cf7-has-counter").forEach((field) => {
+			const textarea = field.querySelector("textarea");
+			const counter  = field.querySelector(".cf7-char-counter");
+			if (!textarea || !counter) return;
+			const max = parseInt(counter.dataset.max || "1000", 10);
+			textarea.setAttribute("maxlength", max);
+			const update = () => { counter.textContent = `${textarea.value.length} / ${max}`; };
+			textarea.addEventListener("input", update);
+			update();
+		});
+
 		document.addEventListener("wpcf7mailsent", () => {
 			setTimeout(() => {
 				document.querySelectorAll(".cf7-custom-select").forEach((dd) => {
@@ -106,6 +148,18 @@ export default {
 						if (r) r.checked = false;
 					});
 					dd.querySelector(".cf7-custom-select__panel").style.display = "none";
+				});
+
+				// Reset upload zones
+				document.querySelectorAll(".consult-upload-zone").forEach((zone) => {
+					const ui = zone.querySelector(".consult-upload-zone__title");
+					if (ui) ui.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Kéo thả hoặc nhấp để tải lên`;
+				});
+
+				// Reset char counters
+				document.querySelectorAll(".cf7-char-counter").forEach((counter) => {
+					const max = parseInt(counter.dataset.max || "1000", 10);
+					counter.textContent = `0 / ${max}`;
 				});
 			}, 100);
 		});

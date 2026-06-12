@@ -331,6 +331,205 @@ $cf7-required:    #FF2056;
 	}
 }
 
+// ── Consultation Form — tất cả styles gói trong .consult-grid để không ảnh hưởng form khác ──
+.consult-grid {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 0 32px;
+	align-items: start;
+
+	@include media-breakpoint-down(lg) {
+		grid-template-columns: 1fr;
+		gap: 24px 0;
+	}
+
+	// ── Main area (inputs + dropdowns + textarea) ──────────────────────────────
+	.consult-main {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+		min-width: 0;
+
+		&__top {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 0 32px;
+
+			@include media-breakpoint-down(md) {
+				grid-template-columns: 1fr;
+			}
+		}
+	}
+
+	// ── Columns ────────────────────────────────────────────────────────────────
+	.consult-col {
+		min-width: 0;
+
+		&--inputs > .cf7-field:last-child,
+		&--dropdowns > .cf7-field:last-child {
+			margin-bottom: 0;
+		}
+
+		&--textarea {
+			> .cf7-field { margin-bottom: 0; }
+
+			textarea {
+				height: 248px !important;
+				min-height: 160px;
+				resize: vertical;
+			}
+		}
+
+		&--right {
+			// <p.cf7-submit> là flex container — input là flex item thật, hiện text trực tiếp
+			// Icon ::after là flex sibling → cả cụm text+icon centered cùng nhau
+			.cf7-submit {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+				height: 40px;
+				background-color: $cf7-gold;
+				border-radius: 4px;
+				cursor: pointer;
+				transition: all 0.3s ease-in-out;
+				margin-bottom: 0 !important;
+
+				&:hover { background-color: darken($cf7-gold, 12%); }
+
+				// Disabled — giống các form khác (CF7 add disabled khi đang submit)
+				&:has(input[type="submit"]:disabled) {
+					opacity: 0.65;
+					cursor: not-allowed;
+					pointer-events: none;
+				}
+
+				&::after {
+					content: "";
+					flex-shrink: 0;
+					width: 22px;
+					height: 22px;
+					background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M15 10L11 14L17 20L21 4L3 11L7 13L9 19L12 15' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+					background-repeat: no-repeat;
+					background-size: contain;
+					pointer-events: none;
+				}
+
+				input[type="submit"].wpcf7-submit {
+					width: auto !important;
+					height: auto !important;
+					padding: 0 !important;
+					margin: 0 !important;
+					background: transparent !important;
+					background-image: none !important;
+					border: none !important;
+					color: #fff !important;
+					font-size: 16px !important;
+					font-weight: 500 !important;
+					cursor: pointer !important;
+					-webkit-appearance: none !important;
+					appearance: none !important;
+					box-shadow: none !important;
+
+					&:disabled {
+						opacity: 1 !important; // opacity xử lý ở <p> cha, không nhân đôi
+						cursor: not-allowed !important;
+					}
+				}
+			}
+		}
+	}
+
+	// ── Upload zone ────────────────────────────────────────────────────────────
+	.consult-upload-zone {
+		display: block;
+		position: relative;
+		border: 1px dashed #E6DFD4;
+		border-radius: 4px;
+		min-height: 108px;
+		cursor: pointer;
+		transition: border-color 0.2s ease;
+		background: #F9FAFB;
+
+		&:hover {
+			border-color: darken($cf7-border, 12%);
+		}
+
+		&__ui {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			padding: 20px 16px;
+			text-align: center;
+			min-height: 102px;
+			pointer-events: none;
+		}
+
+		&__title {
+			font-family: $font-second, sans-serif;
+			font-size: 15px;
+			font-weight: 500;
+			color: $cf7-text;
+
+			svg {
+				vertical-align: -4px;
+				margin-right: 4px;
+			}
+		}
+
+		&__hint {
+			font-family: $font-second, sans-serif;
+			font-size: 13px;
+			color: $cf7-placeholder;
+		}
+
+		.wpcf7-form-control-wrap {
+			position: absolute !important;
+			left: -9999px !important;
+			top: -9999px !important;
+			width: 0 !important;
+			height: 0 !important;
+			overflow: hidden !important;
+		}
+	}
+
+	// ── Optional label suffix ──────────────────────────────────────────────────
+	.cf7-optional {
+		font-weight: 400;
+		font-size: 12px;
+		color: $cf7-placeholder;
+		margin-left: 4px;
+	}
+
+	// ── Textarea with character counter ───────────────────────────────────────
+	.cf7-has-counter textarea {
+		height: 160px !important;
+		min-height: 120px;
+	}
+
+	.cf7-char-counter {
+		display: block;
+		text-align: right;
+		font-family: $font-second, sans-serif;
+		font-size: 13px;
+		color: $cf7-placeholder;
+		margin-top: 4px;
+	}
+
+	// ── Acceptance link ────────────────────────────────────────────────────────
+	.wpcf7-acceptance a {
+		color: $cf7-gold;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+
+		&:hover {
+			color: darken($cf7-gold, 12%);
+		}
+	}
+}
+
 // ── Custom Select Dropdown với Radio (ngoài .wpcf7 để selector không bị override) ──
 .cf7-custom-select {
 	position: relative;
