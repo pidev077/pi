@@ -10602,7 +10602,7 @@ img {
   display: none;
 }
 .page-hero--style-2 .page-hero__title {
-  max-width: 560px;
+  max-width: 600px;
   margin: 0 0 18px 0;
 }
 @media (max-width: 767.98px) {
