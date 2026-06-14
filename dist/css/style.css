@@ -11466,6 +11466,8 @@ img {
   text-align: center;
   padding-top: 200px;
   padding-bottom: 200px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 @media (max-width: 767.98px) {
   .error404 .entry-content {
@@ -11482,6 +11484,8 @@ img {
 }
 .error404 .entry-content h2, .error404 .entry-content .h2 {
   text-transform: uppercase;
+  font-style: italic;
+  margin-bottom: 16px;
 }
 .error404 .entry-content p {
   margin-top: 20px;
