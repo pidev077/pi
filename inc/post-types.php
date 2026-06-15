@@ -136,7 +136,7 @@ if (!function_exists('pi_register_service_group_post_type')) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array('slug' => 'nhom-dich-vu', 'with_front' => false),
+			'rewrite'            => false,
 			'capability_type'    => 'post',
 			'has_archive'        => false,
 			'hierarchical'       => false,
@@ -150,4 +150,48 @@ if (!function_exists('pi_register_service_group_post_type')) {
 
 	add_action('init', 'pi_register_service_group_post_type', 0);
 }
+
+// Hiển thị đúng permalink trong admin cho service_group
+add_filter('post_type_link', function ($url, $post) {
+	if (is_object($post) && $post->post_type === 'service_group' && !empty($post->post_name)) {
+		return home_url(user_trailingslashit($post->post_name));
+	}
+	return $url;
+}, 10, 2);
+
+// Phục vụ service_group tại root URL mà không xung đột với pages
+add_action('template_redirect', function () {
+	if (!is_404()) return;
+
+	$path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+	if (empty($path) || strpos($path, '/') !== false) return;
+
+	$posts = get_posts([
+		'post_type'      => 'service_group',
+		'name'           => sanitize_title($path),
+		'posts_per_page' => 1,
+		'post_status'    => 'publish',
+	]);
+
+	if (empty($posts)) return;
+
+	global $wp_query;
+	$wp_query->is_404      = false;
+	$wp_query->is_single   = true;
+	$wp_query->is_singular = true;
+	$wp_query->post_count  = 1;
+	$wp_query->found_posts = 1;
+	$wp_query->post        = $posts[0];
+	$wp_query->posts       = $posts;
+	$GLOBALS['post']       = $posts[0];
+	setup_postdata($posts[0]);
+
+	status_header(200);
+
+	$template = locate_template(['single-service_group.php', 'single.php']);
+	if ($template) {
+		include $template;
+		exit;
+	}
+}, 5);
 
