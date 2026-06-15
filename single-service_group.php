@@ -18,8 +18,6 @@ if ( have_posts() ) :
 				<?php the_content(); ?>
 			</div>
 
-			<?php get_template_part( 'template-parts/content', 'service_group' ); ?>
-
 		</main>
 		<?php
 	endwhile;
