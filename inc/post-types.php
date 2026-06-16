@@ -34,7 +34,7 @@ if (!function_exists('pi_create_custom_post_type')) {
 			'menu_position'      => 21,
 			'menu_icon'          => 'dashicons-groups',
 			'supports'           => ['title', 'editor', 'thumbnail', 'revisions', 'custom-fields'],
-			'show_in_rest'       => false,
+			'show_in_rest'       => true,
 		));
 	}
 
