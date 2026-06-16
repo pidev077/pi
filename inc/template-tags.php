@@ -69,6 +69,13 @@ if ( ! function_exists( 'pi_page_breadcrumb' ) ) {
 				$crumbs[] = [ 'label' => $cats[0]->name, 'url' => get_category_link( $cats[0]->term_id ) ];
 			}
 			$crumbs[] = [ 'label' => get_the_title(), 'url' => '' ];
+
+		} elseif ( is_singular( 'teams' ) ) {
+			// Trang Chủ → Giới Thiệu → [Tên thành viên]
+			$gioi_thieu_page = get_page_by_path( 'gioi-thieu' );
+			$gioi_thieu_url  = $gioi_thieu_page ? get_permalink( $gioi_thieu_page ) : home_url( '/gioi-thieu/' );
+			$crumbs[] = [ 'label' => 'Giới Thiệu', 'url' => $gioi_thieu_url ];
+			$crumbs[] = [ 'label' => get_the_title(), 'url' => '' ];
 		}
 
 		if ( count( $crumbs ) < 2 ) {
