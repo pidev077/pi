@@ -218,6 +218,7 @@ function pi_acf_init()
 			],
 			'location' => [
 				[[ 'param' => 'post_type', 'operator' => '==', 'value' => 'page' ]],
+				[[ 'param' => 'post_type', 'operator' => '==', 'value' => 'teams' ]],
 			],
 			'menu_order' => 0,
 			'position'   => 'normal',
