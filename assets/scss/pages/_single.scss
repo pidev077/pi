@@ -168,17 +168,14 @@
 
     // ── Featured image ───────────────────────────────────────────────────────
     &__featured-image {
-        margin-top: 8px;
-        background: url('../../images/bg-post.webp') no-repeat center center;
-        background-size: cover;
+        aspect-ratio: 3 / 2;
     }
 
     &__featured-img {
         width: 100%;
         height: auto;
         display: block;
-        border-radius: 20px;
-
+        object-fit: cover;
         @include media-breakpoint-down(md) { border-radius: 12px; }
     }
 

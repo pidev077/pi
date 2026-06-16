@@ -11698,15 +11698,13 @@ img {
   font-style: italic;
 }
 .post-single__featured-image {
-  margin-top: 8px;
-  background: url(../295c77fec0fed3437a6a.webp) no-repeat center center;
-  background-size: cover;
+  aspect-ratio: 3/2;
 }
 .post-single__featured-img {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 20px;
+  object-fit: cover;
 }
 @media (max-width: 767.98px) {
   .post-single__featured-img {
