@@ -132,12 +132,7 @@ $oldest_url = esc_url( add_query_arg( 'sort', 'oldest' ) );
 
         </div>
     </section>
-    <?php
-    $footer_blog = get_page_by_path('footer-blog', OBJECT, 'wp_block');
-    if ($footer_blog) {
-        echo do_blocks($footer_blog->post_content);
-    }
-    ?>
+    <?php pi_render_footer_blog_block(); ?>
 </main>
 
 <?php get_footer(); ?>

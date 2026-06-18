@@ -330,12 +330,7 @@ get_header();
 <?php endif; ?>
 
 <!-- ── Footer blog synced pattern ────────────────────────────────── -->
-<?php
-$footer_blog = get_page_by_path('footer-blog', OBJECT, 'wp_block');
-if ($footer_blog) {
-    echo do_blocks($footer_blog->post_content);
-}
-?>
+<?php pi_render_footer_blog_block(); ?>
 
 <!-- ── Global CTA / form block ────────────────────────────────────── -->
 <?php

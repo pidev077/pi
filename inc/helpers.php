@@ -4,6 +4,23 @@
  * Helpers
  */
 
+function pi_render_footer_blog_block() {
+    $lang = apply_filters( 'wpml_current_language', null ) ?: 'vi';
+    $map  = [
+        'en'      => 'footer-blog-en',
+        'zh'      => 'footer-blog-zh',
+        'zh-hans' => 'footer-blog-zh',
+        'zh-hant' => 'footer-blog-zh',
+        'ko'      => 'footer-blog-ko',
+    ];
+    $slug  = $map[ $lang ] ?? 'footer-blog';
+    $block = get_page_by_path( $slug, OBJECT, 'wp_block' )
+          ?: get_page_by_path( 'footer-blog', OBJECT, 'wp_block' );
+    if ( $block ) {
+        echo do_blocks( $block->post_content );
+    }
+}
+
 function pi_get_localized_date( $post_id = null ) {
     $lang = apply_filters( 'wpml_current_language', null ) ?: 'vi';
     switch ( $lang ) {

@@ -74,12 +74,7 @@ $toc         = pi_extract_toc( $content );
         </div>
     </div>
 
-    <?php
-    $footer_cta = get_page_by_path( 'footer-blog', OBJECT, 'wp_block' );
-    if ( $footer_cta ) {
-        echo do_blocks( $footer_cta->post_content );
-    }
-    ?>
+    <?php pi_render_footer_blog_block(); ?>
 
 </main>
 
