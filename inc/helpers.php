@@ -4,6 +4,26 @@
  * Helpers
  */
 
+function pi_get_localized_date( $post_id = null ) {
+    $lang = apply_filters( 'wpml_current_language', null ) ?: 'vi';
+    switch ( $lang ) {
+        case 'en':
+            $format = 'F j, Y';
+            break;
+        case 'zh':
+        case 'zh-hans':
+        case 'zh-hant':
+            $format = 'Y年n月j日';
+            break;
+        case 'ko':
+            $format = 'Y년 n월 j일';
+            break;
+        default: // vi
+            $format = 'j \t\h\á\n\g n, Y';
+    }
+    return get_the_date( $format, $post_id );
+}
+
 function dump($data)
 {
 	print "<pre style=' background: rgba(0, 0, 0, 0.1); margin-bottom: 1.618em; padding: 1.618em; overflow: auto; max-width: 100%; '>==========================\n";

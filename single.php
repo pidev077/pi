@@ -133,7 +133,7 @@ get_header();
                 </span>
                 <span class="post-single__meta-sep" aria-hidden="true">•</span>
                 <time class="post-single__meta-date" datetime="<?= get_the_date('c') ?>">
-                    <?= get_the_date('j \t\h\á\n\g n, Y') ?>
+                    <?= pi_get_localized_date() ?>
                 </time>
                 <span class="post-single__meta-sep" aria-hidden="true">•</span>
                 <span class="post-single__meta-read">

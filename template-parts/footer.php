@@ -136,7 +136,7 @@ $copyright     = $copyright ?: '&copy; ' . date('Y') . ' ' . __('DD CLINIC. All 
         <div class="footer__bottom">
             <div class="footer__badges">
                 <a href="https://www.dmca.com/Protection/Status.aspx" title="DMCA.com Protection Status" class="dmca-badge" target="_blank">
-                    <img src="https://images.dmca.com/Badges/dmca-badge-w100-5x1-09.png" alt="DMCA.com Protection Status" width="100">
+                    <img src="https://dannymedi.com/wp-content/uploads/2026/06/Compliance-Logos-Container.webp" alt="DMCA.com Protection Status" width="100">
                 </a>
             </div>
             <p class="footer__copyright"><?php echo wp_kses_post($copyright); ?></p>
