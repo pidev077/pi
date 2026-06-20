@@ -76,6 +76,7 @@ $inner_content = function() use ( $supertitle, $title, $description, $cta, $extr
 	<?php endif;
 };
 
+$bg_image    = $bg_image ?: get_template_directory_uri() . '/assets/images/bg-titlebar.webp';
 $style      = $bg_image ? ' style="background-image:url(' . esc_url( $bg_image ) . ');"' : '';
 $has_bg     = $bg_image ? ' page-hero--has-bg' : '';
 $style_class = $style_choice === 'style-2' ? ' page-hero--style-2' : '';
