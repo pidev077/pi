@@ -589,7 +589,7 @@
             color: $color-dark;
             margin: 2.2em 0 0.8em;
             line-height: 1.25;
-
+            font-variant-numeric: lining-nums proportional-nums;
             @include media-breakpoint-down(md) { font-size: 22px; }
 
             &:first-child { margin-top: 0; }
@@ -602,7 +602,7 @@
             color: #E0AC47;
             margin-bottom: 24px;
             line-height: 1.3;
-
+            font-variant-numeric: lining-nums proportional-nums;
             @include media-breakpoint-down(md) { font-size: 24px; }
         }
 
@@ -611,7 +611,8 @@
             font-size: 24px;
             font-weight: 600;
             color: $color-dark;
-            margin-bottom: 24px
+            margin-bottom: 24px;
+            font-variant-numeric: lining-nums proportional-nums;
         }
 
         p { margin-bottom: 16px; }

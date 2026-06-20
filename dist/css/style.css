@@ -12125,6 +12125,7 @@ img {
   color: #120a00;
   margin: 2.2em 0 0.8em;
   line-height: 1.25;
+  font-variant-numeric: lining-nums proportional-nums;
 }
 @media (max-width: 767.98px) {
   .post-content__body h2, .post-content__body .h2 {
@@ -12141,6 +12142,7 @@ img {
   color: #E0AC47;
   margin-bottom: 24px;
   line-height: 1.3;
+  font-variant-numeric: lining-nums proportional-nums;
 }
 @media (max-width: 767.98px) {
   .post-content__body h3, .post-content__body .h3 {
@@ -12153,6 +12155,7 @@ img {
   font-weight: 600;
   color: #120a00;
   margin-bottom: 24px;
+  font-variant-numeric: lining-nums proportional-nums;
 }
 .post-content__body p {
   margin-bottom: 16px;
