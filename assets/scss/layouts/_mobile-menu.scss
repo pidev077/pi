@@ -371,11 +371,13 @@ li.is-open .mob-link {
 }
 
 .mob-lang__label {
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 400;
     color: $mob-muted;
     white-space: nowrap;
-    margin-right: 4px;
+    margin-right: 8px;
+    float: left;
+    line-height: 24px;
 }
 
 .mob-lang {
@@ -387,16 +389,16 @@ li.is-open .mob-link {
     align-items: center;
     gap: 5px;
     background: none;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 6px 10px;
-    font-size: 13px;
+    border: none;
+    padding: 0px;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: 0.8px;
     color: $mob-dark;
     cursor: pointer;
     font-family: inherit;
     transition: border-color 0.2s;
+    float: left;
 
     svg { transition: transform 0.25s ease; }
 
@@ -450,6 +452,7 @@ li.is-open .mob-link {
     justify-content: center;
     gap: 12px;
     margin-bottom: 14px;
+    flex-direction: column-reverse;
 }
 
 .mobile-menu__social {
