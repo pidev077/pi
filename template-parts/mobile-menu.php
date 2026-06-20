@@ -34,6 +34,7 @@ $sm_target   = !empty($see_more['target']) ? $see_more['target'] : '_self';
 
     <div class="mobile-menu__drawer" role="dialog"
          aria-modal="true"
+         data-lenis-prevent
          aria-label="<?php esc_attr_e('Menu', 'pi'); ?>">
 
         <!-- ── Header ─────────────────────────────────────────────── -->
