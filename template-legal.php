@@ -6,7 +6,7 @@
 
 get_header();
 
-$legal_updated = get_field( 'legal_updated_date' ) ?: '';
+$legal_updated = '[' . get_the_modified_date( 'd / m / Y' ) . ']';
 
 $raw_content = get_the_content();
 $content     = pi_add_heading_ids( apply_filters( 'the_content', $raw_content ) );
