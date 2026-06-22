@@ -139,10 +139,10 @@ if (!function_exists('pi_register_service_group_post_type')) {
 			'rewrite'            => false,
 			'capability_type'    => 'post',
 			'has_archive'        => false,
-			'hierarchical'       => false,
+			'hierarchical'       => true,
 			'menu_position'      => 21,
 			'menu_icon'          => 'dashicons-category',
-			'supports'           => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields'),
+			'supports'           => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields', 'page-attributes'),
 			'show_in_rest'       => true, // bắt buộc để Gutenberg hoạt động
 			'rest_base'          => 'service-groups',
 		));
