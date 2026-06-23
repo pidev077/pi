@@ -115,9 +115,21 @@ if (!function_exists('pi_register_service_taxonomy')) {
 	add_action('init', 'pi_register_service_taxonomy', 0);
 }
 
-// Hiển thị đúng permalink phẳng cho service_category (vd: /tham-my-voc-dang/)
+// Độ sâu của 1 term trong taxonomy service_category (0 = cấp 1, 1 = cấp 2, 2 = cấp 3, ...)
+if (!function_exists('pi_service_category_depth')) {
+	function pi_service_category_depth($term_id) {
+		return count(get_ancestors($term_id, 'service_category', 'taxonomy'));
+	}
+}
+
+// Permalink cho service_category:
+// - Cấp 1, 2 → URL phẳng tại root (vd: /tham-my-voc-dang/)
+// - Cấp 3 trở đi → URL dưới prefix "dich-vu" giống service (vd: /dich-vu/cat-mi/)
 add_filter('term_link', function ($url, $term, $taxonomy) {
 	if ($taxonomy === 'service_category') {
+		if (pi_service_category_depth($term->term_id) >= 2) {
+			return home_url(user_trailingslashit('dich-vu/' . $term->slug));
+		}
 		return home_url(user_trailingslashit($term->slug));
 	}
 	return $url;
@@ -169,7 +181,27 @@ add_filter('post_type_link', function ($url, $post) {
 	return $url;
 }, 10, 2);
 
-// Phục vụ service_group tại root URL mà không xung đột với pages
+// Render template taxonomy-service_category.php cho 1 term, dùng chung cho cả 2 dạng URL bên dưới.
+if (!function_exists('pi_render_service_category_term')) {
+	function pi_render_service_category_term($term) {
+		global $wp_query;
+		$wp_query->is_404            = false;
+		$wp_query->is_archive        = true;
+		$wp_query->is_tax            = true;
+		$wp_query->queried_object    = $term;
+		$wp_query->queried_object_id = $term->term_id;
+
+		status_header(200);
+
+		$template = locate_template(['taxonomy-service_category.php', 'taxonomy.php']);
+		if ($template) {
+			include $template;
+			exit;
+		}
+	}
+}
+
+// Phục vụ service_group + service_category (cấp 1-2) tại root URL mà không xung đột với pages.
 add_action('template_redirect', function () {
 	if (!is_404()) return;
 
@@ -205,23 +237,24 @@ add_action('template_redirect', function () {
 		return;
 	}
 
-	// Không khớp service_group → thử khớp danh mục dịch vụ (service_category) tại root URL.
+	// Không khớp service_group → thử khớp danh mục dịch vụ cấp 1-2 (URL phẳng tại root).
 	$term = get_term_by('slug', sanitize_title($path), 'service_category');
-	if (!$term || is_wp_error($term)) return;
+	if (!$term || is_wp_error($term) || pi_service_category_depth($term->term_id) >= 2) return;
 
-	global $wp_query;
-	$wp_query->is_404         = false;
-	$wp_query->is_archive     = true;
-	$wp_query->is_tax         = true;
-	$wp_query->queried_object = $term;
-	$wp_query->queried_object_id = $term->term_id;
+	pi_render_service_category_term($term);
+}, 5);
 
-	status_header(200);
+// Phục vụ service_category cấp 3 trở đi tại "/dich-vu/{slug}" (cùng prefix với service).
+add_action('template_redirect', function () {
+	if (!is_404()) return;
 
-	$template = locate_template(['taxonomy-service_category.php', 'taxonomy.php']);
-	if ($template) {
-		include $template;
-		exit;
-	}
+	$path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+	$segments = $path === '' ? [] : explode('/', $path);
+	if (count($segments) !== 2 || $segments[0] !== 'dich-vu') return;
+
+	$term = get_term_by('slug', sanitize_title($segments[1]), 'service_category');
+	if (!$term || is_wp_error($term) || pi_service_category_depth($term->term_id) < 2) return;
+
+	pi_render_service_category_term($term);
 }, 5);
 
