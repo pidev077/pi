@@ -407,3 +407,11 @@
         }
     }
 }
+.site-main.service-category-archive{
+    padding-bottom: 60px;
+    padding-top: 60px;
+    @include media-breakpoint-down(md) {
+        padding-bottom: 40px;
+        padding-top: 40px;
+    }
+}

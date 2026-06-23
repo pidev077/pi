@@ -105,13 +105,23 @@ if (!function_exists('pi_register_service_taxonomy')) {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
-			'rewrite'           => array('slug' => 'danh-muc-dich-vu', 'with_front' => false, 'hierarchical' => true),
+			// URL phẳng tại root (giống service_group) — không có prefix "danh-muc-dich-vu".
+			// Xem filter 'term_link' và hook template_redirect bên dưới.
+			'rewrite'           => false,
 			'show_in_rest'      => true,
 		));
 	}
 
 	add_action('init', 'pi_register_service_taxonomy', 0);
 }
+
+// Hiển thị đúng permalink phẳng cho service_category (vd: /tham-my-voc-dang/)
+add_filter('term_link', function ($url, $term, $taxonomy) {
+	if ($taxonomy === 'service_category') {
+		return home_url(user_trailingslashit($term->slug));
+	}
+	return $url;
+}, 10, 3);
 
 if (!function_exists('pi_register_service_group_post_type')) {
 	function pi_register_service_group_post_type()
@@ -173,22 +183,42 @@ add_action('template_redirect', function () {
 		'post_status'    => 'publish',
 	]);
 
-	if (empty($posts)) return;
+	if (!empty($posts)) {
+		global $wp_query;
+		$wp_query->is_404      = false;
+		$wp_query->is_single   = true;
+		$wp_query->is_singular = true;
+		$wp_query->post_count  = 1;
+		$wp_query->found_posts = 1;
+		$wp_query->post        = $posts[0];
+		$wp_query->posts       = $posts;
+		$GLOBALS['post']       = $posts[0];
+		setup_postdata($posts[0]);
+
+		status_header(200);
+
+		$template = locate_template(['single-service_group.php', 'single.php']);
+		if ($template) {
+			include $template;
+			exit;
+		}
+		return;
+	}
+
+	// Không khớp service_group → thử khớp danh mục dịch vụ (service_category) tại root URL.
+	$term = get_term_by('slug', sanitize_title($path), 'service_category');
+	if (!$term || is_wp_error($term)) return;
 
 	global $wp_query;
-	$wp_query->is_404      = false;
-	$wp_query->is_single   = true;
-	$wp_query->is_singular = true;
-	$wp_query->post_count  = 1;
-	$wp_query->found_posts = 1;
-	$wp_query->post        = $posts[0];
-	$wp_query->posts       = $posts;
-	$GLOBALS['post']       = $posts[0];
-	setup_postdata($posts[0]);
+	$wp_query->is_404         = false;
+	$wp_query->is_archive     = true;
+	$wp_query->is_tax         = true;
+	$wp_query->queried_object = $term;
+	$wp_query->queried_object_id = $term->term_id;
 
 	status_header(200);
 
-	$template = locate_template(['single-service_group.php', 'single.php']);
+	$template = locate_template(['taxonomy-service_category.php', 'taxonomy.php']);
 	if ($template) {
 		include $template;
 		exit;

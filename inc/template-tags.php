@@ -32,33 +32,18 @@ if ( ! function_exists( 'pi_page_breadcrumb' ) ) {
 			$crumbs[] = [ 'label' => get_the_title(), 'url' => '' ];
 
 		} elseif ( is_singular( 'service' ) ) {
-			// Trang Chủ → Dịch Vụ → [Danh mục cấp 1] → [Tên dịch vụ]
-			$dich_vu_page = get_page_by_path( 'dich-vu' );
-			$dich_vu_url  = $dich_vu_page ? get_permalink( $dich_vu_page ) : home_url( '/dich-vu/' );
-			$crumbs[] = [ 'label' => 'Dịch Vụ', 'url' => $dich_vu_url ];
-
-			// Lấy taxonomy term cấp cao nhất của dịch vụ
+			// Trang Chủ → [Danh mục được gán trực tiếp cho dịch vụ này] → [Tên dịch vụ]
 			$terms = get_the_terms( get_the_ID(), 'service_category' );
 			if ( $terms && ! is_wp_error( $terms ) ) {
-				// Lấy term có depth cao nhất (term cha nhất trong danh sách)
-				$top_term = null;
+				// Ưu tiên term sâu nhất (con) thay vì term cha — đây mới là danh mục "trực tiếp".
+				$direct_term = null;
 				foreach ( $terms as $term ) {
-					if ( ! $top_term || $term->parent === 0 ) {
-						$top_term = $term;
+					if ( ! $direct_term || $term->parent !== 0 ) {
+						$direct_term = $term;
 					}
 				}
-				if ( $top_term ) {
-					// Tìm service_group post được link với term này
-					$linked_group = get_posts( [
-						'post_type'      => 'service_group',
-						'posts_per_page' => 1,
-						'meta_query'     => [ [
-							'key'   => 'sg_linked_category',
-							'value' => $top_term->term_id,
-						] ],
-					] );
-					$group_url = $linked_group ? get_permalink( $linked_group[0]->ID ) : get_term_link( $top_term );
-					$crumbs[]  = [ 'label' => $top_term->name, 'url' => $group_url ];
+				if ( $direct_term ) {
+					$crumbs[] = [ 'label' => $direct_term->name, 'url' => pi_get_service_category_url( $direct_term ) ];
 				}
 			}
 			$crumbs[] = [ 'label' => get_the_title(), 'url' => '' ];
@@ -69,6 +54,18 @@ if ( ! function_exists( 'pi_page_breadcrumb' ) ) {
 				$crumbs[] = [ 'label' => $cats[0]->name, 'url' => get_category_link( $cats[0]->term_id ) ];
 			}
 			$crumbs[] = [ 'label' => get_the_title(), 'url' => '' ];
+
+		} elseif ( is_tax( 'service_category' ) ) {
+			// Trang Chủ → [Danh mục ông/cha ...] → [Tên danh mục hiện tại]
+			$term         = get_queried_object();
+			$ancestor_ids = array_reverse( get_ancestors( $term->term_id, 'service_category', 'taxonomy' ) );
+			foreach ( $ancestor_ids as $ancestor_id ) {
+				$ancestor = get_term( $ancestor_id, 'service_category' );
+				if ( $ancestor && ! is_wp_error( $ancestor ) ) {
+					$crumbs[] = [ 'label' => $ancestor->name, 'url' => pi_get_service_category_url( $ancestor ) ];
+				}
+			}
+			$crumbs[] = [ 'label' => $term->name, 'url' => '' ];
 
 		} elseif ( is_singular( 'teams' ) ) {
 			// Trang Chủ → Giới Thiệu → [Tên thành viên]

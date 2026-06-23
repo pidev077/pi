@@ -4,6 +4,29 @@
  * Helpers
  */
 
+/**
+ * URL "chính tắc" cho 1 danh mục service_category:
+ * - Nếu có service_group liên kết (sg_linked_category) → URL của service_group đó.
+ * - Nếu không → URL phẳng của chính danh mục (xem taxonomy-service_category.php).
+ */
+function pi_get_service_category_url( $term ) {
+	if ( ! $term instanceof WP_Term ) {
+		return '';
+	}
+
+	$linked = get_posts( [
+		'post_type'   => 'service_group',
+		'post_status' => 'publish',
+		'numberposts' => 1,
+		'meta_query'  => [ [
+			'key'   => 'sg_linked_category',
+			'value' => $term->term_id,
+		] ],
+	] );
+
+	return $linked ? get_permalink( $linked[0]->ID ) : get_term_link( $term );
+}
+
 function pi_render_footer_blog_block() {
     $lang = apply_filters( 'wpml_current_language', null ) ?: 'vi';
     $map  = [
