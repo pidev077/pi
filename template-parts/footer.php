@@ -11,6 +11,9 @@ $social_tw     = get_field('footer_social_twitter', 'option');
 $social_yt     = get_field('footer_social_youtube', 'option');
 $copyright     = get_field('footer_copyright', 'option');
 $copyright     = $copyright ?: '&copy; ' . date('Y') . ' ' . __('DD CLINIC. All Rights Reserved.', 'pi');
+$hotline       = get_field('footer_hotline_number', 'option');
+$zalo_link     = get_field('footer_zalo_link', 'option');
+$messenger     = get_field('footer_messenger_link', 'option');
 ?>
 
 <footer id="footer" class="footer">
@@ -144,6 +147,38 @@ $copyright     = $copyright ?: '&copy; ' . date('Y') . ' ' . __('DD CLINIC. All 
 
     </div><!-- /.container -->
 </footer>
+
+<?php if ($hotline || $zalo_link || $messenger): ?>
+<!-- ── Floating contact buttons ─────────────────────────────────── -->
+<div class="floating-contact">
+
+    <?php if ($messenger): ?>
+        <a href="<?php echo esc_url($messenger); ?>" target="_blank" rel="noopener noreferrer" class="floating-contact__btn floating-contact__btn--messenger" aria-label="Messenger">
+            <span class="floating-contact__ring"></span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.13 2 11.7c0 3.06 1.58 5.78 4.07 7.6V22l3.72-2.04c.71.2 1.46.31 2.21.31 5.52 0 10-4.13 10-9.57S17.52 2 12 2zm.99 12.85-2.55-2.72-4.98 2.72 5.48-5.81 2.61 2.72 4.92-2.72-5.48 5.81z"/>
+            </svg>
+        </a>
+    <?php endif; ?>
+
+    <?php if ($zalo_link): ?>
+        <a href="<?php echo esc_url($zalo_link); ?>" target="_blank" rel="noopener noreferrer" class="floating-contact__btn floating-contact__btn--zalo" aria-label="Zalo">
+            <span class="floating-contact__ring"></span>
+            <span class="floating-contact__zalo-text">Zalo</span>
+        </a>
+    <?php endif; ?>
+
+    <?php if ($hotline): ?>
+        <a href="tel:<?php echo esc_attr(preg_replace('/[^0-9+]/', '', $hotline)); ?>" class="floating-contact__btn floating-contact__btn--hotline" aria-label="<?php echo esc_attr($hotline); ?>">
+            <span class="floating-contact__ring"></span>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.25c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2z"/>
+            </svg>
+        </a>
+    <?php endif; ?>
+
+</div>
+<?php endif; ?>
 
 <!-- ── Scroll to top ─────────────────────────────────────────────── -->
 <button id="scroll-top" class="scroll-top" aria-label="<?php esc_attr_e('TRỞ VỀ ĐẦU TRANG', 'pi'); ?>">

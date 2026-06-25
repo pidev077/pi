@@ -56,6 +56,11 @@ export default {
 			dd.appendChild(panel);
 
 			const open = () => {
+				document.querySelectorAll(".cf7-custom-select.is-open").forEach((other) => {
+					if (other === dd) return;
+					other.classList.remove("is-open");
+					other.querySelector(".cf7-custom-select__panel").style.display = "none";
+				});
 				panel.style.display = "block";
 				dd.classList.add("is-open");
 			};

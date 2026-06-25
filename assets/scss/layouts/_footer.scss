@@ -273,6 +273,108 @@ $footer-white:  #ffffff;
 	}
 }
 
+// ── Floating contact buttons (hotline / zalo / messenger) ──────────
+.floating-contact {
+	position: fixed;
+	left: 24px;
+	bottom: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	z-index: 999;
+
+	@include media-breakpoint-down(md) {
+		left: 16px;
+		bottom: 16px;
+		gap: 10px;
+	}
+
+	&__btn {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		color: #fff;
+		box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+		transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+		@include media-breakpoint-down(md) {
+			width: 44px;
+			height: 44px;
+		}
+
+		svg {
+			position: relative;
+			z-index: 1;
+			display: block;
+			margin-left: 0;
+		}
+
+		&:hover,
+		&:focus-visible {
+			transform: scale(1.08);
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+		}
+
+		&--hotline {
+			background: #25d366;
+			animation: floating-contact-shake 2.6s ease-in-out infinite;
+		}
+
+		&--zalo {
+			background: #0068ff;
+		}
+
+		&--messenger {
+			background: linear-gradient(135deg, #00b2ff, #006aff);
+		}
+	}
+
+	&__ring {
+		position: absolute;
+		inset: 0;
+		border-radius: 50%;
+		background: currentColor;
+		opacity: 0.55;
+		animation: floating-contact-pulse 1.8s ease-out infinite;
+	}
+
+	&__btn--hotline &__ring { color: #25d366; }
+	&__btn--zalo &__ring { color: #0068ff; }
+	&__btn--messenger &__ring { color: #006aff; }
+
+	&__zalo-text {
+		position: relative;
+		z-index: 1;
+		font-size: 14px;
+		font-weight: 700;
+		letter-spacing: 0.5px;
+	}
+}
+
+@keyframes floating-contact-pulse {
+	0% {
+		transform: scale(1);
+		opacity: 0.55;
+	}
+	100% {
+		transform: scale(1.8);
+		opacity: 0;
+	}
+}
+
+@keyframes floating-contact-shake {
+	0%, 80%, 100% { transform: rotate(0); }
+	82% { transform: rotate(-12deg); }
+	84% { transform: rotate(10deg); }
+	86% { transform: rotate(-8deg); }
+	88% { transform: rotate(6deg); }
+	90% { transform: rotate(0); }
+}
+
 // ── Scroll to top ─────────────────────────────────────────────────
 .scroll-top {
 	position: fixed;

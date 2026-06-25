@@ -140,6 +140,79 @@
             "placeholder": "https:\/\/youtube.com\/..."
         },
         {
+            "key": "field_pi_footer_tab_contact",
+            "label": "Liên Hệ Nhanh",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_pi_footer_hotline",
+            "label": "Số Hotline",
+            "name": "footer_hotline_number",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Hiển thị nút Hotline nổi ở góc màn hình. Để trống để ẩn nút.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "0123 456 789"
+        },
+        {
+            "key": "field_pi_footer_zalo",
+            "label": "Link Zalo",
+            "name": "footer_zalo_link",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "Hiển thị nút Zalo nổi ở góc màn hình. Để trống để ẩn nút.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": "https:\/\/zalo.me\/..."
+        },
+        {
+            "key": "field_pi_footer_messenger",
+            "label": "Link Messenger",
+            "name": "footer_messenger_link",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "Hiển thị nút Messenger nổi ở góc màn hình. Để trống để ẩn nút.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": "https:\/\/m.me\/..."
+        },
+        {
             "key": "field_pi_footer_tab_other",
             "label": "Khác",
             "name": "",

@@ -2,7 +2,10 @@
  * Mega Menu — desktop panel open/close + services interactive columns.
  *
  * Desktop (≥ 992 px):
- *   Click .mega-toggle → opens fixed mega panel
+ *   Hover .nav-item.has-mega-menu → opens fixed mega panel (panel is nested
+ *   inside the same <li>, so moving the pointer onto it never "leaves" the
+ *   item — no bridging/delay hacks needed for that path).
+ *   Click .mega-toggle → fallback open/close for keyboard & touch users.
  *   Click .mega-menu__close / backdrop / Escape → closes
  *
  * Mobile (< 992 px):
@@ -45,6 +48,10 @@ export default {
             const panel = getPanel(toggle);
             if (!panel) return;
 
+            // Already open: skip re-triggering closeAll()/transition (avoids
+            // a needless close+reopen flicker when re-entering the same item).
+            if (toggle.getAttribute('aria-expanded') === 'true') return;
+
             closeAll();
 
             toggle.setAttribute('aria-expanded', 'true');
@@ -64,7 +71,14 @@ export default {
             panel.classList.remove('is-open');
             panel.addEventListener(
                 'transitionend',
-                () => panel.setAttribute('hidden', ''),
+                // If the panel was reopened before this fired (common with
+                // hover in/out), the pending listener would otherwise catch
+                // the *reopen* transition's end and wrongly re-hide it.
+                () => {
+                    if (!panel.classList.contains('is-open')) {
+                        panel.setAttribute('hidden', '');
+                    }
+                },
                 { once: true }
             );
         };
@@ -97,6 +111,28 @@ export default {
         });
 
         backdrop.addEventListener('click', closeAll);
+
+        // ── Hover open (desktop) ───────────────────────────────────────
+        // Panel lives inside the same <li>, so hovering from the toggle
+        // onto the panel content never fires mouseleave on the item.
+
+        let closeTimer = null;
+
+        document.querySelectorAll('.nav-item.has-mega-menu').forEach((item) => {
+            const toggle = item.querySelector('.mega-toggle');
+            if (!toggle) return;
+
+            item.addEventListener('mouseenter', () => {
+                if (window.innerWidth < LG) return;
+                clearTimeout(closeTimer);
+                openPanel(toggle);
+            });
+
+            item.addEventListener('mouseleave', () => {
+                if (window.innerWidth < LG) return;
+                closeTimer = setTimeout(closeAll, 150);
+            });
+        });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeAll();

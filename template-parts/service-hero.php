@@ -4,15 +4,30 @@
  * Text at bottom-left, full-height image on the right, breadcrumb below.
  *
  * ACF fields:
- *   service_hero_title — main heading (falls back to post title)
- *   service_hero_desc  — short description
- *   service_hero_cta   — CTA button link
- *   service_hero_image — right-side image
+ *   service_hero_title           — main heading (falls back to post title)
+ *   service_hero_desc            — short description
+ *   service_hero_cta             — CTA button link
+ *   service_hero_image           — right-side image
+ *   service_hero_title_font_size — optional CSS font-size override for title
+ *   service_hero_title_max_width — optional CSS max-width override for title
+ *   service_hero_desc_max_width  — optional CSS max-width override for desc
  */
 
 $title      = get_field( 'service_hero_title' ) ?: get_the_title();
 $desc       = get_field( 'service_hero_desc' );
 $cta        = get_field( 'service_hero_cta' );
+
+$title_font_size = get_field( 'service_hero_title_font_size' );
+$title_max_width = get_field( 'service_hero_title_max_width' );
+$desc_max_width   = get_field( 'service_hero_desc_max_width' );
+
+$title_style = array_filter( [
+	$title_font_size ? 'font-size: ' . $title_font_size : '',
+	$title_max_width ? 'max-width: ' . $title_max_width : '',
+] );
+$desc_style = array_filter( [
+	$desc_max_width ? 'max-width: ' . $desc_max_width : '',
+] );
 
 if ( has_post_thumbnail() ) {
 	$thumb_id   = get_post_thumbnail_id();
@@ -39,10 +54,10 @@ if ( has_post_thumbnail() ) {
 		<div class="container">
 			<div class="service-hero__content">
 
-				<h1 class="service-hero__title"><?= wp_kses_post( $title ) ?></h1>
+				<h1 class="service-hero__title"<?= $title_style ? ' style="' . esc_attr( implode( '; ', $title_style ) ) . '"' : '' ?>><?= wp_kses_post( $title ) ?></h1>
 
 				<?php if ( $desc ) : ?>
-					<p class="service-hero__desc"><?= wp_kses_post( $desc ) ?></p>
+					<p class="service-hero__desc"<?= $desc_style ? ' style="' . esc_attr( implode( '; ', $desc_style ) ) . '"' : '' ?>><?= wp_kses_post( $desc ) ?></p>
 				<?php endif; ?>
 
 				<?php if ( $cta ) : ?>

@@ -262,6 +262,30 @@ function pi_acf_init()
 					'preview_size'  => 'medium',
 					'instructions'  => 'Portrait image, ~3:4 or ~2:3 ratio. Fills the right half of the banner.',
 				],
+				[
+					'key'          => 'field_pi_sh_title_font_size',
+					'label'        => 'Title — Font Size',
+					'name'         => 'service_hero_title_font_size',
+					'type'         => 'text',
+					'instructions' => 'CSS value, ví dụ "48px", "3rem", hoặc "clamp(36px, 4.2vw, 56px)". Để trống dùng mặc định.',
+					'wrapper'      => [ 'width' => '50' ],
+				],
+				[
+					'key'          => 'field_pi_sh_title_max_width',
+					'label'        => 'Title — Max Width',
+					'name'         => 'service_hero_title_max_width',
+					'type'         => 'text',
+					'instructions' => 'CSS value, ví dụ "520px" hoặc "80%". Để trống dùng mặc định.',
+					'wrapper'      => [ 'width' => '50' ],
+				],
+				[
+					'key'          => 'field_pi_sh_desc_max_width',
+					'label'        => 'Description — Max Width',
+					'name'         => 'service_hero_desc_max_width',
+					'type'         => 'text',
+					'instructions' => 'CSS value, ví dụ "400px" hoặc "60%". Để trống dùng mặc định.',
+					'wrapper'      => [ 'width' => '50' ],
+				],
 			],
 			'location' => [
 				[[ 'param' => 'post_type', 'operator' => '==', 'value' => 'service' ]],
@@ -317,6 +341,28 @@ function pi_acf_init()
 			],
 			'menu_order' => 0,
 			'position'   => 'side',
+			'style'      => 'default',
+		]);
+
+		// ── Danh Mục Dịch Vụ: hình ảnh đại diện ─────────────────────────
+		acf_add_local_field_group([
+			'key'    => 'group_pi_service_category',
+			'title'  => 'Cài Đặt Danh Mục Dịch Vụ',
+			'fields' => [
+				[
+					'key'           => 'field_pi_service_category_image',
+					'label'         => 'Hình Ảnh Danh Mục',
+					'name'          => 'service_category_image',
+					'type'          => 'image',
+					'return_format' => 'array',
+					'preview_size'  => 'medium',
+					'instructions'  => 'Nếu có ảnh, sẽ ưu tiên dùng ảnh này. Nếu không, sẽ lấy ảnh từ Nhóm Dịch Vụ liên kết.',
+				],
+			],
+			'location' => [
+				[[ 'param' => 'taxonomy', 'operator' => '==', 'value' => 'service_category' ]],
+			],
+			'menu_order' => 0,
 			'style'      => 'default',
 		]);
 
