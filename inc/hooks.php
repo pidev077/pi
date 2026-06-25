@@ -84,6 +84,71 @@ function pi_post_loop_item_template($post_id, $index)
 // ── CF7: tắt tự động chèn <br> / <p> trong form body ─────────────────────────
 add_filter( 'wpcf7_autop_or_not', '__return_false' );
 
+// ── CF7: custom thông báo lỗi "required" theo từng field name ────────────────
+// CF7 6.x validate "required" qua SWV schema (wpcf7_swv_create_schema), không
+// còn qua filter wpcf7_validate_*. Rule nào được add vào schema TRƯỚC sẽ thắng
+// (WPCF7_Validation::invalidate() bỏ qua field đã invalid), nên hook ở priority
+// thấp hơn module gốc (10) để rule custom của mình luôn chạy trước.
+add_action( 'wpcf7_swv_create_schema', function ( $schema, $contact_form ) {
+	$messages = array(
+		'ho-ten'             => 'Vui lòng nhập họ và tên của bạn.',
+		'so-dien-thoai'      => 'Vui lòng nhập số điện thoại liên hệ.',
+		'your-email'         => 'Vui lòng nhập địa chỉ email của bạn.',
+		'quoc-gia'           => 'Vui lòng nhập quốc gia / thành phố hiện tại.',
+		'dich-vu'            => 'Vui lòng chọn dịch vụ bạn quan tâm.',
+		'thoi-gian-tu-van'   => 'Vui lòng chọn thời gian tư vấn mong muốn.',
+		'thoi-gian-dieu-tri' => 'Vui lòng chọn thời gian điều trị dự kiến.',
+		'kenh-lien-he'       => 'Vui lòng chọn kênh liên hệ ưu tiên.',
+		'quan-tam'           => 'Vui lòng chia sẻ điều bạn đang quan tâm nhất.',
+		'chap-thuan'         => 'Vui lòng đồng ý với chính sách bảo mật để tiếp tục.',
+	);
+
+	$tags = $contact_form->scan_form_tags( array(
+		'basetype' => array( 'text', 'email', 'url', 'tel', 'select', 'textarea', 'checkbox', 'radio', 'acceptance' ),
+	) );
+
+	foreach ( $tags as $tag ) {
+		if ( ! isset( $messages[ $tag->name ] ) ) {
+			continue;
+		}
+
+		$is_required = $tag->is_required()
+			|| ( 'acceptance' === $tag->basetype && ! $tag->has_option( 'optional' ) );
+
+		if ( ! $is_required ) {
+			continue;
+		}
+
+		$schema->add_rule(
+			wpcf7_swv_create_rule( 'required', array(
+				'field' => $tag->name,
+				'error' => $messages[ $tag->name ],
+			) )
+		);
+	}
+}, 5, 2 );
+
+// Field acceptance vẫn validate qua filter riêng (không dùng SWV schema).
+add_filter( 'wpcf7_validate_acceptance', function ( $result, $tag ) {
+	$messages = array(
+		'chap-thuan' => 'Vui lòng đồng ý với chính sách bảo mật để tiếp tục.',
+	);
+
+	if ( ! isset( $messages[ $tag->name ] ) || ! $result->is_valid( $tag->name ) ) {
+		return $result;
+	}
+
+	if ( $tag->has_option( 'optional' ) ) {
+		return $result;
+	}
+
+	if ( empty( $_POST[ $tag->name ] ) ) {
+		$result->invalidate( $tag, $messages[ $tag->name ] );
+	}
+
+	return $result;
+}, 5, 2 );
+
 // ── Archive sort: register 'sort' query var and apply ordering ────────────────
 add_filter( 'query_vars', function ( $vars ) {
 	$vars[] = 'sort';

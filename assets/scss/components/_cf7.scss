@@ -668,3 +668,214 @@ $cf7-required:    #FF2056;
 		}
 	}
 }
+
+// ── Date/Time Picker (lịch chọn ngày + khung giờ ưu tiên) ─────────────────────
+.consult-dt-picker {
+	&.cf7-custom-select .cf7-custom-select__panel {
+		width: 320px;
+		max-height: none;
+		padding: 16px;
+	}
+
+	&__cal-head {
+		margin-bottom: 12px;
+	}
+
+	&__cal-title {
+		font-family: $font-second, sans-serif;
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		color: $cf7-placeholder;
+		margin-bottom: 10px;
+	}
+
+	&__nav-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 4px;
+	}
+
+	&__nav {
+		flex-shrink: 0;
+		width: 24px;
+		height: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: none;
+		background: transparent;
+		color: $cf7-placeholder;
+		font-size: 16px;
+		line-height: 1;
+		cursor: pointer;
+		border-radius: 4px;
+		transition: background 0.15s ease, color 0.15s ease;
+
+		&:hover {
+			background: #FBF7EB;
+			color: $cf7-gold;
+		}
+	}
+
+	&__title {
+		flex: 1;
+		text-align: center;
+		font-family: $font-primary, serif;
+		font-size: 15px;
+		font-weight: 500;
+		color: $cf7-text;
+	}
+
+	&__weekdays {
+		display: grid;
+		grid-template-columns: repeat(7, 1fr);
+		margin-bottom: 4px;
+
+		span {
+			text-align: center;
+			font-family: $font-second, sans-serif;
+			font-size: 12px;
+			font-weight: 500;
+			color: $cf7-placeholder;
+			padding: 4px 0;
+		}
+	}
+
+	&__days {
+		display: grid;
+		grid-template-columns: repeat(7, 1fr);
+		row-gap: 4px;
+	}
+
+	&__day {
+		width: 32px;
+		height: 32px;
+		margin: 0 auto;
+		border: none;
+		background: transparent;
+		border-radius: 50%;
+		font-family: $font-second, sans-serif;
+		font-size: 14px;
+		color: $cf7-text;
+		cursor: pointer;
+		transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+		&:hover:not(:disabled) {
+			background: #FBF7EB;
+		}
+
+		&.is-muted,
+		&.is-disabled {
+			color: $cf7-placeholder;
+			cursor: default;
+		}
+
+		&.is-disabled:hover {
+			background: transparent;
+		}
+
+		&.is-today {
+			color: $cf7-gold;
+			font-weight: 600;
+		}
+
+		&.is-selected {
+			border: 2px solid $cf7-gold;
+			color: $cf7-gold;
+			font-weight: 600;
+			background: transparent;
+		}
+	}
+
+	&__slots {
+		margin-top: 16px;
+		padding-top: 16px;
+		border-top: 1px solid $cf7-border;
+	}
+
+	&__slots-label {
+		font-family: $font-second, sans-serif;
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		color: $cf7-placeholder;
+		margin-bottom: 10px;
+	}
+
+	&__slots-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 8px;
+	}
+
+	&__slot {
+		height: 36px;
+		border: 1px solid $cf7-border;
+		border-radius: 4px;
+		background: #fff;
+		font-family: $font-second, sans-serif;
+		font-size: 13px;
+		color: $cf7-text;
+		cursor: pointer;
+		transition: all 0.15s ease;
+
+		&:hover {
+			border-color: $cf7-gold;
+		}
+
+		&.is-active {
+			background: $cf7-gold;
+			border-color: $cf7-gold;
+			color: #fff;
+		}
+	}
+
+	&__footer {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 12px;
+		margin-top: 16px;
+		padding-top: 16px;
+		border-top: 1px solid $cf7-border;
+	}
+
+	&__reset {
+		border: none;
+		background: transparent;
+		font-family: $font-second, sans-serif;
+		font-size: 14px;
+		color: $cf7-placeholder;
+		cursor: pointer;
+
+		&:hover {
+			color: $cf7-text;
+		}
+	}
+
+	&__apply {
+		height: 36px;
+		padding: 0 20px;
+		border: none;
+		border-radius: 4px;
+		background: $cf7-gold;
+		font-family: $font-second, sans-serif;
+		font-size: 14px;
+		font-weight: 500;
+		color: #fff;
+		cursor: pointer;
+		transition: background 0.15s ease;
+
+		&:hover {
+			background: darken($cf7-gold, 12%);
+		}
+
+		&:disabled {
+			background: $cf7-border;
+			color: $cf7-placeholder;
+			cursor: not-allowed;
+		}
+	}
+}
