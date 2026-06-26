@@ -84,7 +84,7 @@ $messenger     = get_field('footer_messenger_link', 'option');
 
             <!-- ── Column 2: Điều Hướng ────────────────────────────── -->
             <div class="footer__nav-col">
-                <h4 class="footer__col-title"><?php esc_html_e('ĐIỀU HƯỚNG', 'pi'); ?></h4>
+                <div class="footer__col-title"><?php esc_html_e('ĐIỀU HƯỚNG', 'pi'); ?></div>
                 <?php
                 if (has_nav_menu('footer-navigation')) {
                     wp_nav_menu([
@@ -101,7 +101,7 @@ $messenger     = get_field('footer_messenger_link', 'option');
 
             <!-- ── Column 3: Dịch Vụ ───────────────────────────────── -->
             <div class="footer__nav-col">
-                <h4 class="footer__col-title"><?php esc_html_e('DỊCH VỤ', 'pi'); ?></h4>
+                <div class="footer__col-title"><?php esc_html_e('DỊCH VỤ', 'pi'); ?></div>
                 <?php
                 if (has_nav_menu('footer-services')) {
                     wp_nav_menu([
@@ -118,7 +118,7 @@ $messenger     = get_field('footer_messenger_link', 'option');
 
             <!-- ── Column 4: Hỗ Trợ ────────────────────────────────── -->
             <div class="footer__nav-col">
-                <h4 class="footer__col-title"><?php esc_html_e('HỖ TRỢ', 'pi'); ?></h4>
+                <div class="footer__col-title"><?php esc_html_e('HỖ TRỢ', 'pi'); ?></div>
                 <?php
                 if (has_nav_menu('footer-support')) {
                     wp_nav_menu([

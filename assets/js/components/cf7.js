@@ -80,13 +80,15 @@ export default {
 				if (e.key === "Escape") close();
 			});
 
-			// Ẩn native select
+			// Ẩn native select — giữ 1x1px (không phải 0x0) để trình duyệt vẫn
+			// focus/định vị được khi cần, tránh submit bị HTML5 validation chặn
+			// âm thầm (field 0x0 không hiện được bong bóng cảnh báo "required").
 			select.style.cssText =
-				"position:absolute;opacity:0;width:0;height:0;pointer-events:none;overflow:hidden;";
+				"position:absolute;opacity:0;width:1px;height:1px;pointer-events:none;overflow:hidden;clip-path:inset(50%);";
 
-			// Ẩn wrap (chỉ chứa select ẩn, không cần chiếm không gian)
+			// Ẩn wrap nhưng vẫn giữ 1px để không đè kích thước select xuống 0
 			const wrap = select.closest(".wpcf7-form-control-wrap");
-			if (wrap) wrap.style.cssText = "height:0;overflow:hidden;display:block;";
+			if (wrap) wrap.style.cssText = "height:1px;overflow:hidden;display:block;";
 
 			// Insert dropdown SAU wrap
 			const anchor = wrap || select;
@@ -263,11 +265,12 @@ export default {
 			});
 			document.addEventListener("wpcf7mailsent", () => setTimeout(resetState, 100));
 
-			// Ẩn input thật, chỉ giữ giá trị cho CF7 validate/submit
+			// Ẩn input thật, chỉ giữ giá trị cho CF7 validate/submit — giữ 1x1px
+			// (không phải 0x0) để tránh submit bị HTML5 validation chặn âm thầm.
 			input.style.cssText =
-				"position:absolute;opacity:0;width:0;height:0;pointer-events:none;overflow:hidden;";
+				"position:absolute;opacity:0;width:1px;height:1px;pointer-events:none;overflow:hidden;clip-path:inset(50%);";
 			const wrap = input.closest(".wpcf7-form-control-wrap");
-			if (wrap) wrap.style.cssText = "height:0;overflow:hidden;display:block;";
+			if (wrap) wrap.style.cssText = "height:1px;overflow:hidden;display:block;";
 
 			zone.appendChild(dd);
 		};
@@ -286,6 +289,20 @@ export default {
 			if (!input) return;
 			p.addEventListener("click", (e) => {
 				if (e.target !== input) input.click();
+			});
+		});
+
+		// ── Fallback: nếu AJAX của CF7 bị treo (mạng lỗi, server không phản
+		// hồi...), input submit có thể bị kẹt ở trạng thái disabled vĩnh viễn
+		// (CSS .cf7-submit:has(:disabled) khoá pointer-events trên cả vùng nút).
+		// Tự gỡ disabled sau 15s nếu CF7 chưa tự xử lý xong.
+		document.querySelectorAll(".wpcf7-form").forEach((form) => {
+			const submit = form.querySelector("input[type='submit']");
+			if (!submit) return;
+			form.addEventListener("submit", () => {
+				setTimeout(() => {
+					if (submit.disabled) submit.disabled = false;
+				}, 15000);
 			});
 		});
 
