@@ -236,7 +236,7 @@
             "name": "footer_copyright",
             "aria-label": "",
             "type": "text",
-            "instructions": "Để trống để tự động tạo. VD: &copy; 2026 DD CLINIC. All Rights Reserved.",
+            "instructions": "Để trống để tự động tạo. VD: &copy; 2026 DD MEDI. All Rights Reserved.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {

@@ -8,11 +8,11 @@
 get_header();
 
 do_action('wpml_register_single_string', 'pi', '404_heading',  'Trang Bạn Đang Tìm Kiếm Không Còn Khả Dụng');
-do_action('wpml_register_single_string', 'pi', '404_body',     'Liên kết này có thể đã được thay đổi, di chuyển hoặc không còn tồn tại. Bạn có thể quay lại trang chủ hoặc tiếp tục khám phá các dịch vụ thẩm mỹ y khoa được DD CLINIC tư vấn tại Hàn Quốc.');
+do_action('wpml_register_single_string', 'pi', '404_body',     'Liên kết này có thể đã được thay đổi, di chuyển hoặc không còn tồn tại. Bạn có thể quay lại trang chủ hoặc tiếp tục khám phá các dịch vụ thẩm mỹ y khoa được DD MEDI tư vấn tại Hàn Quốc.');
 do_action('wpml_register_single_string', 'pi', '404_btn',      'Quay Về Trang Chủ');
 
 $heading_404 = apply_filters('wpml_translate_single_string', 'Trang Bạn Đang Tìm Kiếm Không Còn Khả Dụng', 'pi', '404_heading');
-$body_404    = apply_filters('wpml_translate_single_string', 'Liên kết này có thể đã được thay đổi, di chuyển hoặc không còn tồn tại. Bạn có thể quay lại trang chủ hoặc tiếp tục khám phá các dịch vụ thẩm mỹ y khoa được DD CLINIC tư vấn tại Hàn Quốc.', 'pi', '404_body');
+$body_404    = apply_filters('wpml_translate_single_string', 'Liên kết này có thể đã được thay đổi, di chuyển hoặc không còn tồn tại. Bạn có thể quay lại trang chủ hoặc tiếp tục khám phá các dịch vụ thẩm mỹ y khoa được DD MEDI tư vấn tại Hàn Quốc.', 'pi', '404_body');
 $btn_404     = apply_filters('wpml_translate_single_string', 'Quay Về Trang Chủ', 'pi', '404_btn');
 ?>
 <main id="primary" class="site-main">

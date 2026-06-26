@@ -31,7 +31,7 @@ if ( $linked_group ) {
 get_header();
 
 get_template_part( 'template-parts/page-hero', null, [
-	'supertitle'  => __( 'Dịch Vụ Tại DD Clinic', 'pi' ),
+	'supertitle'  => __( 'Dịch Vụ Tại DD MEDI', 'pi' ),
 	'title'       => $term->name,
 	'description' => term_description( $term->term_id, 'service_category' ),
 ] );

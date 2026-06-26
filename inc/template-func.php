@@ -376,7 +376,7 @@ if (!class_exists('Pi_Header_Walker')) {
             $social_tw  = get_field('footer_social_twitter', 'option');
             $social_yt  = get_field('footer_social_youtube', 'option');
             $copyright  = get_field('footer_copyright', 'option')
-                          ?: '&copy; ' . date('Y') . ' ' . __('DD CLINIC. All Rights Reserved.', 'pi');
+                          ?: '&copy; ' . date('Y') . ' ' . __('DD MEDI. All Rights Reserved.', 'pi');
 
             $html  = '<div class="mega-menu__footer">';
             $html .= '<div class="container">';
@@ -386,7 +386,7 @@ if (!class_exists('Pi_Header_Walker')) {
             if ($social_fb || $social_ig || $social_tw || $social_yt) {
                 $html .= '<div class="mega-menu__footer-social">';
                 $html .= '<span class="mega-menu__footer-social-label">'
-                       . esc_html__('Theo Dõi DD CLINIC', 'pi') . '</span>';
+                       . esc_html__('Theo Dõi DD MEDI', 'pi') . '</span>';
                 $html .= '<div class="mega-menu__footer-icons">';
 
                 if ($social_fb) {

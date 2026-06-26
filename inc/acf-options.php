@@ -165,7 +165,7 @@ function pi_acf_init()
 					'label'             => 'Supertitle',
 					'name'              => 'page_hero_supertitle',
 					'type'              => 'text',
-					'instructions'      => 'Small text above the main title. E.g. DD CLINIC — PREMIUM KOREAN AESTHETIC ADVISORY CENTER',
+					'instructions'      => 'Small text above the main title. E.g. DD MEDI — PREMIUM KOREAN AESTHETIC ADVISORY CENTER',
 					'conditional_logic' => [[
 						['field' => 'field_pi_hero_enable', 'operator' => '==', 'value' => '1'],
 					]],

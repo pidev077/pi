@@ -11,7 +11,7 @@ $current_lang = apply_filters('wpml_current_language', null);
 $languages    = apply_filters('wpml_active_languages', null, ['skip_missing' => 0]);
 $blog_url     = get_permalink(get_option('page_for_posts')) ?: home_url('/blog/');
 $copyright    = get_field('footer_copyright', 'option')
-                ?: '&copy; ' . date('Y') . ' ' . __('DD CLINIC. All Rights Reserved.', 'pi');
+                ?: '&copy; ' . date('Y') . ' ' . __('DD MEDI. All Rights Reserved.', 'pi');
 
 // Social
 $social_fb = get_field('footer_social_facebook', 'option');
@@ -135,7 +135,7 @@ $sm_target   = !empty($see_more['target']) ? $see_more['target'] : '_self';
                 <?php if ($social_fb || $social_ig || $social_tw || $social_yt): ?>
                 <div class="mobile-menu__social">
                     <span class="mobile-menu__social-label">
-                        <?php esc_html_e('Theo Dõi DD CLINIC', 'pi'); ?>
+                        <?php esc_html_e('Theo Dõi DD MEDI', 'pi'); ?>
                     </span>
                     <div class="mobile-menu__social-icons">
                         <?php if ($social_fb): ?>

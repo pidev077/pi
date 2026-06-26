@@ -40,7 +40,7 @@ if ( ! empty( $author_post_ids ) ) {
 
 $blog_page_id   = get_option( 'page_for_posts' );
 $blog_page_url  = $blog_page_id ? get_permalink( $blog_page_id ) : home_url( '/blog/' );
-$blog_page_name = $blog_page_id ? get_the_title( $blog_page_id ) : 'DD CLINIC Blog';
+$blog_page_name = $blog_page_id ? get_the_title( $blog_page_id ) : 'DD MEDI Blog';
 
 $newest_url = esc_url( remove_query_arg( 'sort' ) );
 $oldest_url = esc_url( add_query_arg( 'sort', 'oldest' ) );

@@ -10,7 +10,7 @@ $social_ig     = get_field('footer_social_instagram', 'option');
 $social_tw     = get_field('footer_social_twitter', 'option');
 $social_yt     = get_field('footer_social_youtube', 'option');
 $copyright     = get_field('footer_copyright', 'option');
-$copyright     = $copyright ?: '&copy; ' . date('Y') . ' ' . __('DD CLINIC. All Rights Reserved.', 'pi');
+$copyright     = $copyright ?: '&copy; ' . date('Y') . ' ' . __('DD MEDI. All Rights Reserved.', 'pi');
 $hotline       = get_field('footer_hotline_number', 'option');
 $zalo_link     = get_field('footer_zalo_link', 'option');
 $messenger     = get_field('footer_messenger_link', 'option');
@@ -38,7 +38,7 @@ $messenger     = get_field('footer_messenger_link', 'option');
 
                 <?php if ($social_fb || $social_ig || $social_tw || $social_yt): ?>
                     <div class="footer__social">
-                        <span class="footer__social-label"><?php esc_html_e('THEO DÕI DD CLINIC', 'pi'); ?></span>
+                        <span class="footer__social-label"><?php esc_html_e('THEO DÕI DD MEDI', 'pi'); ?></span>
                         <div class="footer__social-icons">
 
                             <?php if ($social_fb): ?>
