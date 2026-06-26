@@ -28,8 +28,12 @@ get_header();
     $word_count = str_word_count(wp_strip_all_tags($raw_content));
     $read_time  = max(1, ceil($word_count / 200));
 
-    // Blog page URL for breadcrumb
-    $blog_url = get_permalink(get_option('page_for_posts')) ?: home_url('/blog/');
+    // Blog page URL for breadcrumb (WPML-aware: use translated page ID for current language)
+    $blog_page_id = get_option('page_for_posts');
+    if ($blog_page_id && function_exists('apply_filters')) {
+        $blog_page_id = apply_filters('wpml_object_id', $blog_page_id, 'page', true);
+    }
+    $blog_url = $blog_page_id ? get_permalink($blog_page_id) : home_url('/blog/');
 
     // Related posts — prefer same category, fallback to latest
     $cat_ids = array_column($cats, 'term_id');
