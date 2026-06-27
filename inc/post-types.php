@@ -181,9 +181,12 @@ add_filter('post_type_link', function ($url, $post) {
 	return $url;
 }, 10, 2);
 
-// Render template taxonomy-service_category.php cho 1 term, dùng chung cho cả 2 dạng URL bên dưới.
-if (!function_exists('pi_render_service_category_term')) {
-	function pi_render_service_category_term($term) {
+// Đánh dấu cờ $wp_query cho 1 term taxonomy, dùng chung cho cả 2 dạng URL bên dưới.
+// Chỉ sửa cờ — KHÔNG include/exit ở đây, để các action khác đăng ký trên hook 'wp'
+// (vd: Rank Math hook 'integrations' ở priority 10) còn có cơ hội chạy trước khi
+// WordPress build trang ở 'template_redirect'.
+if (!function_exists('pi_set_service_category_query')) {
+	function pi_set_service_category_query($term) {
 		global $wp_query;
 		$wp_query->is_404            = false;
 		$wp_query->is_archive        = true;
@@ -192,12 +195,6 @@ if (!function_exists('pi_render_service_category_term')) {
 		$wp_query->queried_object_id = $term->term_id;
 
 		status_header(200);
-
-		$template = locate_template(['taxonomy-service_category.php', 'taxonomy.php']);
-		if ($template) {
-			include $template;
-			exit;
-		}
 	}
 }
 
@@ -205,6 +202,9 @@ if (!function_exists('pi_render_service_category_term')) {
 // Hook 'wp' (không phải 'template_redirect') vì plugin SEO (Rank Math, Yoast...) đọc
 // is_404()/queried_object ngay tại hook 'wp' để build <title>/meta — 'wp' luôn chạy
 // trước 'template_redirect', nên phải sửa cờ is_404 ở đây để SEO plugin thấy đúng trạng thái.
+// Lưu ý: chỉ set cờ rồi return, KHÔNG include/exit — nếu exit ngay tại priority 1 thì các
+// callback khác đăng ký trên hook 'wp' ở priority mặc định (10), ví dụ Rank Math
+// (Frontend::integrations) sẽ KHÔNG BAO GIỜ được chạy → mất toàn bộ title/description/schema.
 add_action('wp', function () {
 	if (!is_404()) return;
 
@@ -233,12 +233,6 @@ add_action('wp', function () {
 		setup_postdata($posts[0]);
 
 		status_header(200);
-
-		$template = locate_template(['single-service_group.php', 'single.php']);
-		if ($template) {
-			include $template;
-			exit;
-		}
 		return;
 	}
 
@@ -246,7 +240,7 @@ add_action('wp', function () {
 	$term = get_term_by('slug', sanitize_title($path), 'service_category');
 	if (!$term || is_wp_error($term) || pi_service_category_depth($term->term_id) >= 2) return;
 
-	pi_render_service_category_term($term);
+	pi_set_service_category_query($term);
 }, 1);
 
 // Phục vụ service_category cấp 3 trở đi tại "/dich-vu/{slug}" (cùng prefix với service).
@@ -260,6 +254,22 @@ add_action('wp', function () {
 	$term = get_term_by('slug', sanitize_title($segments[1]), 'service_category');
 	if (!$term || is_wp_error($term) || pi_service_category_depth($term->term_id) < 2) return;
 
-	pi_render_service_category_term($term);
+	pi_set_service_category_query($term);
 }, 1);
+
+// Sau khi mọi action trên hook 'wp' (kể cả plugin SEO) đã chạy xong, mới chọn đúng
+// template cho 2 loại trang ảo trên — thay cho việc include/exit ngay trong hook 'wp'.
+add_filter('template_include', function ($template) {
+	if (is_singular('service_group')) {
+		$found = locate_template(['single-service_group.php', 'single.php']);
+		return $found ?: $template;
+	}
+
+	if (is_tax('service_category')) {
+		$found = locate_template(['taxonomy-service_category.php', 'taxonomy.php']);
+		return $found ?: $template;
+	}
+
+	return $template;
+});
 
