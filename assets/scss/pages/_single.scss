@@ -544,14 +544,14 @@
         border-left: 4px solid #fff;
         transition: color 0.2s ease, background 0.2s ease;
 
-        &::before {
-            content: counter(toc-item, decimal-leading-zero) ".";
-            flex-shrink: 0;
-            font-size: 16px;
-            font-weight: 400;
-            color: #B9AE9E;
-            line-height: 1.5;
-        }
+        // &::before {
+        //     content: counter(toc-item, decimal-leading-zero) ".";
+        //     flex-shrink: 0;
+        //     font-size: 16px;
+        //     font-weight: 400;
+        //     color: #B9AE9E;
+        //     line-height: 1.5;
+        // }
 
         &:hover {
             background-color: #FBF7EB;

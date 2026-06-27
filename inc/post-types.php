@@ -225,8 +225,10 @@ add_action('wp', function () {
 		$wp_query->is_singular = true;
 		$wp_query->post_count  = 1;
 		$wp_query->found_posts = 1;
-		$wp_query->post        = $posts[0];
-		$wp_query->posts       = $posts;
+		$wp_query->post          = $posts[0];
+		$wp_query->posts         = $posts;
+		$wp_query->queried_object    = $posts[0];
+		$wp_query->queried_object_id = $posts[0]->ID;
 		$GLOBALS['post']       = $posts[0];
 		setup_postdata($posts[0]);
 

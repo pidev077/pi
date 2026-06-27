@@ -12371,14 +12371,6 @@ body.archive h1.page-hero__title, body.archive .page-hero__title.h1 {
   border-left: 4px solid #fff;
   transition: color 0.2s ease, background 0.2s ease;
 }
-.post-toc__link::before {
-  content: counter(toc-item, decimal-leading-zero) ".";
-  flex-shrink: 0;
-  font-size: 16px;
-  font-weight: 400;
-  color: #B9AE9E;
-  line-height: 1.5;
-}
 .post-toc__link:hover {
   background-color: #FBF7EB;
   border-left: 4px solid #E0AC47;
