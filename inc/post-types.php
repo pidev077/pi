@@ -106,7 +106,7 @@ if (!function_exists('pi_register_service_taxonomy')) {
 			'show_admin_column' => true,
 			'query_var'         => true,
 			// URL phẳng tại root (giống service_group) — không có prefix "danh-muc-dich-vu".
-			// Xem filter 'term_link' và hook template_redirect bên dưới.
+			// Xem filter 'term_link' và hook 'wp' bên dưới.
 			'rewrite'           => false,
 			'show_in_rest'      => true,
 		));
@@ -202,7 +202,10 @@ if (!function_exists('pi_render_service_category_term')) {
 }
 
 // Phục vụ service_group + service_category (cấp 1-2) tại root URL mà không xung đột với pages.
-add_action('template_redirect', function () {
+// Hook 'wp' (không phải 'template_redirect') vì plugin SEO (Rank Math, Yoast...) đọc
+// is_404()/queried_object ngay tại hook 'wp' để build <title>/meta — 'wp' luôn chạy
+// trước 'template_redirect', nên phải sửa cờ is_404 ở đây để SEO plugin thấy đúng trạng thái.
+add_action('wp', function () {
 	if (!is_404()) return;
 
 	$path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
@@ -242,10 +245,10 @@ add_action('template_redirect', function () {
 	if (!$term || is_wp_error($term) || pi_service_category_depth($term->term_id) >= 2) return;
 
 	pi_render_service_category_term($term);
-}, 5);
+}, 1);
 
 // Phục vụ service_category cấp 3 trở đi tại "/dich-vu/{slug}" (cùng prefix với service).
-add_action('template_redirect', function () {
+add_action('wp', function () {
 	if (!is_404()) return;
 
 	$path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
@@ -256,5 +259,5 @@ add_action('template_redirect', function () {
 	if (!$term || is_wp_error($term) || pi_service_category_depth($term->term_id) < 2) return;
 
 	pi_render_service_category_term($term);
-}, 5);
+}, 1);
 
