@@ -12952,7 +12952,7 @@ body.archive h1.page-hero__title, body.archive .page-hero__title.h1 {
 }
 
 .blog-all-grid__item--featured .blog-card .blog-card__image {
-  aspect-ratio: 460/801;
+  aspect-ratio: 115/156;
 }
 
 .blog-all-grid__item:nth-child(1) {
@@ -13090,7 +13090,7 @@ body.archive h1.page-hero__title, body.archive .page-hero__title.h1 {
 }
 .blog-card .blog-card__image {
   width: 100%;
-  aspect-ratio: 386/290;
+  aspect-ratio: 48/25;
   overflow: hidden;
   background: rgb(255, 240.4666666667, 189.6);
 }
