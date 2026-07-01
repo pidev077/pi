@@ -174,7 +174,9 @@ get_header();
     <!-- Featured image -->
     <?php if (has_post_thumbnail()): ?>
     <div class="post-single__featured-image">
+        <div class="container">
             <?php the_post_thumbnail('full', ['loading' => 'eager', 'class' => 'post-single__featured-img']); ?>
+        </div>
     </div>
     <?php endif; ?>
 </div><!-- /.post-single__header -->

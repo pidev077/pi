@@ -11993,9 +11993,6 @@ body.archive h1.page-hero__title, body.archive .page-hero__title.h1 {
   color: #978B7B;
   font-style: italic;
 }
-.post-single__featured-image {
-  aspect-ratio: 3/2;
-}
 .post-single__featured-img {
   width: 100%;
   height: auto;

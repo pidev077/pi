@@ -138,7 +138,7 @@ $messenger     = get_field('footer_messenger_link', 'option');
         <!-- ── Bottom bar ──────────────────────────────────────────── -->
         <div class="footer__bottom">
             <div class="footer__badges">
-                <a href="https://www.dmca.com/Protection/Status.aspx" title="DMCA.com Protection Status" class="dmca-badge" target="_blank">
+                <a href="https://www.dmca.com/r/5ye30kl" title="DMCA.com Protection Status" class="dmca-badge" target="_blank">
                     <img src="https://dannymedi.com/wp-content/uploads/2026/06/Compliance-Logos-Container.webp" alt="DMCA.com Protection Status" width="100">
                 </a>
             </div>
